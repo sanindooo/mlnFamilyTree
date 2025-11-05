@@ -1,0 +1,37 @@
+{
+  "id": "mln",
+  "name": "Martin Luther Nsibirwa",
+  "slug": "martin-luther-nsibirwa",
+  "birthDate": "1895-06-00",
+  "children": [
+    {
+      "id": "child-1",
+      "name": "Child One (photo available)",
+      "children": []
+    },
+    {
+      "id": "child-2",
+      "name": "Child Two (photo available)",
+      "children": []
+    },
+    {
+      "id": "child-3",
+      "name": "Child Three (photo available)",
+      "children": []
+    },
+    {
+      "id": "child-4",
+      "name": "Child Four (photo available)",
+      "children": [
+        {
+          "id": "janet-mdoe",
+          "name": "Janet Mdoe",
+          "slug": "janet-mdoe",
+          "birthDate": "",
+          "children": []
+        }
+      ]
+    }
+  ]
+}
+
