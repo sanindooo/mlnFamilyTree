@@ -5,6 +5,7 @@ export type TreeNode = {
   name: string;
   slug?: string;
   birthDate?: string;
+  photo?: string;
   children?: TreeNode[];
 };
 
@@ -27,6 +28,9 @@ function TreeBranch({ node, depth }: { node: TreeNode; depth: number }) {
           <button className="toggle" aria-label="toggle" onClick={() => setOpen(v => !v)}>
             {open ? '−' : '+'}
           </button>
+        )}
+        {node.photo && (
+          <img src={node.photo} alt={node.name} className="tree-photo" />
         )}
         <a className={node.slug ? 'person' : 'person disabled'} href={node.slug ? `/${node.slug}` : '#'}>
           {node.name}

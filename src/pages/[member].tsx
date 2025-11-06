@@ -4,9 +4,9 @@ import Head from 'next/head';
 import matter from 'gray-matter';
 import familyTree from '../../public/familyTree.json';
 
-type Props = { title: string; content: string };
+type Props = { title: string; content: string; photos?: string[] };
 
-export default function MemberPage({ title, content }: Props) {
+export default function MemberPage({ title, content, photos = [] }: Props) {
   return (
     <>
       <Head>
@@ -15,6 +15,18 @@ export default function MemberPage({ title, content }: Props) {
       <article className="prose">
         <h1>{title}</h1>
         <div dangerouslySetInnerHTML={{ __html: markdownToHtml(content) }} />
+        {photos.length > 0 && (
+          <section style={{ marginTop: '32px' }}>
+            <h2>Photo Gallery</h2>
+            <div className="grid">
+              {photos.map((photo) => (
+                <figure key={photo} className="card">
+                  <img src={photo} alt={`${title} - ${photo.split('/').pop()?.replace(/\.(jpg|jpeg|png)$/i, '')}`} />
+                </figure>
+              ))}
+            </div>
+          </section>
+        )}
       </article>
     </>
   );
@@ -30,7 +42,16 @@ export async function getStaticProps({ params }: { params: { member: string } })
   const file = path.join(contentDir, `${params.member}.md`);
   const raw = fs.readFileSync(file, 'utf8');
   const { data, content } = matter(raw);
-  return { props: { title: data.title || params.member, content } };
+  
+  // Check for photos directory
+  const photosDir = path.join(process.cwd(), 'public', 'members', params.member);
+  let photos: string[] = [];
+  if (fs.existsSync(photosDir)) {
+    const files = fs.readdirSync(photosDir).filter(f => /\.(jpg|jpeg|png)$/i.test(f));
+    photos = files.map(f => `/members/${params.member}/${f}`);
+  }
+  
+  return { props: { title: data.title || params.member, content, photos } };
 }
 
 function collectSlugs(root: any): string[] {

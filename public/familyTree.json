@@ -5,23 +5,15 @@
   "birthDate": "1895-06-00",
   "children": [
     {
-      "id": "child-1",
-      "name": "Child One (photo available)",
+      "id": "kalema",
+      "name": "Kalema",
+      "photo": "/members/children/Kalema.jpg",
       "children": []
     },
     {
-      "id": "child-2",
-      "name": "Child Two (photo available)",
-      "children": []
-    },
-    {
-      "id": "child-3",
-      "name": "Child Three (photo available)",
-      "children": []
-    },
-    {
-      "id": "child-4",
-      "name": "Child Four (photo available)",
+      "id": "mdoe",
+      "name": "Mdoe",
+      "photo": "/members/children/Mdoe.jpg",
       "children": [
         {
           "id": "janet-mdoe",
@@ -31,6 +23,18 @@
           "children": []
         }
       ]
+    },
+    {
+      "id": "bulyaba",
+      "name": "Bulyaba",
+      "photo": "/members/children/Bulyaba.jpg",
+      "children": []
+    },
+    {
+      "id": "kiwana",
+      "name": "Kiwana",
+      "photo": "/members/children/kiwana.jpg",
+      "children": []
     }
   ]
 }
