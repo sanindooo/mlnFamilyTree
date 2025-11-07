@@ -67,3 +67,41 @@ family-website/
 ├── vercel.json # Optional Vercel configuration
 ├── package.json
 └── README.md
+
+---
+
+## 🚀 Quick Start
+
+1) Install and run locally
+
+```bash
+npm install
+npm run dev
+```
+
+2) Content you will edit most
+
+- `public/familyTree.json` — relationships and slugs
+- `src/content/*.md` — biographies
+- `public/members/{slug}/` — member photos
+- `public/gallery/` — reunion/event photos
+
+3) Documentation
+
+- Architecture: `docs/ARCHITECTURE.md`
+- Family contribution guide: `docs/CONTRIBUTING.md`
+
+---
+
+## 🔐 Direct Submit (optional)
+
+Enable the Contribute page “Submit to Site” button to auto‑commit new members via the serverless API.
+
+Required environment variables (set in Vercel Project → Settings → Environment Variables):
+
+- `GITHUB_TOKEN` — repo write token
+- `GITHUB_REPO` — `owner/name`
+- `GITHUB_BRANCH` — defaults to `main`
+- `SUBMIT_SECRET` — shared family key
+
+On local dev, create a file named `.env.local` with the same variables.

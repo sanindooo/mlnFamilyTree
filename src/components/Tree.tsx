@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+// Canonical node structure for the interactive tree.
 export type TreeNode = {
   id: string;
   name: string;
@@ -12,12 +13,17 @@ export type TreeNode = {
 export function Tree({ data }: { data: TreeNode }) {
   return (
     <div className="tree">
+      {/**
+       * Render the full tree starting from the given root node.
+       * The UI uses simple disclosure controls for progressive reveal.
+       */}
       <TreeBranch node={data} depth={0} />
     </div>
   );
 }
 
 function TreeBranch({ node, depth }: { node: TreeNode; depth: number }) {
+  // Local open/closed state for collapsing child branches
   const [open, setOpen] = useState(true);
   const hasChildren = (node.children || []).length > 0;
 

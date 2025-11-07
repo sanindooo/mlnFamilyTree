@@ -4,27 +4,22 @@ title: Janet Mdoe
 
 ## Biography
 
-*Note: The full biography from "Profile of Janet Nsibirwa Mdoe.docx" should be added here. Please extract the content from the DOCX file and paste it below.*
+Janet Nsibirwa Mdoe was a formidable and visionary figure in Ugandan education, whose life was marked by a deep commitment to teaching, family heritage and a pioneering spirit. Born into a prominent family, she was the daughter of Katikkiro Martin Luther Nsibirwa, one of the most respected Prime Ministers of the Buganda Kingdom.
 
-## Education
+Janet had a distinguished career, teaching at Mengo Preparatory School and the Lubiri where the current Kabaka of Buganda, Ronald Mutebi II, was one of her pupils. She later served as the headmistress of Matale Girls' Boarding School. Beyond her teaching and administrative roles, she was recognized as one of Uganda's oldest children's authors.
 
-[Add education history here]
+The crowning achievement of her long career was the co-founding of Greenhill Academy in Kibuli, Kampala, alongside her younger sister, Gladys Nsibirwa Wambuzi. The establishment of the school was the realization of a lifelong ambition shared by the two sisters to significantly impact the quality of education in Uganda. Despite being 72 years old when the school officially opened in February 1994, Janet Mdoe demonstrated immense dedication; she famously sat on a mat at the undeveloped site, waiting for the first parents to register their children. She, along with her sister, her daughter Joy Maraka (who became the school's Rector), and Emma Lugujjo, formed the core group known as the "Big Four" who successfully launched and grew the institution into a prominent educational center.
 
-## Marriage & Family
-
-[Add marriage events and family information here, with consent]
+Janet was married to Miki Mdoe who she met while he was a Sociology student at Makerere College (now Makerere University). Upon marrying him, she relocated to his home country, Tanganyika (now Tanzania), where she continued her vocation as an educator, teaching in several schools. Miki Mdoe himself was a notable public servant, becoming the Director of the Tanganyika Broadcasting Corporation (TBC). He is remembered for his principled stand during the 1964 army mutiny when he reportedly refused to broadcast a government statement requesting British intervention.
 
 ## Achievements & Recognition
 
-- **Recognition from the Nvuma Clan** - [Add details]
-- **40 Years as an Author** - Award from Fountain Publishers
-- [Add other achievements and memorials]
+- Co‑founder of Greenhill Academy (1994)
+- Among Uganda's oldest children's authors
+- Recognition from the Nvuma Clan
+- Awarded by Fountain Publishers for 40 years as an author
 
 ## Contributions to the Nsibirwa Legacy
 
-[Describe contributions to the family legacy]
-
-## Memorable Moments
-
-Janet was known for her love of dance, her work at Greenhill Schools, and spending time with family and friends, including trips to Tanzania and London.
+Janet's work in education, institution building, and writing has inspired generations of learners and educators, extending the legacy of service and excellence championed by the Nsibirwa family.
 

@@ -6,7 +6,9 @@
   "children": [
     {
       "id": "kalema",
-      "name": "Kalema",
+      "name": "Rhoda Kalema",
+      "slug": "rhoda-kalema",
+      "birthDate": "1929-05-10",
       "photo": "/members/children/Kalema.jpg",
       "children": []
     },

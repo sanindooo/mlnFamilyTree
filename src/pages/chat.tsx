@@ -3,6 +3,7 @@ import path from 'node:path';
 import { GetStaticProps } from 'next';
 import { useMemo, useState } from 'react';
 
+// Minimal doc shape for local Q&A search over markdown files
 type Doc = { slug: string; title: string; content: string };
 
 export default function ChatPage({ docs }: { docs: Doc[] }) {
@@ -42,6 +43,11 @@ export const getStaticProps: GetStaticProps = async () => {
   return { props: { docs } };
 };
 
+/**
+ * Keyword ranker: counts term frequency in title+content for each document.
+ * @param docs Documents to score
+ * @param q Query string
+ */
 function rank(docs: Doc[], q: string): Doc[] {
   const terms = q.toLowerCase().split(/\s+/).filter(Boolean);
   return [...docs]
@@ -55,6 +61,7 @@ function count(text: string, term: string): number {
   return (text.toLowerCase().match(new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g')) || []).length;
 }
 
+/** Highlights matched query terms and returns a short snippet. */
 function highlight(text: string, q: string): string {
   const safe = text.replace(/&/g, '&amp;').replace(/</g, '&lt;');
   const terms = q.split(/\s+/).filter(Boolean);
