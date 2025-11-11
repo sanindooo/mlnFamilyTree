@@ -1,107 +1,100 @@
-# 🌳 Family Tree Website — Nsibirwa Family
+# 🌳 Nsibirwa Family Legacy Site
 
-A static website preserving our family history from our great-grandfather down to the latest generation.  
-Built and edited in **Cursor**, deployed on **Vercel (v0)** — fast, modern, and simple to maintain.
-
----
-
-## ✨ Overview
-
-This is a **static site** — it has no traditional backend or database.  
-All content (biographies, tree data, and gallery images) is stored in files and deployed automatically.
-
-You can edit the content directly inside **Cursor** or by updating JSON/Markdown files.
+This repository now serves a purely static website composed of HTML, CSS, and vanilla JavaScript. The site keeps the interactive home page, family tree, gallery, biographies, and local Q&A search—without any React, Next.js, or server-side code.
 
 ---
 
-## 🧩 Features
+## ✨ Quick Start
 
-- 🧬 **Interactive Family Tree** — displays relationships starting from our great-grandfather  
-- 👨‍👩‍👧‍👦 **Biography Pages** — each family member has a Markdown bio  
-- 🖼️ **Gallery** — shows photos from reunions and events  
-- ⚡ **Static + Fast** — built with Next.js or Astro, served on Vercel  
-- 🔒 **Optional Access Control** — simple password protection for family-only viewing  
+Because the pages fetch JSON/Markdown files, open them through a tiny static server (browsers block `fetch()` on the `file://` protocol).
 
----
-
-## 🧱 Tech Stack
-
-| Component | Technology | Purpose |
-|------------|-------------|----------|
-| **Editor** | [Cursor](https://cursor.sh) | AI-assisted code and content editing |
-| **Framework** | [Next.js](https://nextjs.org/) or [Astro](https://astro.build/) | Builds the static website |
-| **Hosting** | [Vercel (v0)](https://v0.dev) | Fast, free static hosting |
-| **Tree Data** | JSON file | Defines family relationships |
-| **Content** | Markdown (`.md`) | Stores biographies |
-| **Images** | `/public/gallery` | Family photos and reunions |
-
----
-
-## 🪜 Project Structure
-
-family-website/
-├── public/
-│ ├── gallery/ # Reunion and event photos
-│ ├── favicon.ico
-│ └── familyTree.json # Data file for tree visualization
-├── src/
-│ ├── pages/
-│ │ ├── index.tsx # Homepage
-│ │ ├── tree.tsx # Family tree visualization
-│ │ ├── gallery.tsx # Gallery page
-│ │ └── [member].tsx # Individual bio pages
-│ ├── content/
-│ │ ├── great-grandfather.md
-│ │ ├── children/
-│ │ │ ├── child1.md
-│ │ │ ├── child2.md
-│ │ │ └── ...
-│ │ └── grandchildren/
-│ │ ├── grandchild1.md
-│ │ ├── grandchild2.md
-│ │ └── ...
-│ └── components/
-│ ├── Tree.tsx
-│ ├── Gallery.tsx
-│ └── BioCard.tsx
-├── vercel.json # Optional Vercel configuration
-├── package.json
-└── README.md
-
----
-
-## 🚀 Quick Start
-
-1) Install and run locally
+Run one of the following from the project root:
 
 ```bash
-npm install
-npm run dev
+# Python 3
+python -m http.server 4173
+
+# Node.js (if you have npm)
+npx serve .
 ```
 
-2) Content you will edit most
-
-- `public/familyTree.json` — relationships and slugs
-- `src/content/*.md` — biographies
-- `public/members/{slug}/` — member photos
-- `public/gallery/` — reunion/event photos
-
-3) Documentation
-
-- Architecture: `docs/ARCHITECTURE.md`
-- Family contribution guide: `docs/CONTRIBUTING.md`
+Then visit `http://localhost:4173/index.html` (or the port that `serve` prints).
 
 ---
 
-## 🔐 Direct Submit (optional)
+## 🗂️ Project Structure
 
-Enable the Contribute page “Submit to Site” button to auto‑commit new members via the serverless API.
+```
+mln/
+├── index.html            # Home + quick search
+├── tree.html             # Interactive family tree
+├── gallery.html          # Photo grid
+├── chat.html             # Local Q&A search
+├── member.html           # Biography viewer (uses ?slug=)
+├── styles.css            # Shared styling
+├── js/                   # Vanilla JS modules for each page
+├── data/
+│   ├── familyTree.json   # Tree data (IDs, slugs, relationships)
+│   └── docs.json         # Biography index (titles + photo lists)
+├── content/              # Markdown biographies (front matter optional)
+├── gallery/              # Gallery images
+├── members/              # Member-specific photo folders
+└── templates/            # Copy-paste helpers for new entries
+```
 
-Required environment variables (set in Vercel Project → Settings → Environment Variables):
+---
 
-- `GITHUB_TOKEN` — repo write token
-- `GITHUB_REPO` — `owner/name`
-- `GITHUB_BRANCH` — defaults to `main`
-- `SUBMIT_SECRET` — shared family key
+## 🧩 Editing the Site
 
-On local dev, create a file named `.env.local` with the same variables.
+| Update | File(s) to edit | Notes |
+|--------|-----------------|-------|
+| Family relationships & quick search | `data/familyTree.json` | Add children under the correct parent `id`. `slug` connects to biographies. |
+| Biography pages | `content/{slug}.md` | Markdown with optional front matter. The `<title>` and search snippets come from the `title` field or file name. |
+| Biography metadata (title + photo list) | `data/docs.json` | Used by Q&A search and member gallery. Keep photo paths relative (e.g. `./members/...`). |
+| Gallery cards | `js/gallery.js` | Simple array of `{ src, alt }`. |
+| Styling | `styles.css` | Global theme shared across pages. |
+
+### Templates for new relatives
+
+Copy the files in `templates/`:
+
+- `templates/member.json` → structure for one person in `familyTree.json`
+- `templates/biography.md` → starter Markdown file
+
+Steps:
+
+1. Give the new relative a unique `id` and `slug` (lowercase, hyphenated).  
+2. Paste the JSON snippet inside `data/familyTree.json` under the parent’s `children` array.  
+3. Duplicate `templates/biography.md` into `content/{slug}.md` and fill it in.  
+4. Add an entry in `data/docs.json` with the `slug`, display `title`, and any photo paths in `members/{slug}/`.  
+5. Drop images into `members/{slug}/` (create the folder if it does not exist).  
+6. (Optional) add a gallery photo to `gallery/` and register it in `js/gallery.js`.
+
+---
+
+## 🔍 Feature Notes
+
+- **Home search**: filters `familyTree.json` by name or `birthDate`.  
+- **Family tree**: loads the same JSON and renders expandable branches with vanilla JS.  
+- **Member biographies**: `member.html?slug=martin-luther-nsibirwa` loads the Markdown file and any photos you list in `docs.json`.  
+- **Q&A search**: client-side keyword matching across all Markdown content—no remote API calls.  
+- **Gallery**: simple DOM render from the array in `js/gallery.js`.
+
+The previous “Contribute” upload form has been removed. All updates happen by editing the files listed above.
+
+---
+
+## 🧠 Tips
+
+- Keep `id` values stable—they link children to parents.  
+- When moving the site under a subdirectory (e.g. GitHub Pages), the relative image paths like `./members/...` keep everything working.  
+- If you add new JS modules, remember to include them with `<script type="module">` at the end of the relevant HTML page.
+
+---
+
+## 📚 Reference Docs
+
+- `docs/ARCHITECTURE.md` – historical context of the earlier setup (still accurate for content organization).  
+- `docs/CONTRIBUTING.md` – suggestions for collecting stories, photos, and family approvals.
+
+Feel free to simplify or expand as the family needs grow. The site now runs anywhere that can serve plain files—no build step required. Enjoy capturing the Nsibirwa legacy! 🙌

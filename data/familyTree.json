@@ -9,13 +9,13 @@
       "name": "Rhoda Kalema",
       "slug": "rhoda-kalema",
       "birthDate": "1929-05-10",
-      "photo": "/members/children/Kalema.jpg",
+      "photo": "./members/children/Kalema.jpg",
       "children": []
     },
     {
       "id": "mdoe",
       "name": "Mdoe",
-      "photo": "/members/children/Mdoe.jpg",
+      "photo": "./members/children/Mdoe.jpg",
       "children": [
         {
           "id": "janet-mdoe",
@@ -29,13 +29,13 @@
     {
       "id": "bulyaba",
       "name": "Bulyaba",
-      "photo": "/members/children/Bulyaba.jpg",
+      "photo": "./members/children/Bulyaba.jpg",
       "children": []
     },
     {
       "id": "kiwana",
       "name": "Kiwana",
-      "photo": "/members/children/kiwana.jpg",
+      "photo": "./members/children/kiwana.jpg",
       "children": []
     }
   ]
