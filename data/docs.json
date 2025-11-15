@@ -5,6 +5,11 @@
     "photos": []
   },
   {
+    "slug": "mln-story",
+    "title": "MLN Story - The Life of Martin Luther Nsibirwa",
+    "photos": []
+  },
+  {
     "slug": "rhoda-kalema",
     "title": "Rhoda Kalema",
     "photos": ["./members/children/Kalema.jpg"]

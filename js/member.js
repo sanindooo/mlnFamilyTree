@@ -1,4 +1,4 @@
-import { loadJSON, loadText, parseFrontMatter, markdownToHtml, setFooterYear } from './site.js';
+import { loadJSON, loadText, parseFrontMatter, markdownToHtml, setFooterYear, flattenTree } from './site.js';
 
 // Read the slug query parameter from the URL (e.g., member.html?slug=janet-mdoe)
 const params = new URLSearchParams(window.location.search);
@@ -10,6 +10,8 @@ const contentEl = document.querySelector('#member-content'); // container for bi
 const heroPhotoEl = document.querySelector('#member-hero-photo'); // hero image slot
 const gallerySection = document.querySelector('#member-gallery'); // gallery section wrapper
 const galleryGrid = document.querySelector('#member-gallery-grid'); // gallery grid container
+const familyTreeSection = document.querySelector('#member-family-tree'); // family tree section wrapper
+const familyTreeRoot = document.querySelector('#member-tree-root'); // family tree container
 
 /**
  * Initializes the member page:
@@ -50,13 +52,25 @@ async function init() {
       contentEl.innerHTML = markdownToHtml(content || 'Biography coming soon.');
     }
 
-    const photos = Array.isArray(entry.photos) ? entry.photos : []; // photo list from docs.json
-    if (photos.length > 0) {
-      renderHeroPhoto(photos[0], title); // first photo in hero slot
-      renderGallery(photos, title); // rest as a grid
+    // Special handling for Martin Luther Nsibirwa: use page_1.png as hero image
+    if (slug === 'martin-luther-nsibirwa') {
+      renderHeroPhoto('./mln_bio/page_1.png', title);
+      const photos = Array.isArray(entry.photos) ? entry.photos : [];
+      if (photos.length > 0) {
+        renderGallery(photos, title); // show other photos in gallery if available
+      }
     } else {
-      heroPhotoEl?.remove(); // remove hero image placeholder if no photos
+      const photos = Array.isArray(entry.photos) ? entry.photos : []; // photo list from docs.json
+      if (photos.length > 0) {
+        renderHeroPhoto(photos[0], title); // first photo in hero slot
+        renderGallery(photos, title); // rest as a grid
+      } else {
+        heroPhotoEl?.remove(); // remove hero image placeholder if no photos
+      }
     }
+
+    // Load and render family tree for this member (if they have children)
+    await renderFamilyTree(slug);
   } catch (err) {
     console.error(err); // log failure for debugging
     showError('Unable to load biography.'); // friendly message
@@ -105,6 +119,110 @@ function renderGallery(photos, title) {
 }
 
 /**
+ * Loads the family tree and renders the subtree for the current member.
+ * Only displays if the member has children.
+ */
+async function renderFamilyTree(memberSlug) {
+  if (!familyTreeSection || !familyTreeRoot) return; // missing containers
+
+  try {
+    const fullTree = await loadJSON('./data/familyTree.json'); // load full tree
+    const allNodes = flattenTree(fullTree); // flatten for searching
+    const memberNode = allNodes.find((node) => node.slug === memberSlug); // find this member
+
+    if (!memberNode || !Array.isArray(memberNode.children) || memberNode.children.length === 0) {
+      return; // no children, don't show tree section
+    }
+
+    // Create a subtree with this member as root
+    const subtree = {
+      ...memberNode,
+      // Keep children as-is (they're already the subtree we want)
+    };
+
+    // Render the subtree
+    const fragment = document.createDocumentFragment();
+    fragment.appendChild(renderTreeBranch(subtree, 0));
+    familyTreeRoot.appendChild(fragment);
+    familyTreeSection.style.display = ''; // show the section
+  } catch (err) {
+    console.error('Failed to load family tree:', err); // log but don't block page
+    // Silently fail - tree section just won't appear
+  }
+}
+
+/**
+ * Recursively renders a tree branch (similar to tree.js but for member pages).
+ * Each node shows a row with optional +/- toggle and link to biography.
+ */
+function renderTreeBranch(node, depth) {
+  const branch = document.createElement('div'); // container for one branch
+  branch.className = 'branch';
+  branch.style.marginLeft = `${depth * 16}px`; // visual indentation by depth
+
+  const row = document.createElement('div'); // header row for the node
+  row.className = 'branch-row';
+  branch.appendChild(row);
+
+  const hasChildren = Array.isArray(node.children) && node.children.length > 0; // child presence
+
+  let childContainer = null; // will contain rendered children
+  if (hasChildren) {
+    const toggle = document.createElement('button'); // disclosure control
+    toggle.className = 'toggle';
+    toggle.setAttribute('aria-label', 'toggle children');
+    toggle.textContent = '−'; // start expanded
+    toggle.addEventListener('click', () => {
+      const open = toggle.textContent === '−'; // is currently open?
+      toggle.textContent = open ? '+' : '−'; // flip symbol
+      if (childContainer) {
+        childContainer.hidden = open; // hide/show children
+      }
+    });
+    row.appendChild(toggle); // add control to row
+  }
+
+  if (node.photo) {
+    const img = document.createElement('img'); // small avatar
+    img.src = node.photo;
+    img.alt = node.name;
+    img.className = 'tree-photo';
+    row.appendChild(img);
+  }
+
+  if (node.slug) {
+    const link = document.createElement('a'); // link to member biography
+    link.href = `./member.html?slug=${encodeURIComponent(node.slug)}`;
+    link.className = 'person';
+    link.textContent = node.name;
+    row.appendChild(link);
+  } else {
+    const span = document.createElement('span'); // fallback when no page exists
+    span.className = 'person disabled';
+    span.textContent = node.name;
+    row.appendChild(span);
+  }
+
+  if (node.birthDate) {
+    const birth = document.createElement('span'); // inline date display
+    birth.className = 'muted';
+    birth.textContent = ` — ${node.birthDate}`;
+    row.appendChild(birth);
+  }
+
+  if (hasChildren) {
+    childContainer = document.createElement('div'); // wrapper for child branches
+    childContainer.className = 'children';
+    for (const child of node.children) {
+      childContainer.appendChild(renderTreeBranch(child, depth + 1)); // recursive render
+    }
+    branch.appendChild(childContainer); // add children to branch
+  }
+
+  return branch; // return assembled branch
+}
+
+/**
  * Displays a muted error message in place of the biography.
  * Also removes visual containers that would be empty.
  */
@@ -118,6 +236,9 @@ function showError(message) {
   heroPhotoEl?.remove(); // hide empty hero
   if (gallerySection) {
     gallerySection.remove(); // remove gallery section entirely
+  }
+  if (familyTreeSection) {
+    familyTreeSection.remove(); // remove tree section
   }
 }
 

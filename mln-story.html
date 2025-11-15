@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MLN Story - The Life of Martin Luther Nsibirwa</title>
+    <link rel="icon" href="./favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+    <style>
+      .story-page {
+        margin: 32px 0;
+        page-break-inside: avoid;
+      }
+      .story-page img {
+        width: 100%;
+        max-width: 800px;
+        height: auto;
+        border-radius: 8px;
+        border: 1px solid var(--warm-sand);
+        box-shadow: 0 4px 12px rgba(74, 44, 42, 0.1);
+        margin: 0 auto;
+        display: block;
+      }
+      .story-section {
+        margin-bottom: 48px;
+      }
+      .story-section h2 {
+        margin-bottom: 16px;
+        color: var(--deep-umber);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="site-header">
+        <a class="logo" href="./index.html">MLN</a>
+        <nav class="nav">
+          <a href="./index.html">Home</a>
+          <a href="./mln-story.html" class="active">MLN Story</a>
+          <a href="./tree.html">Family Tree</a>
+          <a href="./gallery.html">Gallery</a>
+          <a href="./chat.html">Q&amp;A</a>
+        </nav>
+      </header>
+      <main>
+        <section class="hero" style="margin-top: 0;">
+          <div class="hero-text">
+            <h1>The Life of Martin Luther Nsibirwa</h1>
+            <p>Explore the remarkable journey of a pioneering leader, from his early years to his service as Katikkiro of Buganda.</p>
+          </div>
+          <div class="hero-card" aria-hidden="true">
+            <img src="./mln_bio/page_1.png" alt="Martin Luther Nsibirwa" style="width: 100%; max-width: 360px; aspect-ratio: 1; object-fit: cover; border-radius: 16px; border: 1px solid var(--warm-sand); filter: sepia(0.3);" />
+          </div>
+        </section>
+
+        <article class="prose">
+          <div class="story-section">
+            <h2>Early Years</h2>
+            <div class="story-page">
+              <img src="./mln_bio/pg_13.png" alt="Early Years - Page 13" />
+            </div>
+          </div>
+
+          <div class="story-section">
+            <h2>Education and Service Beginnings</h2>
+            <div class="story-page">
+              <img src="./mln_bio/pg_14.png" alt="Education and Service - Page 14" />
+            </div>
+          </div>
+
+          <div class="story-section">
+            <h2>The First Years of Service</h2>
+            <div class="story-page">
+              <img src="./mln_bio/pg_15.png" alt="First Years of Service - Page 15" />
+            </div>
+          </div>
+
+          <div class="story-section">
+            <h2>Rising Leadership</h2>
+            <div class="story-page">
+              <img src="./mln_bio/pg_16.png" alt="Rising Leadership - Page 16" />
+            </div>
+          </div>
+
+          <div class="story-section">
+            <h2>Family and Legacy</h2>
+            <div class="story-page">
+              <img src="./mln_bio/pg_17.png" alt="Family and Legacy - Page 17" />
+            </div>
+          </div>
+
+          <div class="story-section">
+            <h2>Katikkiro of Buganda</h2>
+            <div class="story-page">
+              <img src="./mln_bio/pg_18.png" alt="Katikkiro of Buganda - Page 18" />
+            </div>
+          </div>
+
+          <div class="story-section">
+            <h2>Marriage and Home Life</h2>
+            <div class="story-page">
+              <img src="./marriage_and_home/pg_22.png" alt="Marriage and Home Life - Page 22" />
+            </div>
+            <div class="story-page">
+              <img src="./marriage_and_home/pg_23.png" alt="Marriage and Home Life - Page 23" />
+            </div>
+          </div>
+        </article>
+      </main>
+
+      <footer class="site-footer">
+        <div class="footer-grid">
+          <div>
+            <h3 class="footer-title">Nsibirwa Family Legacy</h3>
+            <p>Preserving and celebrating the life and contributions of Owek. Martin Luther Nsibirwa and his descendants.</p>
+          </div>
+          <div>
+            <h4>Quick Links</h4>
+            <ul class="footer-links">
+              <li><a href="./index.html">Home</a></li>
+              <li><a href="./mln-story.html">MLN Story</a></li>
+              <li><a href="./tree.html">Family Tree</a></li>
+              <li><a href="./gallery.html">Gallery</a></li>
+              <li><a href="./chat.html">Q&amp;A</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>Contact</h4>
+            <p>For additions or corrections, share files via email or a pull request.</p>
+            <p class="muted">&copy; <span id="footer-year"></span> Nsibirwa Family</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <script>
+      document.getElementById('footer-year').textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>
+

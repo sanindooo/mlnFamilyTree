@@ -81,8 +81,13 @@ function handleSearch(event) {
   for (const { doc } of ranked) {
     const li = document.createElement('li'); // container for item
 
-    const link = document.createElement('a'); // link to member page
-    link.href = `./member.html?slug=${encodeURIComponent(doc.slug)}`;
+    const link = document.createElement('a'); // link to member page or MLN Story
+    // MLN Story links to the story page, others to member pages
+    if (doc.slug === 'mln-story') {
+      link.href = './mln-story.html';
+    } else {
+      link.href = `./member.html?slug=${encodeURIComponent(doc.slug)}`;
+    }
     link.innerHTML = `<strong>${doc.title}</strong>`;
     li.appendChild(link);
 
