@@ -259,6 +259,73 @@ p {
   justify-content: center;
 }
 
+.hero-slideshow {
+  width: 100%;
+  max-width: 360px;
+  border-radius: 16px;
+  border: 1px solid var(--warm-sand);
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 10px 24px rgba(74, 44, 42, 0.15);
+}
+
+.hero-slides {
+  position: relative;
+  min-height: 340px;
+}
+
+.hero-slide {
+  margin: 0;
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 400ms ease;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+}
+
+.hero-slide.active {
+  opacity: 1;
+}
+
+.hero-slide img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  filter: sepia(0.4);
+}
+
+.hero-slide figcaption {
+  padding: 8px 12px 12px;
+  font-size: 13px;
+  color: var(--muted);
+  flex: none;
+}
+
+.hero-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px;
+  border-top: 1px solid var(--warm-sand);
+  background: #fff;
+}
+
+.hero-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  background: var(--warm-sand);
+  cursor: pointer;
+  padding: 0;
+}
+
+.hero-dot.active {
+  background: var(--burgundy);
+}
+
 .hero-gradient {
   width: 100%;
   max-width: 360px;

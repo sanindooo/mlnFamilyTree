@@ -8,7 +8,7 @@ import {
   setFooterYear,
 } from './site.js';
 
-// DOM references for Q&A search input and results output
+// DOM references for Search input and results output
 const searchInput = document.querySelector('#qa-search'); // <input> text box
 const resultsList = document.querySelector('#qa-results'); // <ul> results list
 
@@ -16,7 +16,7 @@ const resultsList = document.querySelector('#qa-results'); // <ul> results list
 let documents = [];
 
 /**
- * Initializes the Q&A page:
+ * Initializes the Search page:
  * - Sets footer year
  * - Loads docs index and each markdown file
  * - Builds an in-memory corpus for simple keyword ranking
@@ -81,8 +81,13 @@ function handleSearch(event) {
   for (const { doc } of ranked) {
     const li = document.createElement('li'); // container for item
 
-    const link = document.createElement('a'); // link to member page
-    link.href = `./member.html?slug=${encodeURIComponent(doc.slug)}`;
+    const link = document.createElement('a'); // link to member page or MLN Story
+    // MLN Story links to the story page, others to member pages
+    if (doc.slug === 'mln-story') {
+      link.href = './mln-story.html';
+    } else {
+      link.href = `./member.html?slug=${encodeURIComponent(doc.slug)}`;
+    }
     link.innerHTML = `<strong>${doc.title}</strong>`;
     li.appendChild(link);
 
