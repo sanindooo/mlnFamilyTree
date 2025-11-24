@@ -4,7 +4,7 @@ This project is a static site generated with Next.js (Pages Router) and deployed
 
 ## Key Ideas
 - Static-first: JSON for the tree, Markdown for biographies, images in `public/`
-- No-cost Q&A: local, client-side keyword search across Markdown
+- No-cost search: local, client-side keyword search across Markdown
 - Family-driven edits: optional serverless API commits to GitHub; no database
 
 ## Content Model
@@ -21,7 +21,7 @@ This project is a static site generated with Next.js (Pages Router) and deployed
 - `[member].tsx`: member bio + auto-discovered photo gallery
 - `gallery.tsx`: curated family photos
 - `contribute.tsx`: generate JSON/Markdown or submit directly
-- `chat.tsx`: local keyword Q&A over Markdown files
+- `chat.tsx`: local keyword search over Markdown files
 
 ## Serverless API
 - `pages/api/submit.ts`
@@ -38,7 +38,7 @@ Env vars:
 
 ## Search
 - Quick search (Home): flattens tree and filters by `name`/`birthDate`
-- Q&A (Chat): TF-like term counts to rank documents; highlights snippets
+- Search (Chat): TF-like term counts to rank documents; highlights snippets
 
 ## Styling
 - Heritage Warmth palette with Playfair Display + Lato
@@ -46,6 +46,6 @@ Env vars:
 
 ## Extensibility
 - Add roles/permissions by swapping shared key for GitHub OAuth
-- Replace local Q&A with hosted search (e.g., Algolia) if desired
+- Replace local search with hosted search (e.g., Algolia) if desired
 - Move to App Router later without changing content model
 

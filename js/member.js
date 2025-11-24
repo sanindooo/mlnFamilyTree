@@ -52,9 +52,9 @@ async function init() {
       contentEl.innerHTML = markdownToHtml(content || 'Biography coming soon.');
     }
 
-    // Special handling for Martin Luther Nsibirwa: use page_1.png as hero image
+    // Special handling for Martin Luther Nsibirwa: use curated document as hero image
     if (slug === 'martin-luther-nsibirwa') {
-      renderHeroPhoto('./mln_bio/page_1.png', title);
+      renderHeroPhoto('./slideshow/Document from Paul Kiwana Nsibirwa.png', title);
       const photos = Array.isArray(entry.photos) ? entry.photos : [];
       if (photos.length > 0) {
         renderGallery(photos, title); // show other photos in gallery if available

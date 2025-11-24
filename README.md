@@ -1,6 +1,6 @@
 # 🌳 Nsibirwa Family Legacy Site
 
-This repository now serves a purely static website composed of HTML, CSS, and vanilla JavaScript. The site keeps the interactive home page, family tree, gallery, biographies, and local Q&A search—without any React, Next.js, or server-side code.
+This repository now serves a purely static website composed of HTML, CSS, and vanilla JavaScript. The site keeps the interactive home page, family tree, gallery, biographies, and local search—without any React, Next.js, or server-side code.
 
 ---
 
@@ -29,7 +29,7 @@ mln/
 ├── index.html            # Home + quick search
 ├── tree.html             # Interactive family tree
 ├── gallery.html          # Photo grid
-├── chat.html             # Local Q&A search
+├── chat.html             # Local search
 ├── member.html           # Biography viewer (uses ?slug=)
 ├── styles.css            # Shared styling
 ├── js/                   # Vanilla JS modules for each page
@@ -50,7 +50,7 @@ mln/
 |--------|-----------------|-------|
 | Family relationships & quick search | `data/familyTree.json` | Add children under the correct parent `id`. `slug` connects to biographies. |
 | Biography pages | `content/{slug}.md` | Markdown with optional front matter. The `<title>` and search snippets come from the `title` field or file name. |
-| Biography metadata (title + photo list) | `data/docs.json` | Used by Q&A search and member gallery. Keep photo paths relative (e.g. `./members/...`). |
+| Biography metadata (title + photo list) | `data/docs.json` | Used by search and member gallery. Keep photo paths relative (e.g. `./members/...`). |
 | Gallery cards | `js/gallery.js` | Simple array of `{ src, alt }`. |
 | Styling | `styles.css` | Global theme shared across pages. |
 
@@ -77,7 +77,7 @@ Steps:
 - **Home search**: filters `familyTree.json` by name or `birthDate`.  
 - **Family tree**: loads the same JSON and renders expandable branches with vanilla JS.  
 - **Member biographies**: `member.html?slug=martin-luther-nsibirwa` loads the Markdown file and any photos you list in `docs.json`.  
-- **Q&A search**: client-side keyword matching across all Markdown content—no remote API calls.  
+- **Search**: client-side keyword matching across all Markdown content—no remote API calls.  
 - **Gallery**: simple DOM render from the array in `js/gallery.js`.
 
 The previous “Contribute” upload form has been removed. All updates happen by editing the files listed above.
