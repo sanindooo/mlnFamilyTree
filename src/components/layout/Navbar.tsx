@@ -5,6 +5,7 @@ import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
 import { clsx } from "clsx";
+import { BiChevronDown } from "react-icons/bi";
 
 const useRelume = () => {
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -33,13 +34,23 @@ const useRelume = () => {
 };
 
 const navLinks = [
-	{ href: "/mln-story", label: "Biography" },
 	{ href: "/tree", label: "Family Tree" },
 	{ href: "/gallery", label: "Gallery" },
 ];
 
+// Biography dropdown items (sub-sections only, main link is in the button)
+const biographySections = [
+	{ href: "/mln-story/early-years", label: "Early years and family origins" },
+	{
+		href: "/mln-story/professional-achievements",
+		label: "Professional achievements",
+	},
+	{ href: "/mln-story/family-bonds", label: "Family bonds and legacy" },
+];
+
 export function Navbar() {
 	const useActive = useRelume();
+	const [isBiographyOpen, setIsBiographyOpen] = useState(false);
 
 	return (
 		<header className="border-b border-warm-sand bg-white sticky top-0 z-40">
@@ -51,6 +62,56 @@ export function Navbar() {
 						aria-label="Main navigation"
 					>
 						<ul className="flex items-center gap-6 list-none m-0 p-0">
+							{/* Biography Dropdown */}
+							<li
+								className="relative group"
+								onMouseEnter={() => setIsBiographyOpen(true)}
+								onMouseLeave={() => setIsBiographyOpen(false)}
+							>
+								<div className="flex items-center gap-0.5">
+									<a
+										href="/mln-story"
+										className="text-base font-medium text-deep-umber hover:text-burgundy transition-colors"
+									>
+										Biography
+									</a>
+									<button
+										className="p-1 text-deep-umber hover:text-burgundy transition-colors"
+										onClick={() => setIsBiographyOpen(!isBiographyOpen)}
+										aria-expanded={isBiographyOpen}
+										aria-haspopup="true"
+										aria-label="Toggle biography menu"
+									>
+										<BiChevronDown
+											className={`size-4 transition-transform ${
+												isBiographyOpen ? "rotate-180" : ""
+											}`}
+										/>
+									</button>
+								</div>
+
+								{/* Dropdown Menu */}
+								<div
+									className={`absolute top-full left-0 mt-2 w-64 bg-white border border-warm-sand rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-200 ${
+										isBiographyOpen ? "opacity-100 visible" : ""
+									}`}
+								>
+									<ul className="py-2 list-none m-0 p-0">
+										{biographySections.map((section) => (
+											<li key={section.href}>
+												<a
+													href={section.href}
+													className="block px-4 py-2.5 text-sm font-medium text-deep-umber hover:bg-warm-sand/20 hover:text-burgundy transition-colors"
+												>
+													{section.label}
+												</a>
+											</li>
+										))}
+									</ul>
+								</div>
+							</li>
+
+							{/* Other Nav Links */}
 							{navLinks.map((link) => (
 								<li key={link.href}>
 									<a
@@ -145,6 +206,31 @@ export function Navbar() {
 										Home
 									</a>
 								</li>
+
+								{/* Biography Submenu */}
+								<li>
+									<a
+										href="/mln-story"
+										className="block text-base font-medium text-deep-umber hover:text-burgundy py-3 px-2 rounded-lg hover:bg-warm-sand/10 transition-colors"
+										onClick={useActive.toggleMobileMenu}
+									>
+										Biography
+									</a>
+									<ul className="ml-4 flex flex-col gap-1 list-none mt-1">
+										{biographySections.map((section) => (
+											<li key={section.href}>
+												<a
+													href={section.href}
+													className="block text-sm font-medium text-deep-umber hover:text-burgundy py-2 px-2 rounded-lg hover:bg-warm-sand/10 transition-colors"
+													onClick={useActive.toggleMobileMenu}
+												>
+													{section.label}
+												</a>
+											</li>
+										))}
+									</ul>
+								</li>
+
 								{navLinks.map((link) => (
 									<li key={link.href}>
 										<a
@@ -156,6 +242,7 @@ export function Navbar() {
 										</a>
 									</li>
 								))}
+
 								<li>
 									<a
 										href="/search"

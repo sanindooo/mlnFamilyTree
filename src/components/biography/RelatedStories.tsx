@@ -11,7 +11,7 @@ interface RelatedSection {
 }
 
 interface RelatedStoriesProps {
-	currentSlug?: string; // Optional: to filter out current section
+	currentSlug?: string;
 	sections?: RelatedSection[];
 }
 
@@ -46,7 +46,7 @@ export function RelatedStories({
 		? sections.filter((s) => s.slug !== currentSlug)
 		: sections;
 
-	// Show max 2 items
+	// Show max 2 items (these act as prev/next navigation)
 	const displaySections = relatedSections.slice(0, 2);
 
 	return (

@@ -1,7 +1,6 @@
 import { BiographyHeader } from "@/components/biography/BiographyHeader";
 import { BiographyContent } from "@/components/biography/BiographyContent";
 import { SectionGallery } from "@/components/biography/SectionGallery";
-import { SectionNavigation } from "@/components/biography/SectionNavigation";
 import { RelatedStories } from "@/components/biography/RelatedStories";
 import { notFound } from "next/navigation";
 import fs from "fs";
@@ -100,23 +99,6 @@ export default async function BiographySectionPage({
 		notFound();
 	}
 
-	// Determine prev/next sections
-	const prevSection =
-		sectionIndex > 0
-			? {
-					title: sections[sectionIndex - 1].title,
-					href: `/mln-story/${sections[sectionIndex - 1].slug}`,
-			  }
-			: undefined;
-
-	const nextSection =
-		sectionIndex < sections.length - 1
-			? {
-					title: sections[sectionIndex + 1].title,
-					href: `/mln-story/${sections[sectionIndex + 1].slug}`,
-			  }
-			: undefined;
-
 	return (
 		<>
 			<BiographyHeader
@@ -130,7 +112,6 @@ export default async function BiographySectionPage({
 				sectionTitle={section.title}
 			/>
 			<RelatedStories currentSlug={sectionSlug} />
-			<SectionNavigation prevSection={prevSection} nextSection={nextSection} />
 		</>
 	);
 }

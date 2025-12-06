@@ -37,7 +37,7 @@
 
 	/* Standardized Typography Scale */
 	h1 {
-		@apply font-serif text-4xl font-bold md:text-5xl lg:text-6xl leading-tight tracking-tight;
+		@apply font-serif text-4xl font-bold md:text-5xl lg:text-6xl leading-none tracking-tight;
 	}
 
 	h2 {
@@ -45,19 +45,19 @@
 	}
 
 	h3 {
-		@apply font-serif text-2xl font-bold md:text-3xl leading-snug;
+		@apply font-serif text-2xl font-bold md:text-3xl leading-tight;
 	}
 
 	h4 {
-		@apply font-serif text-xl font-bold md:text-2xl leading-snug;
+		@apply font-serif text-xl font-bold md:text-2xl leading-tight;
 	}
 
 	h5 {
-		@apply font-serif text-lg font-bold leading-snug;
+		@apply font-serif text-lg font-bold leading-tight;
 	}
 
 	h6 {
-		@apply font-serif text-base font-bold uppercase tracking-wider;
+		@apply font-serif text-base font-bold uppercase tracking-wider leading-tight;
 	}
 
 	p {
