@@ -32,7 +32,12 @@ export default async function BiographySectionPage({
 		notFound();
 	}
 
-	const galleryImages = story.galleryImages?.map((img) => img.asset) || [];
+	const galleryImages =
+		story.galleryImages?.map((img: any) => ({
+			src: img.asset,
+			alt: img.alt,
+			caption: img.caption,
+		})) || [];
 
 	return (
 		<>

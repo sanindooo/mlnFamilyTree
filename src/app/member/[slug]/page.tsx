@@ -33,9 +33,16 @@ export default async function MemberPage({
 
 	// Process gallery images
 	const galleryImages =
-		(bio.gallery
-			?.map((img) => (img.asset ? urlForImage(img.asset).url() : null))
-			.filter(Boolean) as string[]) || [];
+		bio.gallery
+			?.map((img) => {
+				if (!img.asset) return null;
+				return {
+					src: urlForImage(img.asset).url(),
+					alt: img.alt,
+					caption: img.caption,
+				};
+			})
+			.filter((img) => img !== null) || [];
 
 	return (
 		<>

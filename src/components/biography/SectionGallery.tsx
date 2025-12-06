@@ -1,14 +1,48 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
+import Lightbox from "yet-another-react-lightbox";
+import Captions from "yet-another-react-lightbox/plugins/captions";
+import "yet-another-react-lightbox/styles.css";
+import "yet-another-react-lightbox/plugins/captions.css";
+
+export interface GalleryImage {
+  src: string;
+  alt?: string;
+  caption?: string;
+  title?: string;
+}
 
 interface SectionGalleryProps {
-  images: string[];
+  images: (string | GalleryImage)[];
   sectionTitle: string;
 }
 
 export function SectionGallery({ images, sectionTitle }: SectionGalleryProps) {
+  const [open, setOpen] = useState(false);
+  const [index, setIndex] = useState(0);
+
   if (!images || images.length === 0) return null;
+
+  // Normalize images to GalleryImage objects
+  const galleryImages = images.map((img) => {
+    if (typeof img === "string") {
+      return { src: img, alt: sectionTitle };
+    }
+    return img;
+  });
+
+  const slides = galleryImages.map((img) => ({
+    src: img.src,
+    alt: img.alt || sectionTitle,
+    title: img.title || img.alt,
+    description: img.caption,
+  }));
+
+  const handleImageClick = (idx: number) => {
+    setIndex(idx);
+    setOpen(true);
+  };
 
   return (
     <section className="py-12 md:py-16 bg-cream/20">
@@ -20,18 +54,27 @@ export function SectionGallery({ images, sectionTitle }: SectionGalleryProps) {
           <p className="text-center text-muted mt-2">Images from this period</p>
         </header>
         <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 list-none p-0">
-          {images.map((image, index) => (
-            <li key={index}>
+          {galleryImages.map((image, idx) => (
+            <li key={idx} onClick={() => handleImageClick(idx)}>
               <figure className="overflow-hidden rounded-xl border border-warm-sand shadow-lg group cursor-pointer m-0">
                 <img
-                  src={image}
-                  alt={`${sectionTitle} - Image ${index + 1}`}
+                  src={image.src}
+                  alt={image.alt || `${sectionTitle} - Image ${idx + 1}`}
                   className="w-full h-48 object-cover sepia-[.3] transition-transform duration-300 group-hover:scale-105"
                 />
               </figure>
             </li>
           ))}
         </ul>
+
+        <Lightbox
+          open={open}
+          close={() => setOpen(false)}
+          index={index}
+          slides={slides}
+          plugins={[Captions]}
+          captions={{ showToggle: true, descriptionTextAlign: 'center' }}
+        />
       </div>
     </section>
   );

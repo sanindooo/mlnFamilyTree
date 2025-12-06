@@ -1,6 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
+import Lightbox from "yet-another-react-lightbox";
+import Captions from "yet-another-react-lightbox/plugins/captions";
+import "yet-another-react-lightbox/styles.css";
+import "yet-another-react-lightbox/plugins/captions.css";
 
 interface GalleryImage {
 	src: string;
@@ -10,6 +14,8 @@ interface GalleryImage {
 
 export function PhotoGallery() {
 	const [selectedCategory, setSelectedCategory] = useState<string>("all");
+	const [open, setOpen] = useState(false);
+	const [index, setIndex] = useState(0);
 
 	const galleryImages: GalleryImage[] = [
 		// Main Gallery
@@ -110,6 +116,18 @@ export function PhotoGallery() {
 			? galleryImages
 			: galleryImages.filter((img) => img.category === selectedCategory);
 
+	const slides = filteredImages.map((img) => ({
+		src: img.src,
+		alt: img.title,
+		title: img.title,
+		description: img.category,
+	}));
+
+	const handleImageClick = (idx: number) => {
+		setIndex(idx);
+		setOpen(true);
+	};
+
 	return (
 		<section className="py-12 md:py-16 lg:py-20 bg-white">
 			<div className="container">
@@ -127,7 +145,10 @@ export function PhotoGallery() {
 				</header>
 
 				{/* Category Filter */}
-				<nav className="mb-8 md:mb-12 flex flex-wrap justify-center gap-3" aria-label="Gallery filters">
+				<nav
+					className="mb-8 md:mb-12 flex flex-wrap justify-center gap-3"
+					aria-label="Gallery filters"
+				>
 					{categories.map((category) => (
 						<button
 							key={category}
@@ -146,8 +167,8 @@ export function PhotoGallery() {
 
 				{/* Gallery Grid */}
 				<ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 list-none p-0">
-					{filteredImages.map((image, index) => (
-						<li key={index}>
+					{filteredImages.map((image, idx) => (
+						<li key={idx} onClick={() => handleImageClick(idx)}>
 							<figure className="group relative overflow-hidden rounded-xl border border-warm-sand shadow-lg cursor-pointer aspect-square m-0">
 								<img
 									src={image.src}
@@ -172,6 +193,15 @@ export function PhotoGallery() {
 						No images found in this category.
 					</p>
 				)}
+
+				<Lightbox
+					open={open}
+					close={() => setOpen(false)}
+					index={index}
+					slides={slides}
+					plugins={[Captions]}
+					captions={{ showToggle: true, descriptionTextAlign: "center" }}
+				/>
 			</div>
 		</section>
 	);
