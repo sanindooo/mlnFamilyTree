@@ -32,7 +32,7 @@ export function Timeline() {
 	return (
 		<section
 			id="timeline"
-			className="py-12 md:py-16 lg:py-20 bg-cream/30"
+			className="py-12 md:py-16 lg:py-20 bg-cream/30 overflow-clip"
 		>
 			<div className="container">
 				<div className="relative grid auto-cols-fr grid-cols-1 items-start justify-center gap-6 sm:gap-12 md:grid-cols-2 md:gap-24 lg:gap-32">
