@@ -7,20 +7,32 @@ import {
 	BiLogoLinkedinSquare,
 } from "react-icons/bi";
 import { FaXTwitter } from "react-icons/fa6";
+import { PortableTextBlock } from "@portabletext/types";
+import { PortableTextRenderer } from "@/sanity/components/PortableTextRenderer";
 
 interface BiographyContentProps {
-	content?: string;
+	content?: string; // Legacy HTML content
+	portableTextContent?: PortableTextBlock[]; // New Sanity Portable Text content
 	children?: React.ReactNode;
 }
 
-export function BiographyContent({ content, children }: BiographyContentProps) {
+export function BiographyContent({
+	content,
+	portableTextContent,
+	children,
+}: BiographyContentProps) {
 	return (
 		<section id="bio-content" className="py-16 md:py-24 lg:py-28">
 			<div className="container">
 				<div className="mx-auto max-w-lg xl:max-w-2xl">
 					<div className="prose mb-12 md:prose-md lg:prose-lg md:mb-16 lg:mb-20 text-deep-umber prose-headings:font-serif prose-headings:text-deep-umber prose-a:text-burgundy prose-img:rounded-xl prose-img:sepia-[.4]">
 						{children}
-						{content && <div dangerouslySetInnerHTML={{ __html: content }} />}
+						{portableTextContent && (
+							<PortableTextRenderer value={portableTextContent} />
+						)}
+						{!portableTextContent && content && (
+							<div dangerouslySetInnerHTML={{ __html: content }} />
+						)}
 					</div>
 
 					<div>
