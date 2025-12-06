@@ -2,6 +2,7 @@ import { BiographyHeader } from "@/components/biography/BiographyHeader";
 import { BiographyContent } from "@/components/biography/BiographyContent";
 import { SectionGallery } from "@/components/biography/SectionGallery";
 import { SectionNavigation } from "@/components/biography/SectionNavigation";
+import { RelatedStories } from "@/components/biography/RelatedStories";
 import { notFound } from "next/navigation";
 import fs from "fs";
 import path from "path";
@@ -128,6 +129,7 @@ export default async function BiographySectionPage({
 				images={section.galleryImages}
 				sectionTitle={section.title}
 			/>
+			<RelatedStories currentSlug={sectionSlug} />
 			<SectionNavigation prevSection={prevSection} nextSection={nextSection} />
 		</>
 	);
