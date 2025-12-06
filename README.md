@@ -1,100 +1,36 @@
-# 🌳 Nsibirwa Family Legacy Site
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-This repository now serves a purely static website composed of HTML, CSS, and vanilla JavaScript. The site keeps the interactive home page, family tree, gallery, biographies, and local search—without any React, Next.js, or server-side code.
+## Getting Started
 
----
-
-## ✨ Quick Start
-
-Because the pages fetch JSON/Markdown files, open them through a tiny static server (browsers block `fetch()` on the `file://` protocol).
-
-Run one of the following from the project root:
+First, run the development server:
 
 ```bash
-# Python 3
-python -m http.server 4173
-
-# Node.js (if you have npm)
-npx serve .
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-Then visit `http://localhost:4173/index.html` (or the port that `serve` prints).
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
----
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-## 🗂️ Project Structure
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-```
-mln/
-├── index.html            # Home + quick search
-├── tree.html             # Interactive family tree
-├── gallery.html          # Photo grid
-├── chat.html             # Local search
-├── member.html           # Biography viewer (uses ?slug=)
-├── styles.css            # Shared styling
-├── js/                   # Vanilla JS modules for each page
-├── data/
-│   ├── familyTree.json   # Tree data (IDs, slugs, relationships)
-│   └── docs.json         # Biography index (titles + photo lists)
-├── content/              # Markdown biographies (front matter optional)
-├── gallery/              # Gallery images
-├── members/              # Member-specific photo folders
-└── templates/            # Copy-paste helpers for new entries
-```
+## Learn More
 
----
+To learn more about Next.js, take a look at the following resources:
 
-## 🧩 Editing the Site
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-| Update | File(s) to edit | Notes |
-|--------|-----------------|-------|
-| Family relationships & quick search | `data/familyTree.json` | Add children under the correct parent `id`. `slug` connects to biographies. |
-| Biography pages | `content/{slug}.md` | Markdown with optional front matter. The `<title>` and search snippets come from the `title` field or file name. |
-| Biography metadata (title + photo list) | `data/docs.json` | Used by search and member gallery. Keep photo paths relative (e.g. `./members/...`). |
-| Gallery cards | `js/gallery.js` | Simple array of `{ src, alt }`. |
-| Styling | `styles.css` | Global theme shared across pages. |
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-### Templates for new relatives
+## Deploy on Vercel
 
-Copy the files in `templates/`:
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-- `templates/member.json` → structure for one person in `familyTree.json`
-- `templates/biography.md` → starter Markdown file
-
-Steps:
-
-1. Give the new relative a unique `id` and `slug` (lowercase, hyphenated).  
-2. Paste the JSON snippet inside `data/familyTree.json` under the parent’s `children` array.  
-3. Duplicate `templates/biography.md` into `content/{slug}.md` and fill it in.  
-4. Add an entry in `data/docs.json` with the `slug`, display `title`, and any photo paths in `members/{slug}/`.  
-5. Drop images into `members/{slug}/` (create the folder if it does not exist).  
-6. (Optional) add a gallery photo to `gallery/` and register it in `js/gallery.js`.
-
----
-
-## 🔍 Feature Notes
-
-- **Home search**: filters `familyTree.json` by name or `birthDate`.  
-- **Family tree**: loads the same JSON and renders expandable branches with vanilla JS.  
-- **Member biographies**: `member.html?slug=martin-luther-nsibirwa` loads the Markdown file and any photos you list in `docs.json`.  
-- **Search**: client-side keyword matching across all Markdown content—no remote API calls.  
-- **Gallery**: simple DOM render from the array in `js/gallery.js`.
-
-The previous “Contribute” upload form has been removed. All updates happen by editing the files listed above.
-
----
-
-## 🧠 Tips
-
-- Keep `id` values stable—they link children to parents.  
-- When moving the site under a subdirectory (e.g. GitHub Pages), the relative image paths like `./members/...` keep everything working.  
-- If you add new JS modules, remember to include them with `<script type="module">` at the end of the relevant HTML page.
-
----
-
-## 📚 Reference Docs
-
-- `docs/ARCHITECTURE.md` – historical context of the earlier setup (still accurate for content organization).  
-- `docs/CONTRIBUTING.md` – suggestions for collecting stories, photos, and family approvals.
-
-Feel free to simplify or expand as the family needs grow. The site now runs anywhere that can serve plain files—no build step required. Enjoy capturing the Nsibirwa legacy! 🙌
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

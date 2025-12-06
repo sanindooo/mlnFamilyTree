@@ -1,0 +1,146 @@
+{
+  "id": "mln",
+  "name": "Katikkiro Martin Luther Nsibirwa MBE",
+  "slug": "martin-luther-nsibirwa",
+  "birthDate": "1883",
+  "photo": "./slideshow/Document from Paul Kiwana Nsibirwa.png",
+  "children": [
+    {
+      "id": "maliyamu-nakimu",
+      "name": "Maliyamu Nakimu",
+      "children": []
+    },
+    {
+      "id": "tito-gita",
+      "name": "Tito Gita",
+      "children": []
+    },
+    {
+      "id": "lusi-nvumirwa",
+      "name": "Lusi Nvumirwa (Kibirige)",
+      "children": []
+    },
+    {
+      "id": "kasalina-mbekeka",
+      "name": "Kasalina Mbekeka (Lule)",
+      "children": []
+    },
+    {
+      "id": "yayeri-nanozi",
+      "name": "Yayeri Nanozi (Mukibbi)",
+      "children": []
+    },
+    {
+      "id": "paulo-munyagwa",
+      "name": "Paulo Munyagwa",
+      "children": []
+    },
+    {
+      "id": "janet-nkabidwa",
+      "name": "Janet Nkabidwa (Mdoe)",
+      "slug": "janet-mdoe",
+      "photo": "./members/janet-mdoe/Her Younger yers.jpg",
+      "children": []
+    },
+    {
+      "id": "sira-bugembe",
+      "name": "Sira Bugembe",
+      "children": []
+    },
+    {
+      "id": "alistaliko-kiwana",
+      "name": "Alistaliko Kiwana",
+      "children": []
+    },
+    {
+      "id": "kosayi-waggwa",
+      "name": "Kosayi Waggwa Nsibirwa",
+      "slug": "kosayi-waggwa",
+      "photo": "./members/kosayi-waggwa/IMG-20251111-WA0016.jpg",
+      "children": []
+    },
+    {
+      "id": "joyce-nakalema",
+      "name": "Joyce Nakalema (Serunjogi)",
+      "children": []
+    },
+    {
+      "id": "elsie-namayanja",
+      "name": "Elsie Namayanja (Lutalo)",
+      "children": []
+    },
+    {
+      "id": "rhoda-kalema",
+      "name": "Rhoda Nakibuka Kalema",
+      "slug": "rhoda-kalema",
+      "birthDate": "1929-05-10",
+      "photo": "./members/rhoda-kalema/Mrs. Kalema Portrait.jpeg",
+      "children": []
+    },
+    {
+      "id": "semu-ntulume",
+      "name": "Semu Kasirivu Frank Ntulume Nsibirwa",
+      "slug": "semu-ntulume",
+      "birthDate": "1930",
+      "photo": "./members/semu-ntulume/Semu Ntulume.jpg",
+      "children": []
+    },
+    {
+      "id": "eseza-kakoba",
+      "name": "Eseza Kakoba (Kironde)",
+      "children": []
+    },
+    {
+      "id": "gladys-bulyaba",
+      "name": "Gladys Bulyaba (Wambuzi)",
+      "photo": "./members/children/Bulyaba.jpg",
+      "children": []
+    },
+    {
+      "id": "samwiri-kasirye",
+      "name": "Samwiri Kasirye",
+      "children": []
+    },
+    {
+      "id": "israel-senkirikimbe",
+      "name": "Israel Senkirikimbe",
+      "children": []
+    },
+    {
+      "id": "deborah-gwera",
+      "name": "Deborah Gwera (Sentongo)",
+      "children": []
+    },
+    {
+      "id": "john-seruwagi",
+      "name": "John Seruwagi",
+      "children": []
+    },
+    {
+      "id": "philipo-lugolobi",
+      "name": "Philipo Lugolobi",
+      "children": []
+    },
+    {
+      "id": "robina-nankanja",
+      "name": "Robina Nankanja (Sserwanda)",
+      "children": []
+    },
+    {
+      "id": "leah-nagita",
+      "name": "Leah Nagita",
+      "children": []
+    },
+    {
+      "id": "john-sendagire",
+      "name": "John Sendagire",
+      "children": []
+    },
+    {
+      "id": "rosemary-namusisi",
+      "name": "Rosemary Namusisi (Kigonya)",
+      "children": []
+    }
+  ]
+}
+

@@ -1,0 +1,44 @@
+LIFE and Legacy of MLN(Martin Luther Nsibirwa) Page
+
+ Full Family Tree Page (descendant database)
+– Details of grandchildren → great-grandchildren
+– Birthdates, education history, marriage events (with consent)
+
+
+Each Child’s Family Branch Page
+
+Template per family:
+Full biography
+Spouse(s) and children
+Modern photos
+
+Achievements & memorials
+
+Contributions to the Nsibirwa legacy
+
+Private Gallery
+– Recent weddings, reunions, graduations
+– Audio/video oral histories
+– Young family profiles (opt-in only)Family Forum / Reunion Area
+
+– Event announcements
+– Internal communications
+
+layout:
+Home
+Biography of Martin Luther Nsibirwa (MLN)
+Family Tree starting with MLN then 26 branches for all his children(right now only have photos of four children
+and pictures and profile of Janet Mdoe)
+Gallery with family reuinion pics 
+
+Navigation:
+in the family tree once we click a child we are taken to the child's page who also has more children
+
+add a feature where users can add new content to the family tree while keeping the site static
+
+Also add a search bar for finding relatives, events etc.
+
+I would also like a RAG chatbot but one where I don't have to spend on embeddings or generation
+
+
+The Logo Should be MLN
