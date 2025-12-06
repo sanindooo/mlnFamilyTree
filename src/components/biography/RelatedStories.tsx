@@ -2,49 +2,21 @@
 
 import { Button } from "@/components/ui/Button";
 import React from "react";
-
-interface RelatedSection {
-	slug: string;
-	title: string;
-	description: string;
-	image: string;
-}
+import { MLNStory } from "@/types";
 
 interface RelatedStoriesProps {
 	currentSlug?: string;
-	sections?: RelatedSection[];
+	stories: MLNStory[];
 }
-
-const defaultSections: RelatedSection[] = [
-	{
-		slug: "early-years",
-		title: "Early years and family origins",
-		description: "The formative experiences that built character and purpose",
-		image: "/gallery/Children of MLN.jpg",
-	},
-	{
-		slug: "professional-achievements",
-		title: "Professional achievements and milestones",
-		description: "Work that mattered, done with skill and dedication",
-		image: "/gallery/MLN Family in Mamakomo 80s.jpg",
-	},
-	{
-		slug: "family-bonds",
-		title: "Family bonds and lasting legacy",
-		description: "Relationships that endured and shaped generations forward",
-		image:
-			"/gallery/MLN Family Reunion 2003 at Greenhill Schools, Children of MLN.jpg",
-	},
-];
 
 export function RelatedStories({
 	currentSlug,
-	sections = defaultSections,
+	stories,
 }: RelatedStoriesProps) {
 	// Filter out the current section if specified
 	const relatedSections = currentSlug
-		? sections.filter((s) => s.slug !== currentSlug)
-		: sections;
+		? stories.filter((s) => s.slug !== currentSlug)
+		: stories;
 
 	// Show max 2 items (these act as prev/next navigation)
 	const displaySections = relatedSections.slice(0, 2);
@@ -67,17 +39,17 @@ export function RelatedStories({
 				</header>
 
 				<ul className="grid grid-cols-1 gap-y-12 md:grid-cols-2 md:gap-x-8 lg:gap-x-12 list-none m-0 p-0">
-					{displaySections.map((section) => (
-						<li key={section.slug}>
+					{displaySections.map((story) => (
+						<li key={story.slug}>
 							<article>
 								<a
-									href={`/mln-story/${section.slug}`}
+									href={`/mln-story/${story.slug}`}
 									className="mb-5 block sm:mb-6 group"
 								>
 									<figure className="w-full overflow-hidden rounded-xl border border-warm-sand m-0">
 										<img
-											src={section.image}
-											alt={section.title}
+											src={story.heroImage || "/gallery/Children of MLN.jpg"}
+											alt={story.title}
 											className="aspect-video size-full object-cover sepia-[.4] transition-transform duration-300 group-hover:scale-105"
 										/>
 									</figure>
@@ -86,14 +58,14 @@ export function RelatedStories({
 									Biography
 								</div>
 								<a
-									href={`/mln-story/${section.slug}`}
+									href={`/mln-story/${story.slug}`}
 									className="mb-2 block max-w-full group"
 								>
 									<h3 className="text-xl font-bold md:text-2xl font-serif text-deep-umber group-hover:text-burgundy transition-colors">
-										{section.title}
+										{story.title}
 									</h3>
 								</a>
-								<p className="text-deep-umber">{section.description}</p>
+								<p className="text-deep-umber">{story.description}</p>
 							</article>
 						</li>
 					))}

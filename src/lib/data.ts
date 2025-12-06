@@ -1,11 +1,13 @@
 import fs from 'fs';
 import path from 'path';
-import { Biography, DocEntry, Person } from '@/types';
+import { Biography, DocEntry, Person, MLNStory } from '@/types';
 import { 
   getFamilyTreeFromSanity, 
   getBiographyFromSanity, 
   getAllBiographiesFromSanity,
-  getDocsIndexFromSanity 
+  getDocsIndexFromSanity,
+  getAllMLNStoriesFromSanity,
+  getMLNStoryFromSanity
 } from '@/sanity/lib/fetch';
 
 const PUBLIC_DIR = path.join(process.cwd(), 'public');
@@ -25,9 +27,9 @@ export function parseFrontMatter(raw: string): { data: Record<string, string>; c
   }
   const data: Record<string, string> = {}; // metadata key/value pairs
   const body = match[1] // captured front matter without the fences
-    .split('\n') // split into lines
-    .map((line) => line.trim()) // normalize whitespace
-    .filter(Boolean); // drop empty lines
+  .split('\n') // split into lines
+  .map((line) => line.trim()) // normalize whitespace
+  .filter(Boolean); // drop empty lines
   for (const line of body) {
     const [key, ...rest] = line.split(':'); // key: value
     data[key.trim()] = rest.join(':').trim(); // preserve colons in values
@@ -133,4 +135,29 @@ export async function getAllBiographies(): Promise<Biography[]> {
     docs.map(doc => getBiography(doc.slug))
   );
   return bios.filter((bio): bio is Biography => bio !== null);
+}
+
+/**
+ * SERVER-SIDE: Gets all MLN stories
+ */
+export async function getAllMLNStories(): Promise<MLNStory[]> {
+  if (USE_SANITY) {
+    return getAllMLNStoriesFromSanity();
+  }
+
+  // Fallback to local hardcoded data structure matching frontend expectations
+  // This is a temporary shim until migration is complete
+  return []; 
+}
+
+/**
+ * SERVER-SIDE: Gets a single MLN story by slug
+ */
+export async function getMLNStory(slug: string): Promise<MLNStory | null> {
+  if (USE_SANITY) {
+    return getMLNStoryFromSanity(slug);
+  }
+
+  // Fallback would require parsing the local JSON structure
+  return null;
 }

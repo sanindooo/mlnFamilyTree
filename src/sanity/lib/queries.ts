@@ -27,7 +27,15 @@ export const familyTreeQuery = groq`
         "slug": slug.current,
         birthDate,
         deathDate,
-        photo
+        photo,
+        "children": children[]-> {
+          _id,
+          name,
+          "slug": slug.current,
+          birthDate,
+          deathDate,
+          photo
+        }
       }
     }
   }
@@ -40,14 +48,14 @@ export const personBySlugQuery = groq`
   *[_type == "person" && slug.current == $slug][0] {
     _id,
     name,
-    "slug": slug.current,
+    slug,
     birthDate,
     deathDate,
     photo,
     biography->{
       _id,
       title,
-      "slug": slug.current,
+      slug,
       content,
       gallery
     }
@@ -76,13 +84,13 @@ export const biographyBySlugQuery = groq`
   *[_type == "biography" && slug.current == $slug][0] {
     _id,
     title,
-    "slug": slug.current,
+    slug,
     content,
     gallery,
     person->{
       _id,
       name,
-      "slug": slug.current,
+      slug,
       birthDate,
       deathDate,
       photo
@@ -97,7 +105,7 @@ export const allBiographiesQuery = groq`
   *[_type == "biography"] {
     _id,
     title,
-    "slug": slug.current,
+    slug,
     content,
     person->{
       name
@@ -114,6 +122,38 @@ export const docsIndexQuery = groq`
     title,
     "photos": gallery[].asset->url
   } | order(title asc)
+`
+
+// ===== MLN Story Queries =====
+
+/**
+ * Get all MLN stories ordered by display order
+ */
+export const allMLNStoriesQuery = groq`
+  *[_type == "mlnStory"] {
+    _id,
+    title,
+    slug,
+    description,
+    heroImage,
+    order
+  } | order(order asc)
+`
+
+/**
+ * Get a single MLN story by slug
+ */
+export const mlnStoryBySlugQuery = groq`
+  *[_type == "mlnStory" && slug.current == $slug][0] {
+    _id,
+    title,
+    slug,
+    description,
+    heroImage,
+    content,
+    galleryImages,
+    order
+  }
 `
 
 // ===== Gallery Queries =====

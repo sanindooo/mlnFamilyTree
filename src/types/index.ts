@@ -32,6 +32,16 @@ export interface Biography {
 	gallery?: any[]; // New field from Sanity
 }
 
+export interface MLNStory {
+	slug: string;
+	title: string;
+	description: string;
+	heroImage?: any; // Sanity image source
+	content?: PortableTextBlock[];
+	galleryImages?: any[];
+	order?: number;
+}
+
 export interface SearchResult {
 	doc: Biography;
 	score: number;
@@ -93,5 +103,27 @@ export interface SanityGalleryImage {
 	relatedPeople?: Array<{
 		_ref: string;
 		_type: "reference";
+	}>;
+}
+
+export interface SanityMLNStory {
+	_id: string;
+	_type: "mlnStory";
+	title: string;
+	slug: {
+		current: string;
+	};
+	description: string;
+	order?: number;
+	heroImage?: {
+		asset: SanityImageSource;
+		alt?: string;
+	};
+	content?: PortableTextBlock[];
+	galleryImages?: Array<{
+		_key: string;
+		asset: SanityImageSource;
+		alt?: string;
+		caption?: string;
 	}>;
 }

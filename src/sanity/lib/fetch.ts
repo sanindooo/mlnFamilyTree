@@ -1,8 +1,3 @@
-/**
- * Sanity data fetching utilities
- * These functions fetch data from Sanity and adapt it to the frontend types
- */
-
 import { client } from '../client'
 import {
   familyTreeQuery,
@@ -11,9 +6,11 @@ import {
   docsIndexQuery,
   allGalleryImagesQuery,
   timelineEventsQuery,
+  allMLNStoriesQuery,
+  mlnStoryBySlugQuery,
 } from './queries'
-import { adaptFamilyTree, adaptSanityBiography } from './adapters'
-import { Person, Biography, DocEntry } from '@/types'
+import { adaptFamilyTree, adaptSanityBiography, adaptSanityMLNStory } from './adapters'
+import { Person, Biography, DocEntry, MLNStory } from '@/types'
 
 /**
  * Fetch the family tree from Sanity
@@ -104,5 +101,35 @@ export async function getTimelineEventsFromSanity(): Promise<any[]> {
   } catch (error) {
     console.error('Error fetching timeline events from Sanity:', error)
     return []
+  }
+}
+
+/**
+ * Fetch all MLN stories from Sanity
+ */
+export async function getAllMLNStoriesFromSanity(): Promise<MLNStory[]> {
+  try {
+    const data = await client.fetch(allMLNStoriesQuery)
+    if (!data) return []
+    return data
+      .map(adaptSanityMLNStory)
+      .filter((story: MLNStory) => story.slug)
+  } catch (error) {
+    console.error('Error fetching MLN stories from Sanity:', error)
+    return []
+  }
+}
+
+/**
+ * Fetch a single MLN story by slug from Sanity
+ */
+export async function getMLNStoryFromSanity(slug: string): Promise<MLNStory | null> {
+  try {
+    const data = await client.fetch(mlnStoryBySlugQuery, { slug })
+    if (!data) return null
+    return adaptSanityMLNStory(data)
+  } catch (error) {
+    console.error(`Error fetching MLN story ${slug} from Sanity:`, error)
+    return null
   }
 }

@@ -27,12 +27,11 @@ export function BiographyContent({
 				<div className="mx-auto max-w-lg xl:max-w-2xl">
 					<div className="prose mb-12 md:prose-md lg:prose-lg md:mb-16 lg:mb-20 text-deep-umber prose-headings:font-serif prose-headings:text-deep-umber prose-a:text-burgundy prose-img:rounded-xl prose-img:sepia-[.4]">
 						{children}
-						{portableTextContent && (
+						{portableTextContent && portableTextContent.length > 0 && (
 							<PortableTextRenderer value={portableTextContent} />
 						)}
-						{!portableTextContent && content && (
-							<div dangerouslySetInnerHTML={{ __html: content }} />
-						)}
+						{(!portableTextContent || portableTextContent.length === 0) &&
+							content && <div dangerouslySetInnerHTML={{ __html: content }} />}
 					</div>
 
 					<div>

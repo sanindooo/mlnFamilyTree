@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/Button";
 import React from "react";
 import { RxChevronRight } from "react-icons/rx";
 import { BiCube } from "react-icons/bi";
+import { MLNStory } from "@/types";
 
 interface BiographySectionCardProps {
 	title: string;
@@ -49,29 +50,11 @@ function BiographySectionCard({
 	);
 }
 
-export function BiographyListing() {
-	const sections = [
-		{
-			title: "Early years and family origins",
-			description: "The formative experiences that built character and purpose",
-			href: "/mln-story/early-years",
-			imageSrc: "/gallery/Children of MLN.jpg",
-		},
-		{
-			title: "Professional achievements and milestones",
-			description: "Work that mattered, done with skill and dedication",
-			href: "/mln-story/professional-achievements",
-			imageSrc: "/gallery/MLN Family in Mamakomo 80s.jpg",
-		},
-		{
-			title: "Family bonds and lasting legacy",
-			description: "Relationships that endured and shaped generations forward",
-			href: "/mln-story/family-bonds",
-			imageSrc:
-				"/gallery/MLN Family Reunion 2003 at Greenhill Schools, Children of MLN.jpg",
-		},
-	];
+interface BiographyListingProps {
+	stories: MLNStory[];
+}
 
+export function BiographyListing({ stories }: BiographyListingProps) {
 	return (
 		<section
 			id="bio-listing"
@@ -92,9 +75,14 @@ export function BiographyListing() {
 					</div>
 				</div>
 				<ul className="grid grid-cols-1 gap-6 md:gap-8 lg:grid-cols-3 list-none m-0 p-0">
-					{sections.map((section, index) => (
-						<li key={index}>
-							<BiographySectionCard {...section} />
+					{stories.map((story, index) => (
+						<li key={story.slug}>
+							<BiographySectionCard
+								title={story.title}
+								description={story.description}
+								href={`/mln-story/${story.slug}`}
+								imageSrc={story.heroImage || "/gallery/Children of MLN.jpg"}
+							/>
 						</li>
 					))}
 				</ul>
