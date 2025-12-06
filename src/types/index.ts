@@ -28,6 +28,8 @@ export interface Biography {
 	content: string; // The HTML content
 	rawContent: string; // The markdown content (for search)
 	frontMatter: Record<string, string>;
+	portableTextContent?: PortableTextBlock[]; // New field from Sanity
+	gallery?: any[]; // New field from Sanity
 }
 
 export interface SearchResult {

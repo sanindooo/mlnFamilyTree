@@ -1,8 +1,18 @@
 import fs from 'fs';
 import path from 'path';
 import { Biography, DocEntry, Person } from '@/types';
+import { 
+  getFamilyTreeFromSanity, 
+  getBiographyFromSanity, 
+  getAllBiographiesFromSanity,
+  getDocsIndexFromSanity 
+} from '@/sanity/lib/fetch';
 
 const PUBLIC_DIR = path.join(process.cwd(), 'public');
+
+// Feature flag for Sanity migration
+// Default to true since we've migrated content
+const USE_SANITY = process.env.NEXT_PUBLIC_USE_SANITY !== 'false';
 
 /**
  * Parses a simple YAML front matter block from a Markdown file.
@@ -47,6 +57,12 @@ export function markdownToHtml(md: string): string {
  * SERVER-SIDE: Loads the family tree JSON
  */
 export async function getFamilyTree(): Promise<Person> {
+  if (USE_SANITY) {
+    const tree = await getFamilyTreeFromSanity();
+    if (tree) return tree;
+    console.warn('⚠️ Failed to fetch family tree from Sanity, falling back to local JSON');
+  }
+
   const filePath = path.join(PUBLIC_DIR, 'data', 'familyTree.json');
   const fileContents = await fs.promises.readFile(filePath, 'utf8');
   return JSON.parse(fileContents);
@@ -56,6 +72,10 @@ export async function getFamilyTree(): Promise<Person> {
  * SERVER-SIDE: Loads the docs index
  */
 export async function getDocsIndex(): Promise<DocEntry[]> {
+  if (USE_SANITY) {
+    return getDocsIndexFromSanity();
+  }
+
   const filePath = path.join(PUBLIC_DIR, 'data', 'docs.json');
   const fileContents = await fs.promises.readFile(filePath, 'utf8');
   return JSON.parse(fileContents);
@@ -66,6 +86,19 @@ export async function getDocsIndex(): Promise<DocEntry[]> {
  */
 export async function getBiography(slug: string): Promise<Biography | null> {
   if (!slug || slug === 'undefined') return null;
+
+  if (USE_SANITY) {
+    const data = await getBiographyFromSanity(slug);
+    if (data) {
+      return {
+        ...data.biography,
+        portableTextContent: data.portableTextContent, // New field for Portable Text
+        gallery: data.gallery // New field for gallery images
+      };
+    }
+    // Fallthrough to local if not found in Sanity
+  }
+
   try {
     const filePath = path.join(PUBLIC_DIR, 'content', `${slug}.md`);
     const fileContents = await fs.promises.readFile(filePath, 'utf8');
@@ -91,10 +124,13 @@ export async function getBiography(slug: string): Promise<Biography | null> {
  * SERVER-SIDE: Gets all biographies (for search index)
  */
 export async function getAllBiographies(): Promise<Biography[]> {
+  if (USE_SANITY) {
+    return getAllBiographiesFromSanity();
+  }
+
   const docs = await getDocsIndex();
   const bios = await Promise.all(
     docs.map(doc => getBiography(doc.slug))
   );
   return bios.filter((bio): bio is Biography => bio !== null);
 }
-

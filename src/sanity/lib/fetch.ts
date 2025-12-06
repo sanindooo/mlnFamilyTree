@@ -10,6 +10,7 @@ import {
   allBiographiesQuery,
   docsIndexQuery,
   allGalleryImagesQuery,
+  timelineEventsQuery,
 } from './queries'
 import { adaptFamilyTree, adaptSanityBiography } from './adapters'
 import { Person, Biography, DocEntry } from '@/types'
@@ -93,3 +94,15 @@ export async function getGalleryImagesFromSanity(): Promise<any[]> {
   }
 }
 
+/**
+ * Fetch timeline events from Sanity
+ */
+export async function getTimelineEventsFromSanity(): Promise<any[]> {
+  try {
+    const data = await client.fetch(timelineEventsQuery)
+    return data || []
+  } catch (error) {
+    console.error('Error fetching timeline events from Sanity:', error)
+    return []
+  }
+}

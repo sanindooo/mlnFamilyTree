@@ -2,8 +2,9 @@
 
 import { Button } from "@/components/ui/Button";
 import { motion, useScroll, useTransform } from "framer-motion";
-import React, { useRef } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { RxChevronRight } from "react-icons/rx";
+import { getTimelineEventsFromSanity } from "@/sanity/lib/fetch";
 
 const Circle = () => {
 	const circleRef = useRef(null);
@@ -29,6 +30,35 @@ const Circle = () => {
 };
 
 export function Timeline() {
+	const [events, setEvents] = useState<any[]>([]);
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		async function fetchEvents() {
+			try {
+				const data = await getTimelineEventsFromSanity();
+				if (data && data.length > 0) {
+					setEvents(data);
+				} else {
+					// Fallback to static data if no Sanity data
+					setEvents([
+						{ year: "1883", title: "Beginnings", description: "Born in Buganda Kingdom during a transformative period in Uganda's history. A time when tradition and change collided." },
+						{ year: "1920s", title: "Ascent", description: "Rose to prominence as a respected leader and advocate for his community. His voice carried weight in rooms where decisions were made." },
+						{ year: "1930s–1940s", title: "Service", description: "Served in the Legislative Council, working tirelessly for social justice and development. His dedication shaped the nation's course." },
+						{ year: "1945", title: "Legacy", description: "Tragically assassinated, leaving a powerful legacy that continues to inspire. His memory endures in the hearts of those who knew his work." },
+						{ year: "Present Day", title: "Remembrance", description: "Remembered as a hero and pioneer whose contributions shaped modern Uganda." },
+					]);
+				}
+			} catch (error) {
+				console.error("Failed to fetch timeline events:", error);
+			} finally {
+				setLoading(false);
+			}
+		}
+
+		fetchEvents();
+	}, []);
+
 	return (
 		<section
 			id="timeline"
@@ -61,84 +91,22 @@ export function Timeline() {
 						<div className="absolute top-[-50vh] h-[50vh] w-full bg-cream" />
 					</div>
 					<div className="grid auto-cols-fr gap-x-12 gap-y-8 sm:gap-y-12 md:gap-x-20 md:gap-y-20">
-						<div className="relative">
-							<Circle />
-							<div className="ml-12 mt-4 flex flex-col md:ml-0">
-								<h3 className="mb-2 text-2xl font-bold leading-[1.2] md:text-3xl text-burgundy font-serif">
-									1890s
-								</h3>
-								<h4 className="mb-2 text-lg font-bold md:text-xl text-deep-umber">
-									Beginnings
-								</h4>
-								<p className="text-deep-umber">
-									Born in Buganda Kingdom during a transformative period in
-									Uganda's history. A time when tradition and change collided.
-								</p>
+						{events.map((event, index) => (
+							<div className="relative" key={index}>
+								<Circle />
+								<div className="ml-12 mt-4 flex flex-col md:ml-0">
+									<h3 className="mb-2 text-2xl font-bold leading-[1.2] md:text-3xl text-burgundy font-serif">
+										{event.year}
+									</h3>
+									<h4 className="mb-2 text-lg font-bold md:text-xl text-deep-umber">
+										{event.title}
+									</h4>
+									<p className="text-deep-umber">
+										{event.description}
+									</p>
+								</div>
 							</div>
-						</div>
-						<div className="relative">
-							<Circle />
-							<div className="ml-12 mt-4 flex flex-col md:ml-0">
-								<h3 className="mb-2 text-2xl font-bold leading-[1.2] md:text-3xl text-burgundy font-serif">
-									1920s
-								</h3>
-								<h4 className="mb-2 text-lg font-bold md:text-xl text-deep-umber">
-									Ascent
-								</h4>
-								<p className="text-deep-umber">
-									Rose to prominence as a respected leader and advocate for his
-									community. His voice carried weight in rooms where decisions
-									were made.
-								</p>
-							</div>
-						</div>
-						<div className="relative">
-							<Circle />
-							<div className="ml-12 mt-4 flex flex-col md:ml-0">
-								<h3 className="mb-2 text-2xl font-bold leading-[1.2] md:text-3xl text-burgundy font-serif">
-									1930s–1940s
-								</h3>
-								<h4 className="mb-2 text-lg font-bold md:text-xl text-deep-umber">
-									Service
-								</h4>
-								<p className="text-deep-umber">
-									Served in the Legislative Council, working tirelessly for
-									social justice and development. His dedication shaped the
-									nation's course.
-								</p>
-							</div>
-						</div>
-						<div className="relative">
-							<Circle />
-							<div className="ml-12 mt-4 flex flex-col md:ml-0">
-								<h3 className="mb-2 text-2xl font-bold leading-[1.2] md:text-3xl text-burgundy font-serif">
-									1945
-								</h3>
-								<h4 className="mb-2 text-lg font-bold md:text-xl text-deep-umber">
-									Legacy
-								</h4>
-								<p className="text-deep-umber">
-									Tragically assassinated, leaving a powerful legacy that
-									continues to inspire. His memory endures in the hearts of
-									those who knew his work.
-								</p>
-							</div>
-						</div>
-						<div className="relative">
-							<Circle />
-							<div className="ml-12 mt-4 flex flex-col md:ml-0">
-								<h3 className="mb-2 text-2xl font-bold leading-[1.2] md:text-3xl text-burgundy font-serif">
-									Present Day
-								</h3>
-								<h4 className="mb-2 text-lg font-bold md:text-xl text-deep-umber">
-									Remembrance
-								</h4>
-								<p className="text-deep-umber">
-									Remembered as a hero and pioneer whose contributions shaped
-									modern Uganda.
-								</p>
-							</div>
-						</div>
+						))}
 					</div>
 				</div>
 			</div>

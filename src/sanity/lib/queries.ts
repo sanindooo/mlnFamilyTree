@@ -149,3 +149,16 @@ export const galleryImagesByTagQuery = groq`
   } | order(_createdAt desc)
 `
 
+// ===== Timeline Queries =====
+
+/**
+ * Get all timeline events ordered by display order
+ */
+export const timelineEventsQuery = groq`
+  *[_type == "timelineEvent"] {
+    year,
+    title,
+    description,
+    displayOrder
+  } | order(displayOrder asc)
+`
