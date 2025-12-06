@@ -1,5 +1,5 @@
 import { PortableTextBlock, toPlainText } from "@portabletext/react";
-import imageUrlBuilder from "@sanity/image-url";
+import createImageUrlBuilder from "@sanity/image-url";
 import { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import { client } from "../client";
 import {
@@ -14,7 +14,7 @@ import {
 /**
  * Image URL builder for Sanity images
  */
-const builder = imageUrlBuilder(client);
+const builder = createImageUrlBuilder(client);
 
 export function urlForImage(source: SanityImageSource) {
 	return builder.image(source).auto("format").fit("max");
