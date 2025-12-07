@@ -28,6 +28,8 @@
     "@sanity/client": "^7.13.1",
     "@sanity/eslint-config-studio": "^5.0.2",
     "@tailwindcss/postcss": "^4",
+    "@types/fs-extra": "^11.0.4",
+    "@types/jsdom": "^27.0.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

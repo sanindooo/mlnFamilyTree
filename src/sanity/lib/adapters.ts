@@ -81,6 +81,9 @@ export function adaptSanityBiography(sanityBio: SanityBiography): Biography {
 		},
 		portableTextContent: sanityBio.content,
 		gallery: sanityBio.gallery,
+		photo: sanityBio.person?.photo
+			? urlForImage(sanityBio.person.photo).url()
+			: undefined,
 	};
 }
 

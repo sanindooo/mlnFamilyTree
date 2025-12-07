@@ -30,6 +30,7 @@ export interface Biography {
 	frontMatter: Record<string, string>;
 	portableTextContent?: PortableTextBlock[]; // New field from Sanity
 	gallery?: any[]; // New field from Sanity
+	photo?: string; // Hero photo from Person
 }
 
 export interface MLNStory {
@@ -80,6 +81,8 @@ export interface SanityBiography {
 	person?: {
 		_ref: string;
 		_type: "reference";
+		name?: string;
+		photo?: SanityImageSource;
 	};
 	content?: PortableTextBlock[];
 	gallery?: Array<{
