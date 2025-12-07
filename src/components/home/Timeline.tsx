@@ -2,9 +2,18 @@
 
 import { Button } from "@/components/ui/Button";
 import { motion, useScroll, useTransform } from "framer-motion";
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef } from "react";
 import { RxChevronRight } from "react-icons/rx";
-import { getTimelineEventsFromSanity } from "@/sanity/lib/fetch";
+
+interface TimelineEvent {
+	year: string;
+	title: string;
+	description: string;
+}
+
+interface TimelineProps {
+	events?: TimelineEvent[];
+}
 
 const Circle = () => {
 	const circleRef = useRef(null);
@@ -29,35 +38,42 @@ const Circle = () => {
 	);
 };
 
-export function Timeline() {
-	const [events, setEvents] = useState<any[]>([]);
-	const [loading, setLoading] = useState(true);
-
-	useEffect(() => {
-		async function fetchEvents() {
-			try {
-				const data = await getTimelineEventsFromSanity();
-				if (data && data.length > 0) {
-					setEvents(data);
-				} else {
-					// Fallback to static data if no Sanity data
-					setEvents([
-						{ year: "1883", title: "Beginnings", description: "Born in Buganda Kingdom during a transformative period in Uganda's history. A time when tradition and change collided." },
-						{ year: "1920s", title: "Ascent", description: "Rose to prominence as a respected leader and advocate for his community. His voice carried weight in rooms where decisions were made." },
-						{ year: "1930s–1940s", title: "Service", description: "Served in the Legislative Council, working tirelessly for social justice and development. His dedication shaped the nation's course." },
-						{ year: "1945", title: "Legacy", description: "Tragically assassinated, leaving a powerful legacy that continues to inspire. His memory endures in the hearts of those who knew his work." },
-						{ year: "Present Day", title: "Remembrance", description: "Remembered as a hero and pioneer whose contributions shaped modern Uganda." },
-					]);
-				}
-			} catch (error) {
-				console.error("Failed to fetch timeline events:", error);
-			} finally {
-				setLoading(false);
-			}
-		}
-
-		fetchEvents();
-	}, []);
+export function Timeline({ events = [] }: TimelineProps) {
+	const displayEvents =
+		events.length > 0
+			? events
+			: [
+					{
+						year: "1883",
+						title: "Beginnings",
+						description:
+							"Born in Buganda Kingdom during a transformative period in Uganda's history. A time when tradition and change collided.",
+					},
+					{
+						year: "1920s",
+						title: "Ascent",
+						description:
+							"Rose to prominence as a respected leader and advocate for his community. His voice carried weight in rooms where decisions were made.",
+					},
+					{
+						year: "1930s–1940s",
+						title: "Service",
+						description:
+							"Served in the Legislative Council, working tirelessly for social justice and development. His dedication shaped the nation's course.",
+					},
+					{
+						year: "1945",
+						title: "Legacy",
+						description:
+							"Tragically assassinated, leaving a powerful legacy that continues to inspire. His memory endures in the hearts of those who knew his work.",
+					},
+					{
+						year: "Present Day",
+						title: "Remembrance",
+						description:
+							"Remembered as a hero and pioneer whose contributions shaped modern Uganda.",
+					},
+			  ];
 
 	return (
 		<section
@@ -91,7 +107,7 @@ export function Timeline() {
 						<div className="absolute top-[-50vh] h-[50vh] w-full bg-cream" />
 					</div>
 					<div className="grid auto-cols-fr gap-x-12 gap-y-8 sm:gap-y-12 md:gap-x-20 md:gap-y-20">
-						{events.map((event, index) => (
+						{displayEvents.map((event, index) => (
 							<div className="relative" key={index}>
 								<Circle />
 								<div className="ml-12 mt-4 flex flex-col md:ml-0">
@@ -101,9 +117,7 @@ export function Timeline() {
 									<h4 className="mb-2 text-lg font-bold md:text-xl text-deep-umber">
 										{event.title}
 									</h4>
-									<p className="text-deep-umber">
-										{event.description}
-									</p>
+									<p className="text-deep-umber">{event.description}</p>
 								</div>
 							</div>
 						))}

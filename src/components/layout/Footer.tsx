@@ -1,8 +1,4 @@
-"use client";
-
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
-import React, { useState } from "react";
+import React from "react";
 import {
   BiLogoFacebookCircle,
   BiLogoInstagram,
@@ -10,25 +6,9 @@ import {
   BiLogoYoutube,
 } from "react-icons/bi";
 import { FaXTwitter } from "react-icons/fa6";
-
-const useForm = () => {
-  const [email, setEmail] = useState("");
-  const handleSetEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
-  };
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    console.log({ email });
-  };
-  return {
-    email,
-    handleSetEmail,
-    handleSubmit,
-  };
-};
+import { FooterNewsletter } from "./FooterNewsletter";
 
 export function Footer() {
-  const formState = useForm();
   return (
     <footer id="relume" className="py-12 md:py-18 lg:py-20 bg-cream border-t border-warm-sand">
       <div className="container">
@@ -38,26 +18,7 @@ export function Footer() {
                <span className="font-serif font-bold text-2xl text-deep-umber">MLN Museum</span>
             </a>
             <p className="mb-5 md:mb-6 text-deep-umber">Preserving and celebrating the life and contributions of Owek. Martin Luther Nsibirwa and his descendants.</p>
-            <div className="w-full max-w-md">
-              <form
-                className="mb-3 grid grid-cols-1 gap-x-4 gap-y-3 sm:grid-cols-[1fr_max-content] md:gap-y-4"
-                onSubmit={formState.handleSubmit}
-              >
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="Email"
-                  value={formState.email}
-                  onChange={formState.handleSetEmail}
-                />
-                <Button title="Subscribe" variant="secondary" size="sm">
-                  Subscribe
-                </Button>
-              </form>
-              <p className="text-xs text-muted">
-                We respect your privacy and only send what matters.
-              </p>
-            </div>
+            <FooterNewsletter />
           </div>
           <div className="grid grid-cols-1 items-start gap-y-10 sm:grid-cols-3 sm:gap-x-6 md:gap-x-8 md:gap-y-4">
             <div className="flex flex-col items-start justify-start">
@@ -127,4 +88,3 @@ export function Footer() {
     </footer>
   );
 }
-

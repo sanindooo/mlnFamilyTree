@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/ui/Button";
 import React from "react";
 import { RxChevronRight } from "react-icons/rx";
@@ -56,10 +54,7 @@ interface BiographyListingProps {
 
 export function BiographyListing({ stories }: BiographyListingProps) {
 	return (
-		<section
-			id="bio-listing"
-			className="py-12 md:py-16 lg:py-20 bg-white"
-		>
+		<section id="bio-listing" className="py-12 md:py-16 lg:py-20 bg-white">
 			<div className="container">
 				<div className="mb-12 md:mb-16 lg:mb-20">
 					<div className="mx-auto max-w-2xl text-center">

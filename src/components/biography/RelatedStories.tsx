@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/ui/Button";
 import React from "react";
 import { MLNStory } from "@/types";
