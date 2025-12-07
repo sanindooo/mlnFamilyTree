@@ -70,13 +70,11 @@ export function Highlights() {
 						</div>
 					</div>
 					<div className="mt-6 flex flex-wrap items-center gap-4 md:mt-8">
-						<Button variant="secondary" asChild>
-							<a href="/mln-story">Read Biography</a>
+						<Button variant="secondary" href="/mln-story">
+							Read Biography
 						</Button>
-						<Button asChild variant="link" size="sm">
-							<a href="/gallery" className="flex items-center">
-								Explore Gallery <RxChevronRight className="ml-2" />
-							</a>
+						<Button variant="link" size="sm" href="/gallery" className="flex items-center">
+							Explore Gallery <RxChevronRight className="ml-2" />
 						</Button>
 					</div>
 				</div>

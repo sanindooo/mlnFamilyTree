@@ -150,11 +150,11 @@ export function Navbar() {
 					{/* Right: CTA Button */}
 					<div className="flex items-center">
 						<Button
-							asChild
+							href="/mln-story"
 							size="sm"
 							className="bg-antique-gold border-antique-gold hover:bg-antique-gold/90"
 						>
-							<a href="/mln-story">Biography</a>
+							Biography
 						</Button>
 					</div>
 				</div>

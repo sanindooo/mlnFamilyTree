@@ -5,38 +5,35 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 
 const playfairDisplay = Playfair_Display({
-  variable: "--font-playfair-display",
-  subsets: ["latin"],
-  weight: ["500", "700"],
+	variable: "--font-playfair-display",
+	subsets: ["latin"],
+	weight: ["500", "700"],
 });
 
 const lato = Lato({
-  variable: "--font-lato",
-  subsets: ["latin"],
-  weight: ["300", "400", "700"],
+	variable: "--font-lato",
+	subsets: ["latin"],
+	weight: ["300", "400", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "Virtual Museum of Martin Luther Nsibirwa",
-  description: "Preserving and celebrating the life and contributions of Owek. Martin Luther Nsibirwa and his descendants.",
+	title: "Virtual Museum of Martin Luther Nsibirwa",
+	description:
+		"Preserving and celebrating the life and contributions of Owek. Martin Luther Nsibirwa and his descendants.",
 };
 
 export default function RootLayout({
-  children,
+	children,
 }: Readonly<{
-  children: React.ReactNode;
+	children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      <body
-        className={`${playfairDisplay.variable} ${lato.variable} font-sans antialiased bg-cream text-deep-umber`}
-      >
-        <Navbar />
-        <main>
-          {children}
-        </main>
-        <Footer />
-      </body>
-    </html>
-  );
+	return (
+		<html lang="en" className={`${playfairDisplay.variable} ${lato.variable}`}>
+			<body className={`font-sans antialiased bg-cream text-deep-umber`}>
+				<Navbar />
+				<main>{children}</main>
+				<Footer />
+			</body>
+		</html>
+	);
 }

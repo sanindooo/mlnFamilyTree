@@ -18,34 +18,30 @@ export function SectionNavigation({
 					{prevSection ? (
 						<Button
 							variant="secondary"
-							asChild
+							href={prevSection.href}
 							className="flex items-center gap-2"
 						>
-							<a href={prevSection.href}>
-								<BiChevronLeft className="size-5" />
-								<span className="hidden md:inline">{prevSection.title}</span>
-								<span className="md:hidden">Previous</span>
-							</a>
+							<BiChevronLeft className="size-5" />
+							<span className="hidden md:inline">{prevSection.title}</span>
+							<span className="md:hidden">Previous</span>
 						</Button>
 					) : (
 						<div />
 					)}
 
-					<Button variant="secondary" asChild>
-						<a href="/mln-story">View All Sections</a>
+					<Button variant="secondary" href="/mln-story">
+						View All Sections
 					</Button>
 
 					{nextSection ? (
 						<Button
 							variant="secondary"
-							asChild
+							href={nextSection.href}
 							className="flex items-center gap-2"
 						>
-							<a href={nextSection.href}>
-								<span className="hidden md:inline">{nextSection.title}</span>
-								<span className="md:hidden">Next</span>
-								<BiChevronRight className="size-5" />
-							</a>
+							<span className="hidden md:inline">{nextSection.title}</span>
+							<span className="md:hidden">Next</span>
+							<BiChevronRight className="size-5" />
 						</Button>
 					) : (
 						<div />

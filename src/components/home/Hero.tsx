@@ -14,11 +14,11 @@ export function Hero() {
               A pioneering leader, devoted family man, and cornerstone of Ugandan heritage. Explore the enduring legacy of a true visionary.
             </p>
             <nav className="mt-6 flex flex-wrap gap-4 md:mt-8" aria-label="Hero actions">
-              <Button asChild>
-                <a href="/mln-story">Discover the Biography</a>
+              <Button href="/mln-story">
+                Discover the Biography
               </Button>
-              <Button variant="secondary" asChild>
-                <a href="/tree">View Family Tree</a>
+              <Button variant="secondary" href="/tree">
+                View Family Tree
               </Button>
             </nav>
           </article>

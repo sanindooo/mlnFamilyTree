@@ -70,8 +70,8 @@ export function RelatedStories({
 				</ul>
 
 				<div className="mt-12 flex items-center justify-center md:mt-16">
-					<Button variant="secondary" asChild>
-						<a href="/mln-story">View All Sections</a>
+					<Button variant="secondary" href="/mln-story">
+						View All Sections
 					</Button>
 				</div>
 			</div>
