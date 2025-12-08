@@ -9,7 +9,13 @@ export default async function TreePage() {
   return (
     <>
       <AncestorHero />
-      <InteractiveTree tree={treeData} />
+      {treeData ? (
+        <InteractiveTree tree={treeData} />
+      ) : (
+        <div className="py-16 text-center text-muted">
+          Family tree data unavailable
+        </div>
+      )}
       <TreeGrid />
     </>
   );
