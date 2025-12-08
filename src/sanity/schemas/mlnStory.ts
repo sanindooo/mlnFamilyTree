@@ -83,6 +83,20 @@ export const mlnStoryType = defineType({
 							type: "string",
 							title: "Alternative text",
 						},
+						{
+							name: "aspectRatio",
+							type: "string",
+							title: "Aspect Ratio",
+							options: {
+								list: [
+									{ title: "16:9 (Landscape)", value: "16/9" },
+									{ title: "1:1 (Square)", value: "1/1" },
+									{ title: "3:4 (Portrait)", value: "3/4" },
+									{ title: "Original", value: "original" },
+								],
+							},
+							initialValue: "16/9",
+						},
 					],
 				},
 			],
