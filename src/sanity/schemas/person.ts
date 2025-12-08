@@ -62,14 +62,6 @@ export const personType = defineType({
 			],
 			description: "References to this person's children",
 		}),
-		defineField({
-			name: "biography",
-			title: "Biography Reference (Deprecated) ⚠️",
-			type: "reference",
-			to: [{ type: "biography" }],
-			description: "DEPRECATED: Use the biography fields below instead.",
-			readOnly: true,
-		}),
 		// Merged Biography Fields
 		defineField({
 			name: "bioTitle",
@@ -133,9 +125,10 @@ export const personType = defineType({
 							title: "Aspect Ratio",
 							options: {
 								list: [
-									{ title: "16:9 (Landscape)", value: "16/9" },
+									{ title: "16:9 (Video)", value: "16/9" },
 									{ title: "1:1 (Square)", value: "1/1" },
 									{ title: "3:4 (Portrait)", value: "3/4" },
+									{ title: "4:3 (Landscape)", value: "4/3" },
 									{ title: "Original", value: "original" },
 								],
 							},

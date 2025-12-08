@@ -74,32 +74,6 @@ export interface SanityPerson {
 		_ref: string;
 		_type: "reference";
 	}>;
-	biography?: {
-		_ref: string;
-		_type: "reference";
-	};
-}
-
-export interface SanityBiography {
-	_id: string;
-	_type: "biography";
-	title: string;
-	slug: {
-		current: string;
-	};
-	person?: {
-		_ref: string;
-		_type: "reference";
-		name?: string;
-		photo?: SanityImageSource;
-	};
-	content?: PortableTextBlock[];
-	gallery?: Array<{
-		_key: string;
-		asset: SanityImageSource;
-		alt?: string;
-		caption?: string;
-	}>;
 }
 
 export interface SanityGalleryImage {

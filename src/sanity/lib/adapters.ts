@@ -8,7 +8,6 @@ import {
 	MLNStory,
 	GalleryImage,
 	SanityPerson,
-	SanityBiography,
 	SanityMLNStory,
 	SanityGalleryImage,
 } from "@/types";
