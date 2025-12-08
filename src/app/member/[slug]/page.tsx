@@ -1,5 +1,5 @@
 import { getBiography, getDocsIndex } from "@/lib/data";
-import { BiographyHeader } from "@/components/biography/BiographyHeader";
+import { MemberBiographyHeader } from "@/components/biography/MemberBiographyHeader";
 import { BiographyContent } from "@/components/biography/BiographyContent";
 import { SectionGallery } from "@/components/biography/SectionGallery";
 import { Button } from "@/components/ui/Button";
@@ -46,7 +46,7 @@ export default async function MemberPage({
 
 	return (
 		<>
-			<BiographyHeader
+			<MemberBiographyHeader
 				title={bio.title}
 				imageSrc={heroImage}
 				category="Family Member"
