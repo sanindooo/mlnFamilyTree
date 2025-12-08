@@ -6,9 +6,11 @@ import {
 	Person,
 	Biography,
 	MLNStory,
+	GalleryImage,
 	SanityPerson,
 	SanityBiography,
 	SanityMLNStory,
+	SanityGalleryImage,
 } from "@/types";
 
 /**
@@ -104,6 +106,21 @@ export function adaptSanityMLNStory(sanityStory: SanityMLNStory): MLNStory {
 			...img,
 			asset: img.asset ? urlForImage(img.asset).url() : undefined,
 		})),
+	};
+}
+
+/**
+ * Convert Sanity Gallery Image to frontend GalleryImage type
+ */
+export function adaptGalleryImage(sanityImage: SanityGalleryImage): GalleryImage {
+	return {
+		src: sanityImage.image ? urlForImage(sanityImage.image).url() : "",
+		thumbnailSrc: sanityImage.image
+			? urlForImage(sanityImage.image).width(600).url()
+			: "",
+		title: sanityImage.title,
+		description: sanityImage.description,
+		tags: sanityImage.tags || [],
 	};
 }
 

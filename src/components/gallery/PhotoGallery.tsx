@@ -1,16 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Lightbox from "yet-another-react-lightbox";
 import Captions from "yet-another-react-lightbox/plugins/captions";
 import "yet-another-react-lightbox/styles.css";
 import "yet-another-react-lightbox/plugins/captions.css";
-
-export interface GalleryImage {
-	src: string;
-	title: string;
-	category: string;
-}
+import { GalleryImage } from "@/types";
 
 interface PhotoGalleryProps {
 	images: GalleryImage[];
@@ -21,20 +16,29 @@ export function PhotoGallery({ images }: PhotoGalleryProps) {
 	const [open, setOpen] = useState(false);
 	const [index, setIndex] = useState(0);
 
-	// Extract unique categories from images
-	const categories = ["all", ...Array.from(new Set(images.map(img => img.category)))];
+	// Memoize categories to prevent recalculation on every render
+	const categories = useMemo(() => {
+		const allTags = images.flatMap((img) => img.tags).filter(Boolean);
+		return ["all", ...Array.from(new Set(allTags)).sort()];
+	}, [images]);
 
-	const filteredImages =
-		selectedCategory === "all"
-			? images
-			: images.filter((img) => img.category === selectedCategory);
+	// Memoize filtered images
+	const filteredImages = useMemo(() => {
+		if (selectedCategory === "all") return images;
+		return images.filter((img) => img.tags.includes(selectedCategory));
+	}, [images, selectedCategory]);
 
-	const slides = filteredImages.map((img) => ({
-		src: img.src,
-		alt: img.title,
-		title: img.title,
-		description: img.category,
-	}));
+	// Memoize slides for lightbox
+	const slides = useMemo(
+		() =>
+			filteredImages.map((img) => ({
+				src: img.src,
+				alt: img.title,
+				title: img.title,
+				description: img.description,
+			})),
+		[filteredImages]
+	);
 
 	const handleImageClick = (idx: number) => {
 		setIndex(idx);
@@ -84,8 +88,9 @@ export function PhotoGallery({ images }: PhotoGalleryProps) {
 						<li key={idx} onClick={() => handleImageClick(idx)}>
 							<figure className="group relative overflow-hidden rounded-xl border border-warm-sand shadow-lg cursor-pointer aspect-square m-0">
 								<img
-									src={image.src}
+									src={image.thumbnailSrc || image.src}
 									alt={image.title}
+									loading="lazy"
 									className="w-full h-full object-cover sepia-[.3] transition-transform duration-300 group-hover:scale-110"
 								/>
 								<figcaption className="absolute inset-0 bg-gradient-to-t from-deep-umber/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -93,7 +98,11 @@ export function PhotoGallery({ images }: PhotoGalleryProps) {
 										<p className="text-cream text-sm font-semibold">
 											{image.title}
 										</p>
-										<p className="text-cream/70 text-xs">{image.category}</p>
+										{image.description && (
+											<p className="text-cream/70 text-xs line-clamp-2">
+												{image.description}
+											</p>
+										)}
 									</div>
 								</figcaption>
 							</figure>

@@ -43,6 +43,14 @@ export interface MLNStory {
 	order?: number;
 }
 
+export interface GalleryImage {
+	src: string;
+	thumbnailSrc: string;
+	title: string;
+	description?: string;
+	tags: string[];
+}
+
 export interface SearchResult {
 	doc: Biography;
 	score: number;

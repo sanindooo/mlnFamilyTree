@@ -167,7 +167,7 @@ export const allGalleryImagesQuery = groq`
     title,
     image,
     description,
-    tags,
+    "tags": tags[]->title,
     relatedPeople[]-> {
       _id,
       name,

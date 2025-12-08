@@ -9,8 +9,8 @@ import {
   allMLNStoriesQuery,
   mlnStoryBySlugQuery,
 } from './queries'
-import { adaptFamilyTree, adaptSanityBiography, adaptSanityMLNStory } from './adapters'
-import { Person, Biography, DocEntry, MLNStory } from '@/types'
+import { adaptFamilyTree, adaptSanityBiography, adaptSanityMLNStory, adaptGalleryImage } from './adapters'
+import { Person, Biography, DocEntry, MLNStory, GalleryImage } from '@/types'
 
 /**
  * Fetch the family tree from Sanity
@@ -81,10 +81,10 @@ export async function getDocsIndexFromSanity(): Promise<DocEntry[]> {
 /**
  * Fetch gallery images from Sanity
  */
-export async function getGalleryImagesFromSanity(): Promise<any[]> {
+export async function getGalleryImagesFromSanity(): Promise<GalleryImage[]> {
   try {
     const data = await client.fetch(allGalleryImagesQuery)
-    return data || []
+    return data ? data.map(adaptGalleryImage) : []
   } catch (error) {
     console.error('Error fetching gallery images from Sanity:', error)
     return []
