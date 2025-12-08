@@ -14,9 +14,9 @@ export const familyTreeQuery = groq`
     birthDate,
     deathDate,
     photo,
-    biography->{
-      content,
-      gallery
+    "biography": {
+      "content": content,
+      "gallery": gallery
     },
     "children": children[]-> {
       _id,
@@ -25,9 +25,9 @@ export const familyTreeQuery = groq`
       birthDate,
       deathDate,
       photo,
-      biography->{
-        content,
-        gallery
+      "biography": {
+        "content": content,
+        "gallery": gallery
       },
       "children": children[]-> {
         _id,
@@ -36,9 +36,9 @@ export const familyTreeQuery = groq`
         birthDate,
         deathDate,
         photo,
-        biography->{
-          content,
-          gallery
+        "biography": {
+          "content": content,
+          "gallery": gallery
         },
         "children": children[]-> {
           _id,
@@ -47,9 +47,9 @@ export const familyTreeQuery = groq`
           birthDate,
           deathDate,
           photo,
-          biography->{
-            content,
-            gallery
+          "biography": {
+            "content": content,
+            "gallery": gallery
           }
         }
       }
@@ -68,10 +68,10 @@ export const personBySlugQuery = groq`
     birthDate,
     deathDate,
     photo,
-    biography->{
+    "biography": {
       _id,
-      title,
-      slug,
+      "title": coalesce(bioTitle, name),
+      "slug": slug.current,
       content,
       gallery
     }
@@ -95,18 +95,19 @@ export const allPeopleQuery = groq`
 
 /**
  * Get a biography by slug with full content
+ * Now queries the Person document directly
  */
 export const biographyBySlugQuery = groq`
-  *[_type == "biography" && slug.current == $slug][0] {
+  *[_type == "person" && slug.current == $slug][0] {
     _id,
-    title,
-    slug,
+    "title": coalesce(bioTitle, name),
+    "slug": slug.current,
     content,
     gallery,
-    person->{
+    "person": {
       _id,
       name,
-      slug,
+      "slug": slug.current,
       birthDate,
       deathDate,
       photo
@@ -116,14 +117,15 @@ export const biographyBySlugQuery = groq`
 
 /**
  * Get all biographies (for search index)
+ * Queries people who have biography content
  */
 export const allBiographiesQuery = groq`
-  *[_type == "biography"] {
+  *[_type == "person" && defined(content)] {
     _id,
-    title,
-    slug,
+    "title": coalesce(bioTitle, name),
+    "slug": slug.current,
     content,
-    person->{
+    "person": {
       name
     }
   } | order(title asc)
@@ -133,9 +135,9 @@ export const allBiographiesQuery = groq`
  * Get docs index (biographies with their photo galleries)
  */
 export const docsIndexQuery = groq`
-  *[_type == "biography"] {
+  *[_type == "person" && defined(content)] {
     "slug": slug.current,
-    title,
+    "title": coalesce(bioTitle, name),
     "photos": gallery[].asset->url
   } | order(title asc)
 `

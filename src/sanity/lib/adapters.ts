@@ -75,13 +75,16 @@ export function portableTextToPlainText(blocks?: PortableTextBlock[]): string {
 }
 
 /**
- * Convert Sanity Biography to frontend Biography type
+ * Convert Sanity Biography (or Person with bio fields) to frontend Biography type
  * Note: content is kept as empty string since we'll use PortableText component
  * rawContent is extracted for search purposes
  */
-export function adaptSanityBiography(sanityBio: SanityBiography): Biography {
+export function adaptSanityBiography(sanityBio: any): Biography {
+	// Handle slug being either string (from Person query alias) or object (from original Biography)
+	const slug = typeof sanityBio.slug === 'string' ? sanityBio.slug : sanityBio.slug?.current;
+	
 	return {
-		slug: sanityBio.slug.current,
+		slug: slug,
 		title: sanityBio.title,
 		content: "", // Will use PortableText component instead
 		rawContent: portableTextToPlainText(sanityBio.content),

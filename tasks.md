@@ -2,6 +2,17 @@
 
 ## Sanity CMS
 
+### Cleanup Deprecated Files
+**Status:** Pending (Post-Migration)
+
+Delete deprecated files and code after verifying the Biography-to-Person migration.
+
+**Files to remove/cleanup:**
+- `src/sanity/schemas/biography.ts` (The entire file)
+- Remove `biographyType` from `src/sanity/schemas/index.ts`
+- Remove deprecated `biography` reference field from `src/sanity/schemas/person.ts`
+- Remove `scripts/migrate-biographies.ts` (Once migration is confirmed successful)
+
 ### Separate Development/Production Datasets
 **Status:** Potential requirement (not needed yet)
 
@@ -20,4 +31,3 @@ Set up separate Sanity datasets for development and production environments to a
 - Test content changes without affecting live site
 - Preview edits before going live
 - Safer content management workflow
-
