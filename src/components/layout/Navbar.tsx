@@ -73,6 +73,7 @@ export function Navbar() {
 									<Link
 										href="/mln-story"
 										className="text-base font-medium text-deep-umber hover:text-burgundy transition-colors"
+										onClick={() => setIsBiographyOpen(false)}
 									>
 										Biography
 									</Link>
@@ -103,6 +104,7 @@ export function Navbar() {
 												<Link
 													href={section.href}
 													className="block px-4 py-2.5 text-sm font-medium text-deep-umber hover:bg-warm-sand/20 hover:text-burgundy transition-colors"
+													onClick={() => setIsBiographyOpen(false)}
 												>
 													{section.label}
 												</Link>
