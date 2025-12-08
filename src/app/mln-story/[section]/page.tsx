@@ -5,6 +5,7 @@ import { getAllMLNStories, getMLNStory } from "@/lib/data";
 import { notFound } from "next/navigation";
 import { BiographyHeader } from "@/components/biography/BiographyHeader";
 import { RelatedStories } from "@/components/biography/RelatedStories";
+import fallbackImage from "@/assets/images/Children of MLN.jpg";
 
 export async function generateStaticParams() {
 	const stories = await getAllMLNStories();
@@ -43,7 +44,7 @@ export default async function BiographySectionPage({
 		<>
 			<BiographyHeader
 				title={story.title}
-				imageSrc={story.heroImage || "/gallery/Children of MLN.jpg"}
+				imageSrc={story.heroImage || fallbackImage}
 				category="MLN Biography"
 			/>
 			<BiographyContent portableTextContent={story.content} />

@@ -70,8 +70,8 @@ export default async function MemberPage({
 						See {bio.title.split(" ")[0]}'s position in the Nsibirwa family
 						lineage and explore their connections
 					</p>
-					<Button asChild variant="secondary">
-						<a href="/tree">View Family Tree</a>
+					<Button variant="secondary" href="/tree">
+						View Family Tree
 					</Button>
 				</div>
 			</section>

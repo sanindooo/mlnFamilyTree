@@ -94,8 +94,8 @@ export function Timeline({ events = [] }: TimelineProps) {
 							upheaval.
 						</p>
 						<div className="mt-6 flex flex-wrap items-center gap-4 md:mt-8">
-							<Button asChild variant="secondary">
-								<a href="/mln-story">Read Full Biography</a>
+							<Button variant="secondary" href="/mln-story">
+								Read Full Biography
 							</Button>
 						</div>
 					</div>

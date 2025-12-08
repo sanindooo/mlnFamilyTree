@@ -1,14 +1,18 @@
 import React from "react";
+import Image from "next/image";
+import heroImage from "@/assets/images/Document from Paul Kiwana Nsibirwa.png";
 
 export function MLNBiographyHero() {
-  return (
-    <section className="relative py-20 md:py-28 lg:py-32 bg-deep-umber overflow-hidden">
-      {/* Background Image with Overlay */}
+	return (
+		<section className="relative py-20 md:py-28 lg:py-32 bg-deep-umber overflow-hidden">
+			{/* Background Image with Overlay */}
 			<div className="absolute inset-0 z-0">
-				<img
-					src="/slideshow/Document from Paul Kiwana Nsibirwa.png"
+				<Image
+					src={heroImage}
 					alt="MLN"
 					className="size-full object-cover opacity-20 sepia-[.5]"
+					fill
+					placeholder="blur"
 				/>
 				<div className="absolute inset-0 bg-deep-umber/70" />
 			</div>

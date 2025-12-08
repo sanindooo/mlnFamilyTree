@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import { BiLogoLinkedinSquare } from "react-icons/bi";
 import { FaXTwitter } from "react-icons/fa6";
 
@@ -26,10 +27,12 @@ export function TreeGrid() {
 							className="flex flex-col items-start p-4 border border-warm-sand rounded-xl"
 						>
 							<div className="mb-5 md:mb-6">
-								<img
+								<Image
 									src={`/members/children/Bulyaba.jpg`}
 									alt="Family member"
-									className="size-20 min-h-20 min-w-20 rounded-full object-cover border-2 border-warm-sand sepia-[.3]"
+									width={80}
+									height={80}
+									className="size-20 rounded-full object-cover border-2 border-warm-sand sepia-[.3]"
 								/>
 							</div>
 							<div className="mb-3 md:mb-4">

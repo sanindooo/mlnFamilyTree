@@ -14,6 +14,7 @@ export interface Person {
 	deathDate?: string;
 	photo?: string;
 	children?: Person[];
+	hasBioOrGallery?: boolean;
 }
 
 export interface DocEntry {

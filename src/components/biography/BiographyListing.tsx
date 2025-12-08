@@ -1,14 +1,17 @@
 import { Button } from "@/components/ui/Button";
 import React from "react";
+import Image, { StaticImageData } from "next/image";
+import Link from "next/link";
 import { RxChevronRight } from "react-icons/rx";
 import { BiCube } from "react-icons/bi";
 import { MLNStory } from "@/types";
+import fallbackImage from "@/assets/images/Children of MLN.jpg";
 
 interface BiographySectionCardProps {
 	title: string;
 	description: string;
 	href: string;
-	imageSrc: string;
+	imageSrc: string | StaticImageData;
 }
 
 function BiographySectionCard({
@@ -18,16 +21,18 @@ function BiographySectionCard({
 	imageSrc,
 }: BiographySectionCardProps) {
 	return (
-		<a
+		<Link
 			href={href}
 			className="relative p-6 md:p-8 group overflow-hidden rounded-xl block"
 		>
 			<div className="absolute inset-0 z-0">
 				<div className="absolute inset-0 bg-muted/80 z-10" />
-				<img
+				<Image
 					src={imageSrc}
 					className="size-full object-cover transition-transform duration-500 group-hover:scale-105 sepia-[.3]"
 					alt={title}
+					fill
+					sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
 				/>
 			</div>
 			<div className="relative z-20 flex flex-col justify-between min-h-[240px]">
@@ -44,7 +49,7 @@ function BiographySectionCard({
 					</div>
 				</div>
 			</div>
-		</a>
+		</Link>
 	);
 }
 
@@ -76,7 +81,7 @@ export function BiographyListing({ stories }: BiographyListingProps) {
 								title={story.title}
 								description={story.description}
 								href={`/mln-story/${story.slug}`}
-								imageSrc={story.heroImage || "/gallery/Children of MLN.jpg"}
+								imageSrc={story.heroImage || fallbackImage}
 							/>
 						</li>
 					))}

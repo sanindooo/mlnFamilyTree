@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
+import Image from "next/image";
 import Lightbox from "yet-another-react-lightbox";
 import Captions from "yet-another-react-lightbox/plugins/captions";
 import "yet-another-react-lightbox/styles.css";
@@ -87,11 +88,12 @@ export function PhotoGallery({ images }: PhotoGalleryProps) {
 					{filteredImages.map((image, idx) => (
 						<li key={idx} onClick={() => handleImageClick(idx)}>
 							<figure className="group relative overflow-hidden rounded-xl border border-warm-sand shadow-lg cursor-pointer aspect-square m-0">
-								<img
+								<Image
 									src={image.thumbnailSrc || image.src}
 									alt={image.title}
-									loading="lazy"
-									className="w-full h-full object-cover sepia-[.3] transition-transform duration-300 group-hover:scale-110"
+									fill
+									sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+									className="object-cover sepia-[.3] transition-transform duration-300 group-hover:scale-110"
 								/>
 								<figcaption className="absolute inset-0 bg-gradient-to-t from-deep-umber/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
 									<div className="absolute bottom-0 left-0 right-0 p-4">

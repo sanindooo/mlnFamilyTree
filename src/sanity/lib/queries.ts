@@ -14,6 +14,10 @@ export const familyTreeQuery = groq`
     birthDate,
     deathDate,
     photo,
+    biography->{
+      content,
+      gallery
+    },
     "children": children[]-> {
       _id,
       name,
@@ -21,6 +25,10 @@ export const familyTreeQuery = groq`
       birthDate,
       deathDate,
       photo,
+      biography->{
+        content,
+        gallery
+      },
       "children": children[]-> {
         _id,
         name,
@@ -28,13 +36,21 @@ export const familyTreeQuery = groq`
         birthDate,
         deathDate,
         photo,
+        biography->{
+          content,
+          gallery
+        },
         "children": children[]-> {
           _id,
           name,
           "slug": slug.current,
           birthDate,
           deathDate,
-          photo
+          photo,
+          biography->{
+            content,
+            gallery
+          }
         }
       }
     }

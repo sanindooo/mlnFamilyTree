@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import {
   BiLogoFacebookCircle,
   BiLogoInstagram,
@@ -14,9 +15,9 @@ export function Footer() {
       <div className="container">
         <div className="grid grid-cols-1 gap-x-[8vw] gap-y-12 pb-12 md:gap-y-16 md:pb-18 lg:grid-cols-[0.75fr_1fr] lg:gap-y-4 lg:pb-20">
           <div className="flex flex-col">
-            <a href="/" className="mb-5 md:mb-6">
+            <Link href="/" className="mb-5 md:mb-6">
                <span className="font-serif font-bold text-2xl text-deep-umber">MLN Museum</span>
-            </a>
+            </Link>
             <p className="mb-5 md:mb-6 text-deep-umber">Preserving and celebrating the life and contributions of Owek. Martin Luther Nsibirwa and his descendants.</p>
             <FooterNewsletter />
           </div>
@@ -25,24 +26,24 @@ export function Footer() {
               <h2 className="mb-3 font-semibold md:mb-4 text-deep-umber">Explore</h2>
               <ul>
                 <li className="py-2 text-sm">
-                  <a href="/mln-story" className="flex items-center gap-3 hover:text-burgundy">
+                  <Link href="/mln-story" className="flex items-center gap-3 hover:text-burgundy">
                     <span>MLN Biography</span>
-                  </a>
+                  </Link>
                 </li>
                 <li className="py-2 text-sm">
-                  <a href="/tree" className="flex items-center gap-3 hover:text-burgundy">
+                  <Link href="/tree" className="flex items-center gap-3 hover:text-burgundy">
                     <span>Family tree</span>
-                  </a>
+                  </Link>
                 </li>
                 <li className="py-2 text-sm">
-                  <a href="/gallery" className="flex items-center gap-3 hover:text-burgundy">
+                  <Link href="/gallery" className="flex items-center gap-3 hover:text-burgundy">
                     <span>Gallery</span>
-                  </a>
+                  </Link>
                 </li>
                 <li className="py-2 text-sm">
-                  <a href="/search" className="flex items-center gap-3 hover:text-burgundy">
+                  <Link href="/search" className="flex items-center gap-3 hover:text-burgundy">
                     <span>Search</span>
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>

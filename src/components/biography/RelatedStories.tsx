@@ -1,16 +1,16 @@
 import { Button } from "@/components/ui/Button";
 import React from "react";
+import Image from "next/image";
+import Link from "next/link";
 import { MLNStory } from "@/types";
+import fallbackImage from "@/assets/images/Children of MLN.jpg";
 
 interface RelatedStoriesProps {
 	currentSlug?: string;
 	stories: MLNStory[];
 }
 
-export function RelatedStories({
-	currentSlug,
-	stories,
-}: RelatedStoriesProps) {
+export function RelatedStories({ currentSlug, stories }: RelatedStoriesProps) {
 	// Filter out the current section if specified
 	const relatedSections = currentSlug
 		? stories.filter((s) => s.slug !== currentSlug)
@@ -40,29 +40,31 @@ export function RelatedStories({
 					{displaySections.map((story) => (
 						<li key={story.slug}>
 							<article>
-								<a
+								<Link
 									href={`/mln-story/${story.slug}`}
 									className="mb-5 block sm:mb-6 group"
 								>
-									<figure className="w-full overflow-hidden rounded-xl border border-warm-sand m-0">
-										<img
-											src={story.heroImage || "/gallery/Children of MLN.jpg"}
+									<figure className="w-full overflow-hidden rounded-xl border border-warm-sand m-0 relative aspect-video">
+										<Image
+											src={story.heroImage || fallbackImage}
 											alt={story.title}
-											className="aspect-video size-full object-cover sepia-[.4] transition-transform duration-300 group-hover:scale-105"
+											className="object-cover sepia-[.4] transition-transform duration-300 group-hover:scale-105"
+											fill
+											sizes="(max-width: 768px) 100vw, 50vw"
 										/>
 									</figure>
-								</a>
+								</Link>
 								<div className="mb-2 mr-4 max-w-full text-sm font-semibold text-burgundy uppercase tracking-wider">
 									Biography
 								</div>
-								<a
+								<Link
 									href={`/mln-story/${story.slug}`}
 									className="mb-2 block max-w-full group"
 								>
 									<h3 className="text-xl font-bold md:text-2xl font-serif text-deep-umber group-hover:text-burgundy transition-colors">
 										{story.title}
 									</h3>
-								</a>
+								</Link>
 								<p className="text-deep-umber">{story.description}</p>
 							</article>
 						</li>

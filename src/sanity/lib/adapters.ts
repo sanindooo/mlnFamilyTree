@@ -46,15 +46,22 @@ export function adaptSanityPerson(
  * Recursively build the family tree from Sanity data
  */
 export function adaptFamilyTree(sanityRoot: any): Person {
-	const adaptPersonNode = (node: any): Person => ({
-		id: node._id,
-		name: node.name,
-		slug: node.slug,
-		birthDate: node.birthDate,
-		deathDate: node.deathDate,
-		photo: node.photo ? urlForImage(node.photo).url() : undefined,
-		children: node.children?.map(adaptPersonNode) || [],
-	});
+	const adaptPersonNode = (node: any): Person => {
+		const hasBioContent = node.biography?.content && node.biography.content.length > 0;
+		const hasGalleryImages = node.biography?.gallery && node.biography.gallery.length > 0;
+		const hasBioOrGallery = hasBioContent || hasGalleryImages;
+
+		return {
+			id: node._id,
+			name: node.name,
+			slug: node.slug,
+			birthDate: node.birthDate,
+			deathDate: node.deathDate,
+			photo: node.photo ? urlForImage(node.photo).url() : undefined,
+			children: node.children?.map(adaptPersonNode) || [],
+			hasBioOrGallery
+		};
+	};
 
 	return adaptPersonNode(sanityRoot);
 }

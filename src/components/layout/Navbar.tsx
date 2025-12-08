@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
 import { clsx } from "clsx";
 import { BiChevronDown } from "react-icons/bi";
+import Link from "next/link";
 
 const useRelume = () => {
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -69,12 +70,12 @@ export function Navbar() {
 								onMouseLeave={() => setIsBiographyOpen(false)}
 							>
 								<div className="flex items-center gap-0.5">
-									<a
+									<Link
 										href="/mln-story"
 										className="text-base font-medium text-deep-umber hover:text-burgundy transition-colors"
 									>
 										Biography
-									</a>
+									</Link>
 									<button
 										className="p-1 text-deep-umber hover:text-burgundy transition-colors"
 										onClick={() => setIsBiographyOpen(!isBiographyOpen)}
@@ -99,12 +100,12 @@ export function Navbar() {
 									<ul className="py-2 list-none m-0 p-0">
 										{biographySections.map((section) => (
 											<li key={section.href}>
-												<a
+												<Link
 													href={section.href}
 													className="block px-4 py-2.5 text-sm font-medium text-deep-umber hover:bg-warm-sand/20 hover:text-burgundy transition-colors"
 												>
 													{section.label}
-												</a>
+												</Link>
 											</li>
 										))}
 									</ul>
@@ -114,12 +115,12 @@ export function Navbar() {
 							{/* Other Nav Links */}
 							{navLinks.map((link) => (
 								<li key={link.href}>
-									<a
+									<Link
 										href={link.href}
 										className="text-base font-medium text-deep-umber hover:text-burgundy transition-colors"
 									>
 										{link.label}
-									</a>
+									</Link>
 								</li>
 							))}
 						</ul>
@@ -138,14 +139,14 @@ export function Navbar() {
 					</button>
 
 					{/* Center: Logo */}
-					<a
+					<Link
 						href="/"
 						className="absolute left-1/2 -translate-x-1/2 flex items-center"
 					>
 						<span className="font-serif font-bold text-xl md:text-2xl text-deep-umber whitespace-nowrap">
 							MLN Museum
 						</span>
-					</a>
+					</Link>
 
 					{/* Right: CTA Button */}
 					<div className="flex items-center">
@@ -185,7 +186,7 @@ export function Navbar() {
 							aria-label="Mobile navigation"
 						>
 							{/* Mobile Logo */}
-							<a
+							<Link
 								href="/"
 								className="mb-8 flex items-center"
 								onClick={useActive.toggleMobileMenu}
@@ -193,39 +194,39 @@ export function Navbar() {
 								<span className="font-serif font-bold text-xl text-deep-umber">
 									MLN Museum
 								</span>
-							</a>
+							</Link>
 
 							{/* Mobile Navigation Links */}
 							<ul className="flex flex-col gap-1 list-none m-0 p-0">
 								<li>
-									<a
+									<Link
 										href="/"
 										className="block text-base font-medium text-deep-umber hover:text-burgundy py-3 px-2 rounded-lg hover:bg-warm-sand/10 transition-colors"
 										onClick={useActive.toggleMobileMenu}
 									>
 										Home
-									</a>
+									</Link>
 								</li>
 
 								{/* Biography Submenu */}
 								<li>
-									<a
+									<Link
 										href="/mln-story"
 										className="block text-base font-medium text-deep-umber hover:text-burgundy py-3 px-2 rounded-lg hover:bg-warm-sand/10 transition-colors"
 										onClick={useActive.toggleMobileMenu}
 									>
 										Biography
-									</a>
+									</Link>
 									<ul className="ml-4 flex flex-col gap-1 list-none mt-1">
 										{biographySections.map((section) => (
 											<li key={section.href}>
-												<a
+												<Link
 													href={section.href}
 													className="block text-sm font-medium text-deep-umber hover:text-burgundy py-2 px-2 rounded-lg hover:bg-warm-sand/10 transition-colors"
 													onClick={useActive.toggleMobileMenu}
 												>
 													{section.label}
-												</a>
+												</Link>
 											</li>
 										))}
 									</ul>
@@ -233,24 +234,24 @@ export function Navbar() {
 
 								{navLinks.map((link) => (
 									<li key={link.href}>
-										<a
+										<Link
 											href={link.href}
 											className="block text-base font-medium text-deep-umber hover:text-burgundy py-3 px-2 rounded-lg hover:bg-warm-sand/10 transition-colors"
 											onClick={useActive.toggleMobileMenu}
 										>
 											{link.label}
-										</a>
+										</Link>
 									</li>
 								))}
 
 								<li>
-									<a
+									<Link
 										href="/search"
 										className="block text-base font-medium text-deep-umber hover:text-burgundy py-3 px-2 rounded-lg hover:bg-warm-sand/10 transition-colors"
 										onClick={useActive.toggleMobileMenu}
 									>
 										Search
-									</a>
+									</Link>
 								</li>
 							</ul>
 						</useActive.NavbarWrapper>

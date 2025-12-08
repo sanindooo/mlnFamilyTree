@@ -6,6 +6,7 @@ import {
 	BreadcrumbSeparator,
 } from "@/components/ui/Breadcrumb";
 import React from "react";
+import Image, { StaticImageData } from "next/image";
 import {
 	BiLinkAlt,
 	BiLogoFacebookCircle,
@@ -16,7 +17,7 @@ import { FaXTwitter } from "react-icons/fa6";
 interface BiographyHeaderProps {
 	title: string;
 	subtitle?: string;
-	imageSrc?: string;
+	imageSrc?: string | StaticImageData;
 	category?: string;
 }
 
@@ -78,11 +79,14 @@ export function BiographyHeader({
 							</div>
 						</div>
 					</div>
-					<div className="mx-auto w-full overflow-hidden rounded-xl border border-warm-sand shadow-lg">
-						<img
+					<div className="mx-auto w-full overflow-hidden rounded-xl border border-warm-sand shadow-lg relative aspect-[3/2]">
+						<Image
 							src={imageSrc}
-							className="aspect-[3/2] size-full object-cover sepia-[.3]"
+							className="object-cover sepia-[.3]"
 							alt={title}
+							fill
+							sizes="(max-width: 768px) 100vw, 50vw"
+							priority
 						/>
 					</div>
 				</div>

@@ -1,6 +1,7 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import { BiChevronRight } from "react-icons/bi";
+import Link from "next/link";
 
 const Breadcrumb = React.forwardRef<
   HTMLElement,
@@ -41,9 +42,9 @@ BreadcrumbItem.displayName = "BreadcrumbItem";
 
 const BreadcrumbLink = React.forwardRef<
   HTMLAnchorElement,
-  React.AnchorHTMLAttributes<HTMLAnchorElement>
+  React.ComponentPropsWithoutRef<typeof Link>
 >(({ className, ...props }, ref) => (
-  <a
+  <Link
     ref={ref}
     className={cn("transition-colors hover:text-deep-umber", className)}
     {...props}

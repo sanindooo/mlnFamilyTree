@@ -1,13 +1,15 @@
 import { Button } from "@/components/ui/Button";
 import React from "react";
+import Image from "next/image";
+import bgImage from "@/assets/images/Children of MLN.jpg";
 
 export function EventCTA() {
-  return (
-    <section
-      id="cta"
-      className="py-12 md:py-16 lg:py-20 bg-deep-umber text-cream"
-    >
-      <div className="container relative">
+	return (
+		<section
+			id="cta"
+			className="py-12 md:py-16 lg:py-20 bg-deep-umber text-cream"
+		>
+			<div className="container relative">
 				<div className="relative z-10 flex flex-col items-center p-8 md:p-12 lg:p-16">
 					<div className="max-w-lg text-center">
 						<h2 className="rb-5 mb-5 text-3xl font-bold md:mb-6 md:text-4xl lg:text-5xl font-serif">
@@ -35,10 +37,12 @@ export function EventCTA() {
 					</div>
 				</div>
 				<div className="absolute inset-0 z-0">
-					<img
-						src="/gallery/Children of MLN.jpg"
+					<Image
+						src={bgImage}
 						className="size-full object-cover opacity-30 sepia-[.5]"
 						alt="Family gathering"
+						fill
+						placeholder="blur"
 					/>
 					<div className="absolute inset-0 bg-deep-umber/80 mix-blend-multiply" />
 				</div>

@@ -1,5 +1,3 @@
-import fs from 'fs';
-import path from 'path';
 import { Biography, DocEntry, Person, MLNStory } from '@/types';
 import { 
   getFamilyTreeFromSanity, 
@@ -10,77 +8,18 @@ import {
   getMLNStoryFromSanity
 } from '@/sanity/lib/fetch';
 
-const PUBLIC_DIR = path.join(process.cwd(), 'public');
-
-// Feature flag for Sanity migration
-// Default to true since we've migrated content
-const USE_SANITY = process.env.NEXT_PUBLIC_USE_SANITY !== 'false';
-
-/**
- * Parses a simple YAML front matter block from a Markdown file.
- * Returns an object with { data, content }.
- */
-export function parseFrontMatter(raw: string): { data: Record<string, string>; content: string } {
-  const match = raw.match(/^---\s*\n([\s\S]*?)\n---\s*\n?/); // find front matter block
-  if (!match) {
-    return { data: {}, content: raw.trim() }; // no front matter, return original content
-  }
-  const data: Record<string, string> = {}; // metadata key/value pairs
-  const body = match[1] // captured front matter without the fences
-  .split('\n') // split into lines
-  .map((line) => line.trim()) // normalize whitespace
-  .filter(Boolean); // drop empty lines
-  for (const line of body) {
-    const [key, ...rest] = line.split(':'); // key: value
-    data[key.trim()] = rest.join(':').trim(); // preserve colons in values
-  }
-  const content = raw.slice(match[0].length).trim(); // remove the front matter from the text
-  return { data, content }; // structured result
-}
-
-/**
- * Converts a small Markdown subset to HTML:
- * - Escapes HTML
- * - Splits on blank lines into paragraphs
- * - Converts single newlines to <br/>
- */
-export function markdownToHtml(md: string): string {
-  const escaped = md
-    .replace(/&/g, '&amp;') // escape &
-    .replace(/</g, '&lt;') // escape <
-    .replace(/>/g, '&gt;'); // escape >
-  return escaped
-    .split(/\n\n+/) // paragraphs by blank line
-    .map((paragraph) => `<p>${paragraph.replace(/\n/g, '<br/>')}</p>`) // newline to <br/>
-    .join('\n'); // rejoin as HTML
-}
-
 /**
  * SERVER-SIDE: Loads the family tree JSON
  */
-export async function getFamilyTree(): Promise<Person> {
-  if (USE_SANITY) {
-    const tree = await getFamilyTreeFromSanity();
-    if (tree) return tree;
-    console.warn('⚠️ Failed to fetch family tree from Sanity, falling back to local JSON');
-  }
-
-  const filePath = path.join(PUBLIC_DIR, 'data', 'familyTree.json');
-  const fileContents = await fs.promises.readFile(filePath, 'utf8');
-  return JSON.parse(fileContents);
+export async function getFamilyTree(): Promise<Person | null> {
+  return getFamilyTreeFromSanity();
 }
 
 /**
  * SERVER-SIDE: Loads the docs index
  */
 export async function getDocsIndex(): Promise<DocEntry[]> {
-  if (USE_SANITY) {
-    return getDocsIndexFromSanity();
-  }
-
-  const filePath = path.join(PUBLIC_DIR, 'data', 'docs.json');
-  const fileContents = await fs.promises.readFile(filePath, 'utf8');
-  return JSON.parse(fileContents);
+  return getDocsIndexFromSanity();
 }
 
 /**
@@ -89,75 +28,35 @@ export async function getDocsIndex(): Promise<DocEntry[]> {
 export async function getBiography(slug: string): Promise<Biography | null> {
   if (!slug || slug === 'undefined') return null;
 
-  if (USE_SANITY) {
-    const data = await getBiographyFromSanity(slug);
-    if (data) {
-      return {
-        ...data.biography,
-        portableTextContent: data.portableTextContent, // New field for Portable Text
-        gallery: data.gallery // New field for gallery images
-      };
-    }
-    // Fallthrough to local if not found in Sanity
-  }
-
-  try {
-    const filePath = path.join(PUBLIC_DIR, 'content', `${slug}.md`);
-    const fileContents = await fs.promises.readFile(filePath, 'utf8');
-    const { data, content } = parseFrontMatter(fileContents);
-    
-    // Fallback title from slug if not in frontmatter
-    const title = data.title || slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-
+  const data = await getBiographyFromSanity(slug);
+  if (data) {
     return {
-      slug,
-      title,
-      content: markdownToHtml(content),
-      rawContent: content,
-      frontMatter: data,
+      ...data.biography,
+      portableTextContent: data.portableTextContent, // New field for Portable Text
+      gallery: data.gallery // New field for gallery images
     };
-  } catch (err) {
-    console.error(`Error loading biography for ${slug}:`, err);
-    return null;
   }
+  
+  return null;
 }
 
 /**
  * SERVER-SIDE: Gets all biographies (for search index)
  */
 export async function getAllBiographies(): Promise<Biography[]> {
-  if (USE_SANITY) {
-    return getAllBiographiesFromSanity();
-  }
-
-  const docs = await getDocsIndex();
-  const bios = await Promise.all(
-    docs.map(doc => getBiography(doc.slug))
-  );
-  return bios.filter((bio): bio is Biography => bio !== null);
+  return getAllBiographiesFromSanity();
 }
 
 /**
  * SERVER-SIDE: Gets all MLN stories
  */
 export async function getAllMLNStories(): Promise<MLNStory[]> {
-  if (USE_SANITY) {
-    return getAllMLNStoriesFromSanity();
-  }
-
-  // Fallback to local hardcoded data structure matching frontend expectations
-  // This is a temporary shim until migration is complete
-  return []; 
+  return getAllMLNStoriesFromSanity();
 }
 
 /**
  * SERVER-SIDE: Gets a single MLN story by slug
  */
 export async function getMLNStory(slug: string): Promise<MLNStory | null> {
-  if (USE_SANITY) {
-    return getMLNStoryFromSanity(slug);
-  }
-
-  // Fallback would require parsing the local JSON structure
-  return null;
+  return getMLNStoryFromSanity(slug);
 }
