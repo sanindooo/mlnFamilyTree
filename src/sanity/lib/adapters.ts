@@ -46,8 +46,10 @@ export function adaptSanityPerson(
  */
 export function adaptFamilyTree(sanityRoot: any): Person {
 	const adaptPersonNode = (node: any): Person => {
-		const hasBioContent = node.biography?.content && node.biography.content.length > 0;
-		const hasGalleryImages = node.biography?.gallery && node.biography.gallery.length > 0;
+		const hasBioContent =
+			node.biography?.content && node.biography.content.length > 0;
+		const hasGalleryImages =
+			node.biography?.gallery && node.biography.gallery.length > 0;
 		const hasBioOrGallery = hasBioContent || hasGalleryImages;
 
 		return {
@@ -58,7 +60,7 @@ export function adaptFamilyTree(sanityRoot: any): Person {
 			deathDate: node.deathDate,
 			photo: node.photo ? urlForImage(node.photo).url() : undefined,
 			children: node.children?.map(adaptPersonNode) || [],
-			hasBioOrGallery
+			hasBioOrGallery,
 		};
 	};
 
@@ -80,8 +82,24 @@ export function portableTextToPlainText(blocks?: PortableTextBlock[]): string {
  */
 export function adaptSanityBiography(sanityBio: any): Biography {
 	// Handle slug being either string (from Person query alias) or object (from original Biography)
-	const slug = typeof sanityBio.slug === 'string' ? sanityBio.slug : sanityBio.slug?.current;
-	
+	const slug =
+		typeof sanityBio.slug === "string"
+			? sanityBio.slug
+			: sanityBio.slug?.current;
+
+	// Merge manual and tagged galleries
+	const manualGallery = sanityBio.manualGallery || [];
+	const taggedGallery = sanityBio.taggedGallery || [];
+	const mergedGallery = [...manualGallery, ...taggedGallery];
+
+	// Deduplicate gallery images based on _key (which maps to _id from our query)
+	const gallery =
+		mergedGallery.length > 0
+			? Array.from(
+					new Map(mergedGallery.map((item: any) => [item._key, item])).values()
+				)
+			: undefined;
+
 	return {
 		slug: slug,
 		title: sanityBio.title,
@@ -91,7 +109,7 @@ export function adaptSanityBiography(sanityBio: any): Biography {
 			title: sanityBio.title,
 		},
 		portableTextContent: sanityBio.content,
-		gallery: sanityBio.gallery,
+		gallery: gallery,
 		photo: sanityBio.person?.photo
 			? urlForImage(sanityBio.person.photo).url()
 			: undefined,
@@ -102,6 +120,19 @@ export function adaptSanityBiography(sanityBio: any): Biography {
  * Convert Sanity MLN Story to frontend MLNStory type
  */
 export function adaptSanityMLNStory(sanityStory: SanityMLNStory): MLNStory {
+	// Merge manual and tagged galleries
+	const manualGallery = sanityStory.manualGalleryImages || [];
+	const taggedGallery = sanityStory.taggedGalleryImages || [];
+	const mergedGallery = [...manualGallery, ...taggedGallery];
+
+	// Deduplicate gallery images based on _key (which maps to _id from our query)
+	const galleryImages =
+		mergedGallery.length > 0
+			? Array.from(
+					new Map(mergedGallery.map((img: any) => [img._key, img])).values()
+				)
+			: undefined;
+
 	return {
 		slug: sanityStory.slug?.current,
 		title: sanityStory.title,
@@ -111,7 +142,7 @@ export function adaptSanityMLNStory(sanityStory: SanityMLNStory): MLNStory {
 			? urlForImage(sanityStory.heroImage).url()
 			: undefined,
 		content: sanityStory.content,
-		galleryImages: sanityStory.galleryImages?.map((img) => ({
+		galleryImages: galleryImages?.map((img: any) => ({
 			...img,
 			asset: img.asset ? urlForImage(img.asset).url() : undefined,
 		})),
@@ -121,7 +152,9 @@ export function adaptSanityMLNStory(sanityStory: SanityMLNStory): MLNStory {
 /**
  * Convert Sanity Gallery Image to frontend GalleryImage type
  */
-export function adaptGalleryImage(sanityImage: SanityGalleryImage): GalleryImage {
+export function adaptGalleryImage(
+	sanityImage: SanityGalleryImage
+): GalleryImage {
 	return {
 		src: sanityImage.image ? urlForImage(sanityImage.image).url() : "",
 		thumbnailSrc: sanityImage.image

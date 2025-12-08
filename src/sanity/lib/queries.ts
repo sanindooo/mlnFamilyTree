@@ -1,4 +1,4 @@
-import { groq } from 'next-sanity'
+import { groq } from "next-sanity";
 
 // ===== Person Queries =====
 
@@ -16,7 +16,14 @@ export const familyTreeQuery = groq`
     photo,
     "biography": {
       "content": content,
-      "gallery": gallery[]->{
+      "manualGallery": gallery[]->{
+        "_key": _id,
+        "asset": image.asset,
+        "alt": coalesce(image.alt, title),
+        "caption": description,
+        "title": title
+      },
+      "taggedGallery": *[_type == "galleryImage" && references(^._id)]{
         "_key": _id,
         "asset": image.asset,
         "alt": coalesce(image.alt, title),
@@ -33,7 +40,14 @@ export const familyTreeQuery = groq`
       photo,
       "biography": {
         "content": content,
-        "gallery": gallery[]->{
+        "manualGallery": gallery[]->{
+          "_key": _id,
+          "asset": image.asset,
+          "alt": coalesce(image.alt, title),
+          "caption": description,
+          "title": title
+        },
+        "taggedGallery": *[_type == "galleryImage" && references(^._id)]{
           "_key": _id,
           "asset": image.asset,
           "alt": coalesce(image.alt, title),
@@ -50,7 +64,14 @@ export const familyTreeQuery = groq`
         photo,
         "biography": {
           "content": content,
-          "gallery": gallery[]->{
+          "manualGallery": gallery[]->{
+            "_key": _id,
+            "asset": image.asset,
+            "alt": coalesce(image.alt, title),
+            "caption": description,
+            "title": title
+          },
+          "taggedGallery": *[_type == "galleryImage" && references(^._id)]{
             "_key": _id,
             "asset": image.asset,
             "alt": coalesce(image.alt, title),
@@ -67,7 +88,14 @@ export const familyTreeQuery = groq`
           photo,
           "biography": {
             "content": content,
-            "gallery": gallery[]->{
+            "manualGallery": gallery[]->{
+              "_key": _id,
+              "asset": image.asset,
+              "alt": coalesce(image.alt, title),
+              "caption": description,
+              "title": title
+            },
+            "taggedGallery": *[_type == "galleryImage" && references(^._id)]{
               "_key": _id,
               "asset": image.asset,
               "alt": coalesce(image.alt, title),
@@ -79,7 +107,7 @@ export const familyTreeQuery = groq`
       }
     }
   }
-`
+`;
 
 /**
  * Get a single person by slug
@@ -97,7 +125,14 @@ export const personBySlugQuery = groq`
       "title": coalesce(bioTitle, name),
       "slug": slug.current,
       content,
-      "gallery": gallery[]->{
+      "manualGallery": gallery[]->{
+        "_key": _id,
+        "asset": image.asset,
+        "alt": coalesce(image.alt, title),
+        "caption": description,
+        "title": title
+      },
+      "taggedGallery": *[_type == "galleryImage" && references(^._id)]{
         "_key": _id,
         "asset": image.asset,
         "alt": coalesce(image.alt, title),
@@ -106,7 +141,7 @@ export const personBySlugQuery = groq`
       }
     }
   }
-`
+`;
 
 /**
  * Get all people (for sitemap, search indexing, etc.)
@@ -119,7 +154,7 @@ export const allPeopleQuery = groq`
     birthDate,
     deathDate
   } | order(name asc)
-`
+`;
 
 // ===== Biography Queries =====
 
@@ -133,7 +168,14 @@ export const biographyBySlugQuery = groq`
     "title": coalesce(bioTitle, name),
     "slug": slug.current,
     content,
-    "gallery": gallery[]->{
+    "manualGallery": gallery[]->{
+      "_key": _id,
+      "asset": image.asset,
+      "alt": coalesce(image.alt, title),
+      "caption": description,
+      "title": title
+    },
+    "taggedGallery": *[_type == "galleryImage" && references(^._id)]{
       "_key": _id,
       "asset": image.asset,
       "alt": coalesce(image.alt, title),
@@ -149,7 +191,7 @@ export const biographyBySlugQuery = groq`
       photo
     }
   }
-`
+`;
 
 /**
  * Get all biographies (for search index)
@@ -165,7 +207,7 @@ export const allBiographiesQuery = groq`
       name
     }
   } | order(title asc)
-`
+`;
 
 /**
  * Get docs index (biographies with their photo galleries)
@@ -174,9 +216,9 @@ export const docsIndexQuery = groq`
   *[_type == "person" && defined(content)] {
     "slug": slug.current,
     "title": coalesce(bioTitle, name),
-    "photos": gallery[]->image.asset->url
+    "photos": (coalesce(gallery, [])[]-> + *[_type == "galleryImage" && references(^._id)]).image.asset->url
   } | order(title asc)
-`
+`;
 
 // ===== MLN Story Queries =====
 
@@ -192,7 +234,7 @@ export const allMLNStoriesQuery = groq`
     heroImage,
     order
   } | order(order asc)
-`
+`;
 
 /**
  * Get a single MLN story by slug
@@ -205,7 +247,14 @@ export const mlnStoryBySlugQuery = groq`
     description,
     heroImage,
     content,
-    "galleryImages": galleryImages[]->{
+    "manualGalleryImages": galleryImages[]->{
+      "_key": _id,
+      "asset": image.asset,
+      "alt": coalesce(image.alt, title),
+      "caption": description,
+      "title": title
+    },
+    "taggedGalleryImages": *[_type == "galleryImage" && references(^._id)]{
       "_key": _id,
       "asset": image.asset,
       "alt": coalesce(image.alt, title),
@@ -214,7 +263,7 @@ export const mlnStoryBySlugQuery = groq`
     },
     order
   }
-`
+`;
 
 // ===== Gallery Queries =====
 
@@ -234,7 +283,7 @@ export const allGalleryImagesQuery = groq`
       "slug": slug.current
     }
   } | order(_createdAt desc)
-`
+`;
 
 /**
  * Get gallery images by tag
@@ -247,7 +296,7 @@ export const galleryImagesByTagQuery = groq`
     description,
     tags
   } | order(_createdAt desc)
-`
+`;
 
 // ===== Timeline Queries =====
 
@@ -261,4 +310,4 @@ export const timelineEventsQuery = groq`
     description,
     displayOrder
   } | order(displayOrder asc)
-`
+`;
