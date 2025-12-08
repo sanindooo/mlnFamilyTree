@@ -144,23 +144,12 @@ export const personType = defineType({
 			type: "array",
 			of: [
 				{
-					type: "image",
-					options: { hotspot: true },
-					fields: [
-						{
-							name: "alt",
-							type: "string",
-							title: "Alternative text",
-						},
-						{
-							name: "caption",
-							type: "string",
-							title: "Caption",
-						},
-					],
+					type: "reference",
+					to: [{ type: "galleryImage" }],
 				},
 			],
-			description: "Additional photos for the biography page",
+			description:
+				"References to photos in the main gallery. Creating a new item here adds it to the global gallery.",
 		}),
 	],
 	preview: {

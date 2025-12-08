@@ -16,7 +16,13 @@ export const familyTreeQuery = groq`
     photo,
     "biography": {
       "content": content,
-      "gallery": gallery
+      "gallery": gallery[]->{
+        "_key": _id,
+        "asset": image.asset,
+        "alt": coalesce(image.alt, title),
+        "caption": description,
+        "title": title
+      }
     },
     "children": children[]-> {
       _id,
@@ -27,7 +33,13 @@ export const familyTreeQuery = groq`
       photo,
       "biography": {
         "content": content,
-        "gallery": gallery
+        "gallery": gallery[]->{
+          "_key": _id,
+          "asset": image.asset,
+          "alt": coalesce(image.alt, title),
+          "caption": description,
+          "title": title
+        }
       },
       "children": children[]-> {
         _id,
@@ -38,7 +50,13 @@ export const familyTreeQuery = groq`
         photo,
         "biography": {
           "content": content,
-          "gallery": gallery
+          "gallery": gallery[]->{
+            "_key": _id,
+            "asset": image.asset,
+            "alt": coalesce(image.alt, title),
+            "caption": description,
+            "title": title
+          }
         },
         "children": children[]-> {
           _id,
@@ -49,7 +67,13 @@ export const familyTreeQuery = groq`
           photo,
           "biography": {
             "content": content,
-            "gallery": gallery
+            "gallery": gallery[]->{
+              "_key": _id,
+              "asset": image.asset,
+              "alt": coalesce(image.alt, title),
+              "caption": description,
+              "title": title
+            }
           }
         }
       }
@@ -73,7 +97,13 @@ export const personBySlugQuery = groq`
       "title": coalesce(bioTitle, name),
       "slug": slug.current,
       content,
-      gallery
+      "gallery": gallery[]->{
+        "_key": _id,
+        "asset": image.asset,
+        "alt": coalesce(image.alt, title),
+        "caption": description,
+        "title": title
+      }
     }
   }
 `
@@ -103,7 +133,13 @@ export const biographyBySlugQuery = groq`
     "title": coalesce(bioTitle, name),
     "slug": slug.current,
     content,
-    gallery,
+    "gallery": gallery[]->{
+      "_key": _id,
+      "asset": image.asset,
+      "alt": coalesce(image.alt, title),
+      "caption": description,
+      "title": title
+    },
     "person": {
       _id,
       name,
@@ -138,7 +174,7 @@ export const docsIndexQuery = groq`
   *[_type == "person" && defined(content)] {
     "slug": slug.current,
     "title": coalesce(bioTitle, name),
-    "photos": gallery[].asset->url
+    "photos": gallery[]->image.asset->url
   } | order(title asc)
 `
 
@@ -169,7 +205,13 @@ export const mlnStoryBySlugQuery = groq`
     description,
     heroImage,
     content,
-    galleryImages,
+    "galleryImages": galleryImages[]->{
+      "_key": _id,
+      "asset": image.asset,
+      "alt": coalesce(image.alt, title),
+      "caption": description,
+      "title": title
+    },
     order
   }
 `

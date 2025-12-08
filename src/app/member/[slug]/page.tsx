@@ -35,7 +35,7 @@ export default async function MemberPage({
 	const galleryImages =
 		bio.gallery
 			?.map((img) => {
-				if (!img.asset) return null;
+				if (!img || !img.asset) return null;
 				return {
 					src: urlForImage(img.asset).url(),
 					alt: img.alt,

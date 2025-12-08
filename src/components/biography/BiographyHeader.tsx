@@ -27,7 +27,7 @@ export function BiographyHeader({
 	category = "Origins",
 }: BiographyHeaderProps) {
 	return (
-		<section id="bio-header" className="py-12 md:py-16 lg:py-20">
+		<section id="bio-header" className="pt-12 md:pt-16 lg:pt-20">
 			<div className="container">
 				<div className="grid gap-x-20 gap-y-12 md:grid-cols-[.75fr_1fr]">
 					<div className="mx-auto flex size-full max-w-lg flex-col items-start justify-start">

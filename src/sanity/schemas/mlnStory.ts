@@ -89,9 +89,10 @@ export const mlnStoryType = defineType({
 							title: "Aspect Ratio",
 							options: {
 								list: [
-									{ title: "16:9 (Landscape)", value: "16/9" },
+									{ title: "16:9 (Video)", value: "16/9" },
 									{ title: "1:1 (Square)", value: "1/1" },
 									{ title: "3:4 (Portrait)", value: "3/4" },
+									{ title: "4:3 (Landscape)", value: "4/3" },
 									{ title: "Original", value: "original" },
 								],
 							},
@@ -107,23 +108,12 @@ export const mlnStoryType = defineType({
 			type: "array",
 			of: [
 				{
-					type: "image",
-					options: { hotspot: true },
-					fields: [
-						{
-							name: "alt",
-							type: "string",
-							title: "Alternative text",
-						},
-						{
-							name: "caption",
-							type: "string",
-							title: "Caption",
-						},
-					],
+					type: "reference",
+					to: [{ type: "galleryImage" }],
 				},
 			],
-			description: "Additional photos for the story page gallery",
+			description:
+				"References to photos in the main gallery. Creating a new item here adds it to the global gallery.",
 		}),
 	],
 	preview: {
