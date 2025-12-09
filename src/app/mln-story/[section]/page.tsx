@@ -7,8 +7,6 @@ import { BiographyHeader } from "@/components/biography/BiographyHeader";
 import { RelatedStories } from "@/components/biography/RelatedStories";
 import fallbackImage from "@/assets/images/Children of MLN.jpg";
 
-export const revalidate = 3600;
-
 export async function generateStaticParams() {
 	const stories = await getAllMLNStories();
 	return stories

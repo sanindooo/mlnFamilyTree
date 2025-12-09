@@ -3,8 +3,6 @@ import { TreeGrid } from "@/components/tree/TreeGrid";
 import { InteractiveTree } from "@/components/tree/InteractiveTree";
 import { getFamilyTree } from "@/lib/data";
 
-export const revalidate = 3600;
-
 export default async function TreePage() {
 	const treeData = await getFamilyTree();
 

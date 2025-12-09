@@ -4,8 +4,6 @@ import { Timeline } from "@/components/home/Timeline";
 import { EventCTA } from "@/components/home/EventCTA";
 import { getTimelineEventsFromSanity } from "@/sanity/lib/fetch";
 
-export const revalidate = 3600;
-
 export default async function Home() {
 	const events = await getTimelineEventsFromSanity();
 

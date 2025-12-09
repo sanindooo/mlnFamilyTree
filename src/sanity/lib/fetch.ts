@@ -17,12 +17,20 @@ import {
 } from "./adapters";
 import { Person, Biography, DocEntry, MLNStory, GalleryImage } from "@/types";
 
+// Cache strategy:
+// - Prod: USE_CACHE=true -> 1 hour ISR
+// - Dev: USE_CACHE=false (default) -> 0 (no cache)
+const revalidate = process.env.USE_CACHE === "true" ? 3600 : 0;
+
+// Helper to add cache config to fetch options
+const fetchOptions = { next: { revalidate } };
+
 /**
  * Fetch the family tree from Sanity
  */
 export async function getFamilyTreeFromSanity(): Promise<Person | null> {
 	try {
-		const data = await client.fetch(familyTreeQuery);
+		const data = await client.fetch(familyTreeQuery, {}, fetchOptions);
 		if (!data) return null;
 		return adaptFamilyTree(data);
 	} catch (error) {
@@ -40,7 +48,7 @@ export async function getBiographyFromSanity(slug: string): Promise<{
 	portableTextContent: any;
 } | null> {
 	try {
-		const data = await client.fetch(biographyBySlugQuery, { slug });
+		const data = await client.fetch(biographyBySlugQuery, { slug }, fetchOptions);
 		if (!data) return null;
 
 		return {
@@ -59,7 +67,7 @@ export async function getBiographyFromSanity(slug: string): Promise<{
  */
 export async function getAllBiographiesFromSanity(): Promise<Biography[]> {
 	try {
-		const data = await client.fetch(allBiographiesQuery);
+		const data = await client.fetch(allBiographiesQuery, {}, fetchOptions);
 		if (!data) return [];
 
 		return data.map((bio: any) => adaptSanityBiography(bio));
@@ -74,7 +82,7 @@ export async function getAllBiographiesFromSanity(): Promise<Biography[]> {
  */
 export async function getDocsIndexFromSanity(): Promise<DocEntry[]> {
 	try {
-		const data = await client.fetch(docsIndexQuery);
+		const data = await client.fetch(docsIndexQuery, {}, fetchOptions);
 		return data || [];
 	} catch (error) {
 		console.error("Error fetching docs index from Sanity:", error);
@@ -87,7 +95,7 @@ export async function getDocsIndexFromSanity(): Promise<DocEntry[]> {
  */
 export async function getGalleryImagesFromSanity(): Promise<GalleryImage[]> {
 	try {
-		const data = await client.fetch(allGalleryImagesQuery);
+		const data = await client.fetch(allGalleryImagesQuery, {}, fetchOptions);
 		return data ? data.map(adaptGalleryImage) : [];
 	} catch (error) {
 		console.error("Error fetching gallery images from Sanity:", error);
@@ -100,7 +108,7 @@ export async function getGalleryImagesFromSanity(): Promise<GalleryImage[]> {
  */
 export async function getTimelineEventsFromSanity(): Promise<any[]> {
 	try {
-		const data = await client.fetch(timelineEventsQuery);
+		const data = await client.fetch(timelineEventsQuery, {}, fetchOptions);
 		return data || [];
 	} catch (error) {
 		console.error("Error fetching timeline events from Sanity:", error);
@@ -113,7 +121,7 @@ export async function getTimelineEventsFromSanity(): Promise<any[]> {
  */
 export async function getAllMLNStoriesFromSanity(): Promise<MLNStory[]> {
 	try {
-		const data = await client.fetch(allMLNStoriesQuery);
+		const data = await client.fetch(allMLNStoriesQuery, {}, fetchOptions);
 		if (!data) return [];
 		return data
 			.map(adaptSanityMLNStory)
@@ -131,7 +139,7 @@ export async function getMLNStoryFromSanity(
 	slug: string
 ): Promise<MLNStory | null> {
 	try {
-		const data = await client.fetch(mlnStoryBySlugQuery, { slug });
+		const data = await client.fetch(mlnStoryBySlugQuery, { slug }, fetchOptions);
 		if (!data) return null;
 		return adaptSanityMLNStory(data);
 	} catch (error) {

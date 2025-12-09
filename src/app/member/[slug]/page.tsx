@@ -6,8 +6,6 @@ import { Button } from "@/components/ui/Button";
 import { notFound } from "next/navigation";
 import { urlForImage } from "@/sanity/lib/adapters";
 
-export const revalidate = 3600;
-
 export async function generateStaticParams() {
 	const docs = await getDocsIndex();
 	return docs.map((doc) => ({
