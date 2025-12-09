@@ -1,14 +1,42 @@
 import { Button } from "@/components/ui/Button";
-import React from "react";
+import React, { useRef } from "react";
 import Image from "next/image";
 import ancestorImage from "@/assets/images/Children of MLN.jpg";
-import { ScaleBackground } from "@/components/ui/ScaleBackground";
 import { StaggerFade } from "@/components/ui/StaggerFade";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { useGSAP } from "@gsap/react";
 
 export function AncestorHero() {
+	const container = useRef<HTMLElement>(null);
+	const bgImageRef = useRef<HTMLDivElement>(null);
+
+	useGSAP(() => {
+		if (!bgImageRef.current) return;
+
+		const imageElement = bgImageRef.current.querySelector("img");
+		if (!imageElement) return;
+
+		// Set initial scale
+		gsap.set(imageElement, { scale: 1.2, transformOrigin: "center center" });
+
+		ScrollTrigger.create({
+			trigger: container.current,
+			start: "top 80%",
+			onEnter: () => {
+				gsap.to(imageElement, {
+					scale: 1,
+					duration: 1.5,
+					ease: "power2.out",
+				});
+			},
+			toggleActions: "play none none none",
+		});
+	}, { scope: container });
+
 	return (
 		<section
 			id="ancestor-hero"
+			ref={container}
 			className="relative py-12 md:py-16 lg:py-20 bg-deep-umber overflow-hidden"
 		>
 			<StaggerFade tag="div" className="container relative z-10 max-w-lg text-center" delay={0.2}>
@@ -45,8 +73,8 @@ export function AncestorHero() {
 				</StaggerFade>
 			</StaggerFade>
 
-			<ScaleBackground className="absolute inset-0 z-0 h-full w-full">
-				<div className="relative h-full w-full">
+			<div ref={bgImageRef} className="absolute inset-0 z-0 size-full overflow-hidden">
+				<div className="relative size-full">
 					<Image
 						src={ancestorImage}
 						className="size-full object-cover opacity-40 sepia-[.5]"
@@ -56,7 +84,7 @@ export function AncestorHero() {
 					/>
 					<div className="absolute inset-0 bg-deep-umber/50 mix-blend-multiply" />
 				</div>
-			</ScaleBackground>
+			</div>
 		</section>
 	);
 }

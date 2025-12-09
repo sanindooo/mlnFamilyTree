@@ -1,15 +1,43 @@
 import { Button } from "@/components/ui/Button";
-import React from "react";
+import React, { useRef } from "react";
 import Image from "next/image";
 import bgImage from "@/assets/images/Children of MLN.jpg";
 import { RevealText } from "@/components/ui/RevealText";
-import { ScaleBackground } from "@/components/ui/ScaleBackground";
 import { StaggerFade } from "@/components/ui/StaggerFade";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { useGSAP } from "@gsap/react";
 
 export function EventCTA() {
+	const container = useRef<HTMLDivElement>(null);
+	const bgImageRef = useRef<HTMLDivElement>(null);
+
+	useGSAP(() => {
+		if (!bgImageRef.current) return;
+
+		const imageElement = bgImageRef.current.querySelector("img");
+		if (!imageElement) return;
+
+		// Set initial scale
+		gsap.set(imageElement, { scale: 1.2, transformOrigin: "center center" });
+
+		ScrollTrigger.create({
+			trigger: container.current,
+			start: "top 80%",
+			onEnter: () => {
+				gsap.to(imageElement, {
+					scale: 1,
+					duration: 1.5,
+					ease: "power2.out",
+				});
+			},
+			toggleActions: "play none none none",
+		});
+	}, { scope: container });
+
 	return (
 		<section
 			id="cta"
+			ref={container}
 			className="relative py-12 md:py-16 lg:py-20 bg-deep-umber text-cream overflow-hidden"
 		>
 			<div className="container relative z-10">
@@ -48,8 +76,8 @@ export function EventCTA() {
 				</div>
 			</div>
 			
-			{/* Background Image - moved outside container to be absolute to section */}
-			<ScaleBackground className="absolute inset-0 z-0 size-full">
+			{/* Background Image */}
+			<div ref={bgImageRef} className="absolute inset-0 z-0 size-full overflow-hidden">
 				<div className="relative size-full">
 					<Image
 						src={bgImage}
@@ -60,7 +88,7 @@ export function EventCTA() {
 					/>
 					<div className="absolute inset-0 bg-deep-umber/80 mix-blend-multiply" />
 				</div>
-			</ScaleBackground>
+			</div>
 		</section>
 	);
 }
