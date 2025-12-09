@@ -1,4 +1,3 @@
-import { PortableText } from "@portabletext/react";
 import React from "react";
 import {
 	BiLinkAlt,
@@ -6,7 +5,7 @@ import {
 	BiLogoFacebookCircle,
 } from "react-icons/bi";
 import { FaXTwitter } from "react-icons/fa6";
-import { PortableTextRenderer } from "@/components/biography/PortableTextRenderer";
+import { PortableTextRenderer } from "@/sanity/components/PortableTextRenderer";
 import { StaggerFade } from "@/components/ui/StaggerFade";
 
 interface BiographyContentProps {

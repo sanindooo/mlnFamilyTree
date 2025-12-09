@@ -3,6 +3,7 @@ import React from "react";
 import { RxChevronRight } from "react-icons/rx";
 import { BiBuildings, BiGroup, BiBook } from "react-icons/bi";
 import { RevealText } from "@/components/ui/RevealText";
+import { StaggerFade } from "@/components/ui/StaggerFade";
 
 export function Highlights() {
   return (
@@ -14,12 +15,15 @@ export function Highlights() {
 				<div className="flex flex-col">
 					<div className="rb-12 mb-12 md:mb-16 lg:mb-20">
 						<div className="w-full max-w-lg">
-							<p className="mb-3 font-semibold md:mb-4 text-antique-gold uppercase tracking-wider text-sm">
-								Legacy
-							</p>
+							<RevealText tag="div" delay={0}>
+								<p className="mb-3 font-semibold md:mb-4 text-antique-gold uppercase tracking-wider text-sm">
+									Legacy
+								</p>
+							</RevealText>
 							<RevealText
 								tag="h2"
 								className="mb-5 text-3xl font-bold md:mb-6 md:text-4xl lg:text-5xl font-serif text-deep-umber"
+								delay={0.1}
 							>
 								Legacy Highlights
 							</RevealText>
@@ -31,11 +35,11 @@ export function Highlights() {
 					</div>
 					<div className="grid grid-cols-1 items-start gap-y-12 md:grid-cols-3 md:gap-x-8 md:gap-y-16 lg:gap-x-12">
 						<div className="flex w-full flex-col">
-							<div className="mb-5 md:mb-6">
+							<StaggerFade className="mb-5 md:mb-6">
 								<div className="size-12 flex items-center justify-center rounded-full bg-warm-sand/30 text-deep-umber">
 									<BiBuildings className="size-6" />
 								</div>
-							</div>
+							</StaggerFade>
 							<RevealText
 								tag="h3"
 								className="mb-3 text-xl font-bold md:mb-4 md:text-2xl font-serif text-deep-umber"
@@ -49,11 +53,11 @@ export function Highlights() {
 							</RevealText>
 						</div>
 						<div className="flex w-full flex-col">
-							<div className="mb-5 md:mb-6">
+							<StaggerFade className="mb-5 md:mb-6" delay={0.1}>
 								<div className="size-12 flex items-center justify-center rounded-full bg-warm-sand/30 text-deep-umber">
 									<BiGroup className="size-6" />
 								</div>
-							</div>
+							</StaggerFade>
 							<RevealText
 								tag="h3"
 								className="mb-3 text-xl font-bold md:mb-4 md:text-2xl font-serif text-deep-umber"
@@ -67,11 +71,11 @@ export function Highlights() {
 							</RevealText>
 						</div>
 						<div className="flex w-full flex-col">
-							<div className="mb-5 md:mb-6">
+							<StaggerFade className="mb-5 md:mb-6" delay={0.2}>
 								<div className="size-12 flex items-center justify-center rounded-full bg-warm-sand/30 text-deep-umber">
 									<BiBook className="size-6" />
 								</div>
-							</div>
+							</StaggerFade>
 							<RevealText
 								tag="h3"
 								className="mb-3 text-xl font-bold md:mb-4 md:text-2xl font-serif text-deep-umber"
@@ -85,11 +89,18 @@ export function Highlights() {
 							</RevealText>
 						</div>
 					</div>
-					<div className="mt-10 flex items-center justify-start gap-4 md:mt-14 lg:mt-16">
+					
+					{/* Slide in button */}
+					<StaggerFade 
+						tag="div" 
+						className="mt-10 flex items-center justify-start gap-4 md:mt-14 lg:mt-16"
+						delay={0.4}
+						stagger={0} // Single item
+					>
 						<Button variant="secondary" href="/mln-story">
 							Explore Full Legacy <RxChevronRight className="size-5" />
 						</Button>
-					</div>
+					</StaggerFade>
 				</div>
       </div>
     </section>

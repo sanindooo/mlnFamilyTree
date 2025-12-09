@@ -86,21 +86,22 @@ export function Timeline({ events = [] }: TimelineProps) {
 					autoAlpha: 0,
 				});
 
-				// Initial state for Year (simple fade)
+				// Initial state for Year (simple fade, NO transform)
 				gsap.set(year, {
 					opacity: 0,
 					autoAlpha: 0,
-					x: -20, // Slide in slightly from left
+					// Explicitly ensure no transform is set
+					x: 0,
+					y: 0
 				});
 
 				// Text Animation Timeline
 				const tlText = gsap.timeline({ paused: true });
 				
-				// Year fade in first/simultaneously
+				// Year fade in first/simultaneously - PURE FADE
 				tlText.to(year, {
 					opacity: 1,
 					autoAlpha: 1,
-					x: 0,
 					duration: 0.8,
 					ease: "power2.out",
 				}, 0);
@@ -132,7 +133,7 @@ export function Timeline({ events = [] }: TimelineProps) {
 					trigger: row,
 					start: "top 80%",
 					end: "bottom 20%",
-					// Play once: onEnter play, onLeave/EnterBack do nothing (or reset if explicitly requested, but user asked for one direction)
+					// Play once: onEnter play, onLeave/EnterBack do nothing
 					toggleActions: "play none none none",
 					onEnter: () => {
 						tlText.play();
@@ -156,23 +157,18 @@ export function Timeline({ events = [] }: TimelineProps) {
 						<p className="mb-3 font-semibold md:mb-4 text-antique-gold uppercase tracking-wider text-sm">
 							Life & Times
 						</p>
-						<RevealText
-							tag="h2"
-							className="mb-5 text-3xl font-bold md:mb-6 md:text-4xl lg:text-5xl font-serif text-deep-umber"
-						>
+						<h2 className="mb-5 text-3xl font-bold md:mb-6 md:text-4xl lg:text-5xl font-serif text-deep-umber">
 							A life marked by courage and conviction
-						</RevealText>
-						<RevealText tag="p" className="text-lg text-deep-umber" delay={0.2}>
+						</h2>
+						<p className="text-lg text-deep-umber">
 							Born into Buganda Kingdom during a time of profound change and
 							upheaval.
-						</RevealText>
-						<StaggerFade className="mt-6 flex flex-wrap items-center gap-4 md:mt-8" delay={0.4}>
-							<div>
-								<Button variant="secondary" href="/mln-story">
-									Read Full Biography
-								</Button>
-							</div>
-						</StaggerFade>
+						</p>
+						<div className="mt-6 flex flex-wrap items-center gap-4 md:mt-8">
+							<Button variant="secondary" href="/mln-story">
+								Read Full Biography
+							</Button>
+						</div>
 					</div>
 					<div className="absolute z-0 flex h-full w-8 flex-col items-center justify-self-start [grid-area:2/1/3/2] md:z-auto md:justify-self-center md:[grid-area:auto]">
 						<div className="absolute z-10 h-16 w-1 bg-gradient-to-b from-cream to-transparent" />

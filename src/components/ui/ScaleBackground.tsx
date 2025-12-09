@@ -29,10 +29,13 @@ export const ScaleBackground = ({
     
     if (!target) return;
 
+    // IMPORTANT: Ensure container has relative positioning if not set, and absolute/full size handling
+    // However, the issue might be that GSAP is setting styles that conflict with layout.
+    // We'll rely on CSS classes passed in, but ensure overflow hidden is set.
     gsap.set(container.current, { overflow: 'hidden' });
     
     // Set initial scale
-    gsap.set(target, { scale: scaleFrom });
+    gsap.set(target, { scale: scaleFrom, transformOrigin: "center center" });
 
     ScrollTrigger.create({
       trigger: container.current,
@@ -56,4 +59,3 @@ export const ScaleBackground = ({
     </div>
   );
 };
-

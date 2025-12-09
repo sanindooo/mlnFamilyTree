@@ -7,20 +7,6 @@ import { StaggerFade } from "@/components/ui/StaggerFade";
 export function MLNBiographyHero() {
 	return (
 		<section className="relative py-20 md:py-28 lg:py-32 bg-deep-umber overflow-hidden">
-			{/* Background Image with Overlay */}
-			<ScaleBackground className="absolute inset-0 z-0 h-full w-full">
-				<div className="relative h-full w-full">
-					<Image
-						src={heroImage}
-						alt="MLN"
-						className="size-full object-cover opacity-20 sepia-[.5]"
-						fill
-						placeholder="blur"
-					/>
-					<div className="absolute inset-0 bg-deep-umber/70" />
-				</div>
-			</ScaleBackground>
-
 			{/* Content */}
 			<StaggerFade tag="div" className="container relative z-10 text-center" delay={0.2}>
 				<div>
@@ -35,6 +21,20 @@ export function MLNBiographyHero() {
 					</p>
 				</div>
 			</StaggerFade>
+
+			{/* Background Image with Overlay - ensure absolute positioning works */}
+			<ScaleBackground className="absolute inset-0 z-0 size-full">
+				<div className="relative size-full">
+					<Image
+						src={heroImage}
+						alt="MLN"
+						className="size-full object-cover opacity-20 sepia-[.5]"
+						fill
+						placeholder="blur"
+					/>
+					<div className="absolute inset-0 bg-deep-umber/70" />
+				</div>
+			</ScaleBackground>
 		</section>
 	);
 }

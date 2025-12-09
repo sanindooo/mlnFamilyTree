@@ -10,10 +10,10 @@ export function EventCTA() {
 	return (
 		<section
 			id="cta"
-			className="py-12 md:py-16 lg:py-20 bg-deep-umber text-cream"
+			className="relative py-12 md:py-16 lg:py-20 bg-deep-umber text-cream overflow-hidden"
 		>
-			<div className="container relative">
-				<div className="relative z-10 flex flex-col items-center p-8 md:p-12 lg:p-16">
+			<div className="container relative z-10">
+				<div className="flex flex-col items-center p-8 md:p-12 lg:p-16">
 					<div className="max-w-lg text-center">
 						<RevealText
 							tag="h2"
@@ -46,19 +46,21 @@ export function EventCTA() {
 						</div>
 					</StaggerFade>
 				</div>
-				<ScaleBackground className="absolute inset-0 z-0 h-full w-full">
-					<div className="relative h-full w-full">
-						<Image
-							src={bgImage}
-							className="size-full object-cover opacity-30 sepia-[.5]"
-							alt="Family gathering"
-							fill
-							placeholder="blur"
-						/>
-						<div className="absolute inset-0 bg-deep-umber/80 mix-blend-multiply" />
-					</div>
-				</ScaleBackground>
 			</div>
+			
+			{/* Background Image - moved outside container to be absolute to section */}
+			<ScaleBackground className="absolute inset-0 z-0 size-full">
+				<div className="relative size-full">
+					<Image
+						src={bgImage}
+						className="size-full object-cover opacity-30 sepia-[.5]"
+						alt="Family gathering"
+						fill
+						placeholder="blur"
+					/>
+					<div className="absolute inset-0 bg-deep-umber/80 mix-blend-multiply" />
+				</div>
+			</ScaleBackground>
 		</section>
 	);
 }
