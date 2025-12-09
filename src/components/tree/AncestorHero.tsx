@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/Button";
 import React, { useRef } from "react";
 import Image from "next/image";
