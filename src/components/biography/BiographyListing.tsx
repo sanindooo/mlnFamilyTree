@@ -68,15 +68,17 @@ export function BiographyListing({ stories }: BiographyListingProps) {
 						<p className="mb-3 font-semibold md:mb-4 text-antique-gold uppercase tracking-wider text-sm">
 							Foundation
 						</p>
-						<RevealText
-							tag="h2"
-							className="mb-5 text-3xl font-bold md:mb-6 md:text-4xl lg:text-5xl font-serif text-deep-umber"
-						>
-							The roots that shaped a life
-						</RevealText>
-						<RevealText tag="p" className="text-lg text-deep-umber" delay={0.2}>
-							Every person begins somewhere, shaped by place and circumstance
-						</RevealText>
+					<RevealText
+						tag="h2"
+						className="mb-5 text-3xl font-bold md:mb-6 md:text-4xl lg:text-5xl font-serif text-deep-umber"
+						yOffset={30}
+						duration={1.2}
+					>
+						The roots that shaped a life
+					</RevealText>
+					<RevealText tag="p" className="text-lg text-deep-umber" delay={0.2} yOffset={30} duration={1.2}>
+						Every person begins somewhere, shaped by place and circumstance
+					</RevealText>
 					</div>
 				</div>
 				<StaggerFade

@@ -81,15 +81,17 @@ export function BiographyHeader({
 								The simplest way is to treat the whole block as staggered children.
 							*/}
 
-							<div className="mb-5 md:mb-6">
-								<RevealText
-									tag="h1"
-									className="text-4xl font-bold md:text-5xl lg:text-6xl font-serif text-deep-umber"
-									delay={0.2} // Slight delay to sync with breadcrumbs fade in
-								>
-									{title}
-								</RevealText>
-							</div>
+						<div className="mb-5 md:mb-6">
+							<RevealText
+								tag="h1"
+								className="text-4xl font-bold md:text-5xl lg:text-6xl font-serif text-deep-umber"
+								delay={0.2}
+								yOffset={30}
+								duration={1.2}
+							>
+								{title}
+							</RevealText>
+						</div>
 
 							<div className="flex size-full flex-col items-start justify-start">
 								<div className="rb-4 mb-6 flex items-center md:mb-8">

@@ -50,21 +50,25 @@ export function SectionGallery({ images, sectionTitle }: SectionGalleryProps) {
 	return (
 		<section className="py-12 md:py-16 bg-cream/20">
 			<div className="container">
-				<header className="mb-8 md:mb-12">
-					<RevealText
-						tag="h3"
-						className="text-2xl font-bold md:text-3xl font-serif text-deep-umber text-center"
-					>
-						Gallery
-					</RevealText>
-					<RevealText
-						tag="p"
-						className="text-center text-muted mt-2"
-						delay={0.2}
-					>
-						Images from this period
-					</RevealText>
-				</header>
+			<header className="mb-8 md:mb-12">
+				<RevealText
+					tag="h3"
+					className="text-2xl font-bold md:text-3xl font-serif text-deep-umber text-center"
+					yOffset={30}
+					duration={1.2}
+				>
+					Gallery
+				</RevealText>
+				<RevealText
+					tag="p"
+					className="text-center text-muted mt-2"
+					delay={0.2}
+					yOffset={30}
+					duration={1.2}
+				>
+					Images from this period
+				</RevealText>
+			</header>
 				<StaggerFade
 					tag="ul"
 					className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 list-none p-0"

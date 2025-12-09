@@ -12,7 +12,7 @@ export function Highlights() {
 				<div className="flex flex-col">
 					<div className="rb-12 mb-12 md:mb-16 lg:mb-20">
 						<div className="w-full max-w-lg">
-							<RevealText tag="div" delay={0}>
+							<RevealText tag="div" delay={0} yOffset={30} duration={1.2}>
 								<p className="mb-3 font-semibold md:mb-4 text-antique-gold uppercase tracking-wider text-sm">
 									Legacy
 								</p>
@@ -21,6 +21,8 @@ export function Highlights() {
 								tag="h2"
 								className="mb-5 text-3xl font-bold md:mb-6 md:text-4xl lg:text-5xl font-serif text-deep-umber"
 								delay={0.1}
+								yOffset={30}
+								duration={1.2}
 							>
 								Legacy Highlights
 							</RevealText>
@@ -28,6 +30,8 @@ export function Highlights() {
 								tag="p"
 								className="text-lg text-deep-umber"
 								delay={0.2}
+								yOffset={30}
+								duration={1.2}
 							>
 								Understand the achievements that defined a remarkable life and
 								shaped history.
@@ -45,10 +49,12 @@ export function Highlights() {
 								tag="h3"
 								className="mb-3 text-xl font-bold md:mb-4 md:text-2xl font-serif text-deep-umber"
 								delay={0.1}
+								yOffset={30}
+								duration={1.2}
 							>
 								Political Pioneer
 							</RevealText>
-							<RevealText tag="p" className="text-deep-umber" delay={0.3}>
+							<RevealText tag="p" className="text-deep-umber" delay={0.3} yOffset={30} duration={1.2}>
 								Served on the Legislative Council, advocating for justice and
 								progress in colonial Uganda.
 							</RevealText>
@@ -63,10 +69,12 @@ export function Highlights() {
 								tag="h3"
 								className="mb-3 text-xl font-bold md:mb-4 md:text-2xl font-serif text-deep-umber"
 								delay={0.2}
+								yOffset={30}
+								duration={1.2}
 							>
 								Family Foundation
 							</RevealText>
-							<RevealText tag="p" className="text-deep-umber" delay={0.4}>
+							<RevealText tag="p" className="text-deep-umber" delay={0.4} yOffset={30} duration={1.2}>
 								Built a strong family legacy that inspires generations with
 								integrity, education, and service.
 							</RevealText>
@@ -81,10 +89,12 @@ export function Highlights() {
 								tag="h3"
 								className="mb-3 text-xl font-bold md:mb-4 md:text-2xl font-serif text-deep-umber"
 								delay={0.3}
+								yOffset={30}
+								duration={1.2}
 							>
 								Educational Advocate
 							</RevealText>
-							<RevealText tag="p" className="text-deep-umber" delay={0.5}>
+							<RevealText tag="p" className="text-deep-umber" delay={0.5} yOffset={30} duration={1.2}>
 								Championed education and literacy as keys to empowerment and
 								national development.
 							</RevealText>

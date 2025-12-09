@@ -53,15 +53,17 @@ export function MemberBiographyHeader({
 								</Breadcrumb>
 							</div>
 							
-							<div className="mb-8 md:mb-10 lg:mb-12">
-								<RevealText
-									tag="h1"
-									className="text-4xl font-bold md:text-5xl lg:text-6xl font-serif text-deep-umber"
-									delay={0.2}
-								>
-									{title}
-								</RevealText>
-							</div>
+						<div className="mb-8 md:mb-10 lg:mb-12">
+							<RevealText
+								tag="h1"
+								className="text-4xl font-bold md:text-5xl lg:text-6xl font-serif text-deep-umber"
+								delay={0.2}
+								yOffset={30}
+								duration={1.2}
+							>
+								{title}
+							</RevealText>
+						</div>
 							
 							<div className="flex size-full flex-col items-start justify-start">
 								<div className="rb-4 mb-6 flex items-center md:mb-8">
