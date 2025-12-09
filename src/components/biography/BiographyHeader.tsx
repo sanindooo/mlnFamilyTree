@@ -24,7 +24,7 @@ export function BiographyHeader({
 	return (
 		<section className="relative pt-16 md:pt-24 lg:pt-28">
 			<div className="container">
-				<div className="grid gap-x-20 gap-y-12 md:grid-cols-[.75fr_1fr]">
+				<div className="grid gap-x-16 gap-y-12 md:grid-cols-[.75fr_1fr]">
 					<div className="w-full self-center">
 						<StaggerFade tag="div" delay={0.1}>
 							{/* Breadcrumbs */}
@@ -81,15 +81,15 @@ export function BiographyHeader({
 								The simplest way is to treat the whole block as staggered children.
 							*/}
 
-						<div className="mb-5 md:mb-6">
-							<RevealText
-								tag="h1"
-								className="text-4xl font-bold md:text-5xl lg:text-6xl font-serif text-deep-umber"
-								delay={0.2}
-							>
-								{title}
-							</RevealText>
-						</div>
+							<div className="mb-5 md:mb-6">
+								<RevealText
+									tag="h1"
+									className="text-4xl font-bold md:text-5xl lg:text-6xl font-serif text-deep-umber"
+									delay={0.2}
+								>
+									{title}
+								</RevealText>
+							</div>
 
 							<div className="flex size-full flex-col items-start justify-start">
 								<div className="rb-4 mb-6 flex items-center md:mb-8">
@@ -100,11 +100,11 @@ export function BiographyHeader({
 										</h6>
 									</div>
 								</div>
-								<div>
+								<div className="w-full">
 									<p className="text-base font-semibold text-deep-umber">
 										Share this biography
 									</p>
-									<div className="rt-4 mt-3 grid grid-flow-col grid-cols-[max-content] items-start gap-2 md:mt-4">
+									<div className="rt-4 mt-3 flex items-center justify-start flex-wrap gap-2 md:mt-4">
 										<button className="rounded-[1.25rem] bg-warm-sand/30 p-1 hover:bg-warm-sand/50 transition-colors">
 											<BiLinkAlt className="size-6 text-deep-umber" />
 										</button>
@@ -123,7 +123,7 @@ export function BiographyHeader({
 						</StaggerFade>
 					</div>
 					<RevealImage delay={0.3}>
-						<div className="mx-auto w-full overflow-hidden rounded-xl border border-warm-sand shadow-lg relative aspect-[3/2]">
+						<figure className="mx-auto w-full overflow-hidden rounded-xl border border-warm-sand shadow-lg relative aspect-square">
 							<Image
 								src={imageSrc}
 								className="object-cover sepia-[.3]"
@@ -132,7 +132,7 @@ export function BiographyHeader({
 								sizes="(max-width: 768px) 100vw, 50vw"
 								priority
 							/>
-						</div>
+						</figure>
 					</RevealImage>
 				</div>
 			</div>
