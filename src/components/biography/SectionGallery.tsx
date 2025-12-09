@@ -54,8 +54,6 @@ export function SectionGallery({ images, sectionTitle }: SectionGalleryProps) {
 				<RevealText
 					tag="h3"
 					className="text-2xl font-bold md:text-3xl font-serif text-deep-umber text-center"
-					yOffset={30}
-					duration={1.2}
 				>
 					Gallery
 				</RevealText>
@@ -63,8 +61,6 @@ export function SectionGallery({ images, sectionTitle }: SectionGalleryProps) {
 					tag="p"
 					className="text-center text-muted mt-2"
 					delay={0.2}
-					yOffset={30}
-					duration={1.2}
 				>
 					Images from this period
 				</RevealText>

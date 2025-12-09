@@ -3,7 +3,7 @@
 import React, { useRef } from "react";
 import Image from "next/image";
 import heroImage from "@/assets/images/Document from Paul Kiwana Nsibirwa.png";
-import { StaggerFade } from "@/components/ui/StaggerFade";
+import { RevealText } from "@/components/ui/RevealText";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { useGSAP } from "@gsap/react";
 
@@ -20,42 +20,42 @@ export function MLNBiographyHero() {
 		// Set initial scale
 		gsap.set(imageElement, { scale: 1.1, transformOrigin: "center center" });
 
-		// Secondary motion: Image scales after text animation
-		ScrollTrigger.create({
-			trigger: container.current,
-			start: "top 80%",
-			onEnter: () => {
-				gsap.to(imageElement, {
-					scale: 1,
-					duration: 1.5,
-					ease: "power2.out",
-					delay: 0.8, // Delayed to start as text animation is finishing
-				});
-			},
-			toggleActions: "play none none none",
+	// Secondary motion: Image scales after text animation
+	ScrollTrigger.create({
+		trigger: container.current,
+		start: "top 80%",
+		onEnter: () => {
+		gsap.to(imageElement, {
+			scale: 1,
+			duration: 1.2,
+			ease: "expo.out", // Dramatic deceleration - starts fast, slows significantly
+			delay: 0.9, // More pronounced secondary motion
 		});
+		},
+		toggleActions: "play none none none",
+	});
 	}, { scope: container });
 
 	return (
 		<section ref={container} className="relative py-20 md:py-28 lg:py-32 bg-deep-umber overflow-hidden">
 			{/* Content */}
-			<StaggerFade
-				tag="div"
-				className="container relative z-10 text-center"
-				delay={0.2}
-			>
-				<div>
-					<h1 className="mb-5 text-4xl font-bold text-cream md:mb-6 md:text-5xl lg:text-6xl font-serif">
-						MLN biography
-					</h1>
-				</div>
-				<div>
-					<p className="mx-auto max-w-2xl text-lg text-cream/90 md:text-xl">
-						The journey from Bugerere to national leadership, told through
-						documents and memory
-					</p>
-				</div>
-			</StaggerFade>
+			<div className="container relative z-10 text-center">
+				<RevealText
+					tag="h1"
+					className="mb-5 text-4xl font-bold text-cream md:mb-6 md:text-5xl lg:text-6xl font-serif"
+					delay={0.2}
+				>
+					MLN biography
+				</RevealText>
+				<RevealText
+					tag="p"
+					className="mx-auto max-w-2xl text-lg text-cream/90 md:text-xl"
+					delay={0.3}
+				>
+					The journey from Bugerere to national leadership, told through
+					documents and memory
+				</RevealText>
+			</div>
 
 			{/* Background Image with Overlay */}
 			<div ref={bgImageRef} className="absolute inset-0 z-0 size-full overflow-hidden">

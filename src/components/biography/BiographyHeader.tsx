@@ -86,8 +86,6 @@ export function BiographyHeader({
 								tag="h1"
 								className="text-4xl font-bold md:text-5xl lg:text-6xl font-serif text-deep-umber"
 								delay={0.2}
-								yOffset={30}
-								duration={1.2}
 							>
 								{title}
 							</RevealText>

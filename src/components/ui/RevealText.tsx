@@ -30,32 +30,34 @@ export const RevealText = ({
 			if (!textRef.current) return;
 
 			// Use SplitType to split text into words
-			const split = new SplitType(textRef.current, { types: "words" });
+			const split = new SplitType(textRef.current, { types: "words,lines" });
 
-		// Set initial state: words slightly down and invisible
-		gsap.set(split.words, {
-			yPercent: yOffset,
-			opacity: 0,
-			autoAlpha: 0,
-		});
-
-		ScrollTrigger.create({
-			trigger: textRef.current,
-			start: "top 85%", // Trigger when top of element hits 85% of viewport height
-			onEnter: () => {
-				gsap.to(split.words, {
-					yPercent: 0,
-					opacity: 1,
-					autoAlpha: 1,
-					duration: duration,
-					ease: "power3.out",
-					stagger: 0.02,
-					delay: delay,
+			// Set overflow hidden on the lines to create the mask effect
+			if (split.lines) {
+				split.lines.forEach((line) => {
+					gsap.set(line, {
+						overflow: "hidden",
+					});
 				});
-			},
-				// Optional: Reset when scrolling back up?
-				// User didn't strictly specify, but usually "play once" is better for reading.
-				// leaving it as play once for now.
+			}
+
+			// Set initial state: words start below the mask (invisible)
+			gsap.set(split.words, {
+				yPercent: yOffset,
+			});
+
+			ScrollTrigger.create({
+				trigger: textRef.current,
+				start: "top 85%",
+				onEnter: () => {
+					gsap.to(split.words, {
+						yPercent: 0,
+						duration: duration,
+						ease: "power3.out",
+						stagger: 0.02,
+						delay: delay,
+					});
+				},
 			});
 
 			// Cleanup on unmount (revert split)
@@ -68,10 +70,6 @@ export const RevealText = ({
 
 	return (
 		<div ref={comp} className={className}>
-			{/* 
-        We use a specific ref for the tag. 
-        Note: SplitType works on the DOM element content.
-      */}
 			<Tag ref={textRef as any} style={{ fontKerning: "none" }}>
 				{children}
 			</Tag>

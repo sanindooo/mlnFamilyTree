@@ -28,12 +28,12 @@ export function EventCTA() {
 			trigger: container.current,
 			start: "top 80%",
 			onEnter: () => {
-				gsap.to(imageElement, {
-					scale: 1,
-					duration: 1.5,
-					ease: "power2.out",
-					delay: 0.8, // Delayed to start as text animation is finishing
-				});
+			gsap.to(imageElement, {
+				scale: 1,
+				duration: 1.2,
+				ease: "expo.out", // Dramatic deceleration - starts fast, slows significantly
+				delay: 0.9, // More pronounced secondary motion
+			});
 			},
 			toggleActions: "play none none none",
 		});
@@ -53,12 +53,10 @@ export function EventCTA() {
 						<RevealText
 							tag="h2"
 							className="rb-5 mb-5 text-3xl font-bold md:mb-6 md:text-4xl lg:text-5xl font-serif"
-							yOffset={30}
-							duration={1.2}
 						>
 							Join us this December
 						</RevealText>
-						<RevealText tag="p" className="text-lg" delay={0.2} yOffset={30} duration={1.2}>
+						<RevealText tag="p" className="text-lg" delay={0.2}>
 							Mark your calendar for December 27th and be part of something
 							meaningful as we celebrate this remarkable life.
 						</RevealText>

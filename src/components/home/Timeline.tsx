@@ -72,19 +72,29 @@ export function Timeline({ events = [] }: TimelineProps) {
 
 				if (!year || !title || !text || !icon) return;
 
-				const titleSplit = new SplitType(title as HTMLElement, {
-					types: "words",
-				});
-				const textSplit = new SplitType(text as HTMLElement, {
-					types: "words",
-				});
+			const titleSplit = new SplitType(title as HTMLElement, {
+				types: "words,lines",
+			});
+			const textSplit = new SplitType(text as HTMLElement, {
+				types: "words,lines",
+			});
 
-				// Initial state for SplitText
-				gsap.set([titleSplit.words, textSplit.words], {
-					yPercent: 80,
-					opacity: 0,
-					autoAlpha: 0,
+			// Set overflow hidden on lines for masking effect
+			if (titleSplit.lines) {
+				titleSplit.lines.forEach((line) => {
+					gsap.set(line, { overflow: "hidden" });
 				});
+			}
+			if (textSplit.lines) {
+				textSplit.lines.forEach((line) => {
+					gsap.set(line, { overflow: "hidden" });
+				});
+			}
+
+			// Initial state for SplitText - words start below the mask
+			gsap.set([titleSplit.words, textSplit.words], {
+				yPercent: 100,
+			});
 
 				// Initial state for Year (simple fade, NO transform)
 				gsap.set(year, {
@@ -110,19 +120,17 @@ export function Timeline({ events = [] }: TimelineProps) {
 					0
 				);
 
-				// Then split text content
-				tlText.to(
-					[titleSplit.words, textSplit.words],
-					{
-						yPercent: 0,
-						opacity: 1,
-						autoAlpha: 1,
-						stagger: 0.01,
-						duration: 1,
-						ease: "power3.out",
-					},
-					0.2
-				);
+			// Then split text content
+			tlText.to(
+				[titleSplit.words, textSplit.words],
+				{
+					yPercent: 0,
+					stagger: 0.01,
+					duration: 1,
+					ease: "power3.out",
+				},
+				0.2
+			);
 
 				// Icon Animation Timeline
 				const tlIcon = gsap.timeline({ paused: true });

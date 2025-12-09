@@ -56,8 +56,6 @@ export function PhotoGallery({ images }: PhotoGalleryProps) {
 				<RevealText
 					tag="p"
 					className="mb-3 font-semibold md:mb-4 text-antique-gold uppercase tracking-wider text-sm"
-					yOffset={30}
-					duration={1.2}
 				>
 					Archive
 				</RevealText>
@@ -65,8 +63,6 @@ export function PhotoGallery({ images }: PhotoGalleryProps) {
 					tag="h1"
 					className="mb-5 text-4xl font-bold md:mb-6 md:text-5xl lg:text-6xl font-serif text-deep-umber"
 					delay={0.1}
-					yOffset={30}
-					duration={1.2}
 				>
 					Photo Gallery
 				</RevealText>
@@ -74,8 +70,6 @@ export function PhotoGallery({ images }: PhotoGalleryProps) {
 					tag="p"
 					className="text-lg text-deep-umber max-w-2xl mx-auto"
 					delay={0.2}
-					yOffset={30}
-					duration={1.2}
 				>
 					A visual journey through the life and times of the Nsibirwa family
 				</RevealText>

@@ -31,18 +31,18 @@ export const RevealImage = ({
 				clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
 			});
 
-			ScrollTrigger.create({
-				trigger: element,
-				start: "top 80%",
-				onEnter: () => {
-					gsap.to(element, {
-						clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-						duration: duration,
-						ease: "power2.inOut",
-						delay: delay,
-					});
-				},
+		ScrollTrigger.create({
+			trigger: element,
+			start: "top 80%",
+			onEnter: () => {
+			gsap.to(element, {
+				clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+				duration: 1.2,
+				ease: "expo.out", // Dramatic deceleration - starts fast, slows significantly
+				delay: delay + 0.3, // Additional delay for secondary motion
 			});
+			},
+		});
 		},
 		{ scope: containerRef }
 	);

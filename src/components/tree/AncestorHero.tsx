@@ -5,6 +5,7 @@ import React, { useRef } from "react";
 import Image from "next/image";
 import ancestorImage from "@/assets/images/Children of MLN.jpg";
 import { StaggerFade } from "@/components/ui/StaggerFade";
+import { RevealText } from "@/components/ui/RevealText";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { useGSAP } from "@gsap/react";
 
@@ -29,9 +30,9 @@ export function AncestorHero() {
 				onEnter: () => {
 					gsap.to(imageElement, {
 						scale: 1,
-						duration: 1.5,
-						ease: "power2.out",
-						delay: 0.8, // Delayed to start as text animation is finishing
+						duration: 1.2,
+						ease: "expo.out", // Dramatic deceleration - starts fast, slows significantly
+						delay: 0.9, // More pronounced secondary motion
 					});
 				},
 				toggleActions: "play none none none",
@@ -46,27 +47,24 @@ export function AncestorHero() {
 			ref={container}
 			className="relative py-12 md:py-16 lg:py-20 bg-deep-umber overflow-hidden"
 		>
-			<StaggerFade
-				tag="div"
-				className="container relative z-10 max-w-lg text-center"
-				delay={0.2}
-			>
-				<div>
-					<p className="mb-3 font-semibold text-cream/80 md:mb-4 uppercase tracking-wider text-sm">
-						Ancestor
-					</p>
-				</div>
-				<div>
-					<h1 className="mb-5 text-4xl font-bold text-cream md:mb-6 md:text-5xl lg:text-6xl font-serif">
-						A life remembered
-					</h1>
-				</div>
-				<div>
-					<p className="text-cream/90 text-lg">
-						Born into a world that shaped generations. Their story lives on
-						through family and legacy.
-					</p>
-				</div>
+			<div className="container relative z-10 max-w-lg text-center">
+				<RevealText
+					tag="p"
+					className="mb-3 font-semibold text-cream/80 md:mb-4 uppercase tracking-wider text-sm"
+				>
+					Ancestor
+				</RevealText>
+				<RevealText
+					tag="h1"
+					className="mb-5 text-4xl font-bold text-cream md:mb-6 md:text-5xl lg:text-6xl font-serif"
+					delay={0.1}
+				>
+					A life remembered
+				</RevealText>
+				<RevealText tag="p" className="text-cream/90 text-lg" delay={0.2}>
+					Born into a world that shaped generations. Their story lives on
+					through family and legacy.
+				</RevealText>
 				<StaggerFade
 					className="mt-6 flex flex-wrap items-center justify-center gap-4 md:mt-8"
 					delay={0.4}
@@ -86,7 +84,7 @@ export function AncestorHero() {
 						</Button>
 					</div>
 				</StaggerFade>
-			</StaggerFade>
+			</div>
 
 			<div
 				ref={bgImageRef}
