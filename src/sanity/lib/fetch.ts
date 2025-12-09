@@ -48,7 +48,11 @@ export async function getBiographyFromSanity(slug: string): Promise<{
 	portableTextContent: any;
 } | null> {
 	try {
-		const data = await client.fetch(biographyBySlugQuery, { slug }, fetchOptions);
+		const data = await client.fetch(
+			biographyBySlugQuery,
+			{ slug },
+			fetchOptions
+		);
 		if (!data) return null;
 
 		return {
@@ -139,7 +143,11 @@ export async function getMLNStoryFromSanity(
 	slug: string
 ): Promise<MLNStory | null> {
 	try {
-		const data = await client.fetch(mlnStoryBySlugQuery, { slug }, fetchOptions);
+		const data = await client.fetch(
+			mlnStoryBySlugQuery,
+			{ slug },
+			fetchOptions
+		);
 		if (!data) return null;
 		return adaptSanityMLNStory(data);
 	} catch (error) {
