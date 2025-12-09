@@ -27,7 +27,7 @@ export function MLNBiographyHero() {
 		onEnter: () => {
 		gsap.to(imageElement, {
 			scale: 1,
-			duration: 1.2,
+			duration: 1.5,
 			ease: "expo.out", // Dramatic deceleration - starts fast, slows significantly
 			delay: 0.9, // More pronounced secondary motion
 		});

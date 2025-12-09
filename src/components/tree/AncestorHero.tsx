@@ -28,12 +28,12 @@ export function AncestorHero() {
 				trigger: container.current,
 				start: "top 80%",
 				onEnter: () => {
-					gsap.to(imageElement, {
-						scale: 1,
-						duration: 1.2,
-						ease: "expo.out", // Dramatic deceleration - starts fast, slows significantly
-						delay: 0.9, // More pronounced secondary motion
-					});
+			gsap.to(imageElement, {
+				scale: 1,
+				duration: 1.5,
+				ease: "expo.out", // Dramatic deceleration - starts fast, slows significantly
+				delay: 0.9, // More pronounced secondary motion
+			});
 				},
 				toggleActions: "play none none none",
 			});

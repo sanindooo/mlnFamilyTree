@@ -37,7 +37,7 @@ export const RevealImage = ({
 			onEnter: () => {
 			gsap.to(element, {
 				clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-				duration: 1.2,
+				duration: 1.5,
 				ease: "expo.out", // Dramatic deceleration - starts fast, slows significantly
 				delay: delay + 0.3, // Additional delay for secondary motion
 			});

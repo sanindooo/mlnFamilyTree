@@ -1,9 +1,0 @@
-{
-  "id": "id-new-member",
-  "name": "Full Name",
-  "slug": "full-name-slug",
-  "birthDate": "YYYY-MM-DD",
-  "photo": "./members/path-to-photo.jpg",
-  "children": []
-}
-
