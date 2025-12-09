@@ -2,35 +2,23 @@
 
 import { Button } from "@/components/ui/Button";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { AnimatePresence, motion } from "framer-motion";
 import React, { useState, useEffect, useRef } from "react";
 import { clsx } from "clsx";
 import { BiChevronDown } from "react-icons/bi";
 import Link from "next/link";
+import { gsap } from "@/lib/gsap";
+import { useGSAP } from "@gsap/react";
 
 const useRelume = () => {
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 	const isMobile = useMediaQuery("(max-width: 991px)");
 	const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
 
-	const getMobileOverlayClassNames = clsx(
-		"fixed inset-0 z-40 bg-black/50 lg:hidden",
-		{
-			block: isMobileMenuOpen,
-			hidden: !isMobileMenuOpen,
-		}
-	);
-
-	const NavbarWrapper = (isMobile ? motion.nav : "nav") as any;
-
-	const animateMobileMenu = isMobileMenuOpen ? "open" : "closed";
-
 	return {
 		toggleMobileMenu,
-		getMobileOverlayClassNames,
-		animateMobileMenu,
-		NavbarWrapper,
 		isMobileMenuOpen,
+		isMobile,
+		setIsMobileMenuOpen,
 	};
 };
 
@@ -51,9 +39,12 @@ const biographySections = [
 ];
 
 export function Navbar() {
-	const useActive = useRelume();
+	const { isMobileMenuOpen, toggleMobileMenu, isMobile, setIsMobileMenuOpen } =
+		useRelume();
 	const [isBiographyOpen, setIsBiographyOpen] = useState(false);
 	const dropdownRef = useRef<HTMLLIElement>(null);
+	const mobileMenuRef = useRef<HTMLElement>(null);
+	const mobileOverlayRef = useRef<HTMLDivElement>(null);
 
 	// Close dropdown when clicking outside
 	useEffect(() => {
@@ -71,6 +62,36 @@ export function Navbar() {
 			document.removeEventListener("mousedown", handleClickOutside);
 		};
 	}, []);
+
+	// GSAP Animation for Mobile Menu
+	useGSAP(
+		() => {
+			if (!isMobile) return;
+
+			const menu = mobileMenuRef.current;
+			const overlay = mobileOverlayRef.current;
+
+			if (isMobileMenuOpen) {
+				gsap.to(menu, { x: "0%", duration: 0.5, ease: "power3.out" });
+				gsap.to(overlay, { autoAlpha: 1, duration: 0.3 });
+			} else {
+				gsap.to(menu, { x: "-100%", duration: 0.5, ease: "power3.in" });
+				gsap.to(overlay, { autoAlpha: 0, duration: 0.3 });
+			}
+		},
+		{ dependencies: [isMobileMenuOpen, isMobile] }
+	);
+
+	// Initial set up for mobile menu
+	useGSAP(
+		() => {
+			if (isMobile && mobileMenuRef.current && mobileOverlayRef.current) {
+				gsap.set(mobileMenuRef.current, { x: "-100%" });
+				gsap.set(mobileOverlayRef.current, { autoAlpha: 0 });
+			}
+		},
+		{ dependencies: [isMobile] }
+	);
 
 	return (
 		<header className="border-b border-warm-sand bg-white sticky top-0 z-40">
@@ -137,9 +158,9 @@ export function Navbar() {
 					{/* Mobile Menu Button (Left on mobile) */}
 					<button
 						className="flex size-10 flex-col items-center justify-center gap-1 lg:hidden"
-						onClick={useActive.toggleMobileMenu}
+						onClick={toggleMobileMenu}
 						aria-label="Toggle mobile menu"
-						aria-expanded={useActive.isMobileMenuOpen}
+						aria-expanded={isMobileMenuOpen}
 					>
 						<span className="h-0.5 w-6 bg-deep-umber transition-all" />
 						<span className="h-0.5 w-6 bg-deep-umber transition-all" />
@@ -169,116 +190,96 @@ export function Navbar() {
 				</div>
 			</div>
 
-			{/* Mobile Menu Drawer */}
-			<AnimatePresence>
-				{useActive.isMobileMenuOpen && (
-					<>
-						<useActive.NavbarWrapper
-							key="mobile-menu"
-							initial="closed"
-							animate={useActive.animateMobileMenu}
-							exit="closed"
-							variants={{
-								closed: {
-									x: "-100%",
-									opacity: 0,
-									transition: { type: "spring", duration: 0.6, bounce: 0 },
-								},
-								open: {
-									x: 0,
-									opacity: 1,
-									transition: { type: "spring", duration: 0.4, bounce: 0 },
-								},
-							}}
-							className="fixed left-0 top-0 z-50 flex h-screen w-[280px] flex-col bg-white border-r border-warm-sand px-6 py-6 shadow-xl"
-							aria-label="Mobile navigation"
+			{/* Mobile Menu Drawer - Always rendered if mobile (controlled by GSAP) */}
+			{isMobile && (
+				<>
+					<nav
+						ref={mobileMenuRef}
+						className="fixed left-0 top-0 z-50 flex h-screen w-[280px] flex-col bg-white border-r border-warm-sand px-6 py-6 shadow-xl transform -translate-x-full"
+						aria-label="Mobile navigation"
+					>
+						{/* Mobile Logo */}
+						<Link
+							href="/"
+							className="mb-8 flex items-center"
+							onClick={toggleMobileMenu}
 						>
-							{/* Mobile Logo */}
-							<Link
-								href="/"
-								className="mb-8 flex items-center"
-								onClick={useActive.toggleMobileMenu}
-							>
-								<span className="font-serif font-bold text-xl text-deep-umber">
-									MLN Museum
-								</span>
-							</Link>
+							<span className="font-serif font-bold text-xl text-deep-umber">
+								MLN Museum
+							</span>
+						</Link>
 
-							{/* Mobile Navigation Links */}
-							<ul className="flex flex-col gap-1 list-none m-0 p-0">
-								<li>
+						{/* Mobile Navigation Links */}
+						<ul className="flex flex-col gap-1 list-none m-0 p-0">
+							<li>
+								<Link
+									href="/"
+									className="block text-base font-medium text-deep-umber hover:text-burgundy py-3 px-2 rounded-lg hover:bg-warm-sand/10 transition-colors"
+									onClick={toggleMobileMenu}
+								>
+									Home
+								</Link>
+							</li>
+
+							{/* Biography Submenu */}
+							<li>
+								<Link
+									href="/mln-story"
+									className="block text-base font-medium text-deep-umber hover:text-burgundy py-3 px-2 rounded-lg hover:bg-warm-sand/10 transition-colors"
+									onClick={toggleMobileMenu}
+								>
+									Biography
+								</Link>
+								<ul className="ml-4 flex flex-col gap-1 list-none mt-1">
+									{biographySections
+										.filter((s) => s.href !== "/mln-story")
+										.map((section) => (
+											<li key={section.href}>
+												<Link
+													href={section.href}
+													className="block text-sm font-medium text-deep-umber hover:text-burgundy py-2 px-2 rounded-lg hover:bg-warm-sand/10 transition-colors"
+													onClick={toggleMobileMenu}
+												>
+													{section.label}
+												</Link>
+											</li>
+										))}
+								</ul>
+							</li>
+
+							{navLinks.map((link) => (
+								<li key={link.href}>
 									<Link
-										href="/"
+										href={link.href}
 										className="block text-base font-medium text-deep-umber hover:text-burgundy py-3 px-2 rounded-lg hover:bg-warm-sand/10 transition-colors"
-										onClick={useActive.toggleMobileMenu}
+										onClick={toggleMobileMenu}
 									>
-										Home
+										{link.label}
 									</Link>
 								</li>
+							))}
 
-								{/* Biography Submenu */}
-								<li>
-									<Link
-										href="/mln-story"
-										className="block text-base font-medium text-deep-umber hover:text-burgundy py-3 px-2 rounded-lg hover:bg-warm-sand/10 transition-colors"
-										onClick={useActive.toggleMobileMenu}
-									>
-										Biography
-									</Link>
-									<ul className="ml-4 flex flex-col gap-1 list-none mt-1">
-										{biographySections
-											.filter((s) => s.href !== "/mln-story")
-											.map((section) => (
-												<li key={section.href}>
-													<Link
-														href={section.href}
-														className="block text-sm font-medium text-deep-umber hover:text-burgundy py-2 px-2 rounded-lg hover:bg-warm-sand/10 transition-colors"
-														onClick={useActive.toggleMobileMenu}
-													>
-														{section.label}
-													</Link>
-												</li>
-											))}
-									</ul>
-								</li>
+							<li>
+								<Link
+									href="/search"
+									className="block text-base font-medium text-deep-umber hover:text-burgundy py-3 px-2 rounded-lg hover:bg-warm-sand/10 transition-colors"
+									onClick={toggleMobileMenu}
+								>
+									Search
+								</Link>
+							</li>
+						</ul>
+					</nav>
 
-								{navLinks.map((link) => (
-									<li key={link.href}>
-										<Link
-											href={link.href}
-											className="block text-base font-medium text-deep-umber hover:text-burgundy py-3 px-2 rounded-lg hover:bg-warm-sand/10 transition-colors"
-											onClick={useActive.toggleMobileMenu}
-										>
-											{link.label}
-										</Link>
-									</li>
-								))}
-
-								<li>
-									<Link
-										href="/search"
-										className="block text-base font-medium text-deep-umber hover:text-burgundy py-3 px-2 rounded-lg hover:bg-warm-sand/10 transition-colors"
-										onClick={useActive.toggleMobileMenu}
-									>
-										Search
-									</Link>
-								</li>
-							</ul>
-						</useActive.NavbarWrapper>
-
-						{/* Mobile Overlay */}
-						<motion.div
-							key="mobile-overlay"
-							initial={{ opacity: 0 }}
-							exit={{ opacity: 0 }}
-							animate={{ opacity: 1 }}
-							transition={{ duration: 0.2 }}
-							className={useActive.getMobileOverlayClassNames}
-							onClick={useActive.toggleMobileMenu}
-						/>
-					</>
-				)}
-			</AnimatePresence>
+					{/* Mobile Overlay */}
+					<div
+						ref={mobileOverlayRef}
+						className="fixed inset-0 z-40 bg-black/50 lg:hidden opacity-0 invisible"
+						onClick={toggleMobileMenu}
+						aria-hidden="true"
+					/>
+				</>
+			)}
 		</header>
 	);
 }

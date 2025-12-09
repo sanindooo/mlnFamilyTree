@@ -1,9 +1,10 @@
 "use client";
 
 import { Button } from "@/components/ui/Button";
-import { motion, useScroll, useTransform } from "framer-motion";
 import React, { useRef } from "react";
-import { RxChevronRight } from "react-icons/rx";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { useGSAP } from "@gsap/react";
+import SplitType from "split-type";
 
 interface TimelineEvent {
 	year: string;
@@ -15,30 +16,9 @@ interface TimelineProps {
 	events?: TimelineEvent[];
 }
 
-const Circle = () => {
-	const circleRef = useRef(null);
-	const { scrollYProgress } = useScroll({
-		target: circleRef,
-		offset: ["end end", "end center"],
-	});
-	const backgroundColor = useTransform(
-		scrollYProgress,
-		[0.85, 1],
-		["#e2c8a8", "#6d2e2a"]
-	);
-
-	return (
-		<div className="absolute flex h-full w-8 items-start justify-center md:-ml-24 md:w-24 lg:-ml-32 lg:w-32">
-			<motion.div
-				ref={circleRef}
-				style={{ backgroundColor }}
-				className="z-20 mt-7 size-4 rounded-full shadow-[0_0_0_8px_#fff] md:mt-8 border border-warm-sand"
-			/>
-		</div>
-	);
-};
-
 export function Timeline({ events = [] }: TimelineProps) {
+	const container = useRef<HTMLElement>(null);
+
 	const displayEvents =
 		events.length > 0
 			? events
@@ -73,11 +53,86 @@ export function Timeline({ events = [] }: TimelineProps) {
 						description:
 							"Remembered as a hero and pioneer whose contributions shaped modern Uganda.",
 					},
-			  ];
+				];
+
+	useGSAP(
+		() => {
+			if (!container.current) return;
+			const rows = gsap.utils.toArray<HTMLElement>(
+				container.current.querySelectorAll(".timeline_row")
+			);
+
+			rows.forEach((row) => {
+				const title = row.querySelector(".timeline_title");
+				const text = row.querySelector(".timeline_text");
+				const icon = row.querySelector(".timeline-icon-wrapper");
+
+				// Split text
+				// Note: We check if elements exist to be safe
+				if (!title || !text || !icon) return;
+
+				const titleSplit = new SplitType(title as HTMLElement, {
+					types: "words",
+				});
+				const textSplit = new SplitType(text as HTMLElement, {
+					types: "words",
+				});
+
+				// Initial state
+				gsap.set([titleSplit.words, textSplit.words], {
+					yPercent: 80,
+					opacity: 0,
+					autoAlpha: 0,
+				});
+
+				// Text Animation Timeline
+				const tlText = gsap.timeline({ paused: true });
+				tlText.to([titleSplit.words, textSplit.words], {
+					yPercent: 0,
+					opacity: 1,
+					autoAlpha: 1,
+					stagger: 0.01,
+					duration: 1,
+					ease: "power3.out",
+				});
+
+				// Icon Animation Timeline
+				// Animate background color instead of border color to match design
+				const tlIcon = gsap.timeline({ paused: true });
+				tlIcon.fromTo(
+					icon,
+					{ backgroundColor: "#e2c8a8" }, // warm-sand
+					{
+						backgroundColor: "#6d2e2a", // burgundy
+						duration: 0.5,
+						ease: "power3.inOut",
+					}
+				);
+
+				// ScrollTrigger
+				ScrollTrigger.create({
+					trigger: row,
+					start: "top 80%", // Adjusted for better visibility on enter
+					end: "bottom 20%",
+					toggleActions: "play reverse play reverse",
+					onEnter: () => {
+						tlText.play();
+						tlIcon.play();
+					},
+					onLeaveBack: () => {
+						tlText.reverse();
+						tlIcon.reverse();
+					},
+				});
+			});
+		},
+		{ scope: container }
+	);
 
 	return (
 		<section
 			id="timeline"
+			ref={container}
 			className="py-12 md:py-16 lg:py-20 bg-cream/30 overflow-clip"
 		>
 			<div className="container">
@@ -108,16 +163,22 @@ export function Timeline({ events = [] }: TimelineProps) {
 					</div>
 					<div className="grid auto-cols-fr gap-x-12 gap-y-8 sm:gap-y-12 md:gap-x-20 md:gap-y-20">
 						{displayEvents.map((event, index) => (
-							<div className="relative" key={index}>
-								<Circle />
+							<div className="relative timeline_row" key={index}>
+								{/* Icon/Circle */}
+								<div className="absolute flex h-full w-8 items-start justify-center md:-ml-24 md:w-24 lg:-ml-32 lg:w-32">
+									<div className="timeline-icon-wrapper z-20 mt-7 size-4 rounded-full shadow-[0_0_0_8px_#fff] md:mt-8 border border-warm-sand bg-warm-sand" />
+								</div>
+
 								<div className="ml-12 mt-4 flex flex-col md:ml-0">
 									<h3 className="mb-2 text-2xl font-bold leading-[1.2] md:text-3xl text-burgundy font-serif">
 										{event.year}
 									</h3>
-									<h4 className="mb-2 text-lg font-bold md:text-xl text-deep-umber">
+									<h4 className="timeline_title mb-2 text-lg font-bold md:text-xl text-deep-umber">
 										{event.title}
 									</h4>
-									<p className="text-deep-umber">{event.description}</p>
+									<p className="timeline_text text-deep-umber">
+										{event.description}
+									</p>
 								</div>
 							</div>
 						))}
