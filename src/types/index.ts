@@ -74,9 +74,8 @@ export interface SanityPerson {
 		_ref: string;
 		_type: "reference";
 	}>;
-	// New fields for two-way sync
-	manualGallery?: any[];
-	taggedGallery?: any[];
+	// Gallery
+	gallery?: any[];
 }
 
 export interface SanityGalleryImage {
@@ -89,10 +88,6 @@ export interface SanityGalleryImage {
 	};
 	description?: string;
 	tags?: string[];
-	relatedPeople?: Array<{
-		_ref: string;
-		_type: "reference";
-	}>;
 }
 
 export interface SanityMLNStory {
@@ -115,7 +110,4 @@ export interface SanityMLNStory {
 		alt?: string;
 		caption?: string;
 	}>;
-	// New fields for two-way sync
-	manualGalleryImages?: any[];
-	taggedGalleryImages?: any[];
 }

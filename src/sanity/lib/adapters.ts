@@ -87,18 +87,7 @@ export function adaptSanityBiography(sanityBio: any): Biography {
 			? sanityBio.slug
 			: sanityBio.slug?.current;
 
-	// Merge manual and tagged galleries
-	const manualGallery = sanityBio.manualGallery || [];
-	const taggedGallery = sanityBio.taggedGallery || [];
-	const mergedGallery = [...manualGallery, ...taggedGallery];
-
-	// Deduplicate gallery images based on _key (which maps to _id from our query)
-	const gallery =
-		mergedGallery.length > 0
-			? Array.from(
-					new Map(mergedGallery.map((item: any) => [item._key, item])).values()
-				)
-			: undefined;
+	const gallery = sanityBio.gallery;
 
 	return {
 		slug: slug,
@@ -120,18 +109,7 @@ export function adaptSanityBiography(sanityBio: any): Biography {
  * Convert Sanity MLN Story to frontend MLNStory type
  */
 export function adaptSanityMLNStory(sanityStory: SanityMLNStory): MLNStory {
-	// Merge manual and tagged galleries
-	const manualGallery = sanityStory.manualGalleryImages || [];
-	const taggedGallery = sanityStory.taggedGalleryImages || [];
-	const mergedGallery = [...manualGallery, ...taggedGallery];
-
-	// Deduplicate gallery images based on _key (which maps to _id from our query)
-	const galleryImages =
-		mergedGallery.length > 0
-			? Array.from(
-					new Map(mergedGallery.map((img: any) => [img._key, img])).values()
-				)
-			: undefined;
+	const galleryImages = sanityStory.galleryImages;
 
 	return {
 		slug: sanityStory.slug?.current,
@@ -144,7 +122,7 @@ export function adaptSanityMLNStory(sanityStory: SanityMLNStory): MLNStory {
 		content: sanityStory.content,
 		galleryImages: galleryImages?.map((img: any) => ({
 			...img,
-			asset: img.asset ? urlForImage(img.asset).url() : undefined,
+			asset: img?.asset ? urlForImage(img.asset).url() : undefined,
 		})),
 	};
 }

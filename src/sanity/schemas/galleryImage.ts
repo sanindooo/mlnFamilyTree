@@ -46,30 +46,6 @@ export const galleryImageType = defineType({
 			],
 			description: "Categories/Tags for this image",
 		}),
-		defineField({
-			name: "relatedPeople",
-			title: "Related People",
-			type: "array",
-			of: [
-				{
-					type: "reference",
-					to: [{ type: "person" }],
-				},
-			],
-			description: "People featured in this photo",
-		}),
-		defineField({
-			name: "relatedStories",
-			title: "Related Stories",
-			type: "array",
-			of: [
-				{
-					type: "reference",
-					to: [{ type: "mlnStory" }],
-				},
-			],
-			description: "Stories related to this photo",
-		}),
 	],
 	preview: {
 		select: {

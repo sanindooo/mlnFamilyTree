@@ -16,14 +16,7 @@ export const familyTreeQuery = groq`
     photo,
     "biography": {
       "content": content,
-      "manualGallery": gallery[]->{
-        "_key": _id,
-        "asset": image.asset,
-        "alt": coalesce(image.alt, title),
-        "caption": description,
-        "title": title
-      },
-      "taggedGallery": *[_type == "galleryImage" && references(^._id)]{
+      "gallery": gallery[]->{
         "_key": _id,
         "asset": image.asset,
         "alt": coalesce(image.alt, title),
@@ -40,14 +33,7 @@ export const familyTreeQuery = groq`
       photo,
       "biography": {
         "content": content,
-        "manualGallery": gallery[]->{
-          "_key": _id,
-          "asset": image.asset,
-          "alt": coalesce(image.alt, title),
-          "caption": description,
-          "title": title
-        },
-        "taggedGallery": *[_type == "galleryImage" && references(^._id)]{
+        "gallery": gallery[]->{
           "_key": _id,
           "asset": image.asset,
           "alt": coalesce(image.alt, title),
@@ -64,14 +50,7 @@ export const familyTreeQuery = groq`
         photo,
         "biography": {
           "content": content,
-          "manualGallery": gallery[]->{
-            "_key": _id,
-            "asset": image.asset,
-            "alt": coalesce(image.alt, title),
-            "caption": description,
-            "title": title
-          },
-          "taggedGallery": *[_type == "galleryImage" && references(^._id)]{
+          "gallery": gallery[]->{
             "_key": _id,
             "asset": image.asset,
             "alt": coalesce(image.alt, title),
@@ -88,14 +67,7 @@ export const familyTreeQuery = groq`
           photo,
           "biography": {
             "content": content,
-            "manualGallery": gallery[]->{
-              "_key": _id,
-              "asset": image.asset,
-              "alt": coalesce(image.alt, title),
-              "caption": description,
-              "title": title
-            },
-            "taggedGallery": *[_type == "galleryImage" && references(^._id)]{
+            "gallery": gallery[]->{
               "_key": _id,
               "asset": image.asset,
               "alt": coalesce(image.alt, title),
@@ -125,14 +97,7 @@ export const personBySlugQuery = groq`
       "title": coalesce(bioTitle, name),
       "slug": slug.current,
       content,
-      "manualGallery": gallery[]->{
-        "_key": _id,
-        "asset": image.asset,
-        "alt": coalesce(image.alt, title),
-        "caption": description,
-        "title": title
-      },
-      "taggedGallery": *[_type == "galleryImage" && references(^._id)]{
+      "gallery": gallery[]->{
         "_key": _id,
         "asset": image.asset,
         "alt": coalesce(image.alt, title),
@@ -168,14 +133,7 @@ export const biographyBySlugQuery = groq`
     "title": coalesce(bioTitle, name),
     "slug": slug.current,
     content,
-    "manualGallery": gallery[]->{
-      "_key": _id,
-      "asset": image.asset,
-      "alt": coalesce(image.alt, title),
-      "caption": description,
-      "title": title
-    },
-    "taggedGallery": *[_type == "galleryImage" && references(^._id)]{
+    "gallery": gallery[]->{
       "_key": _id,
       "asset": image.asset,
       "alt": coalesce(image.alt, title),
@@ -216,7 +174,7 @@ export const docsIndexQuery = groq`
   *[_type == "person" && defined(content)] {
     "slug": slug.current,
     "title": coalesce(bioTitle, name),
-    "photos": (coalesce(gallery, [])[]-> + *[_type == "galleryImage" && references(^._id)]).image.asset->url
+    "photos": (coalesce(gallery, [])[]->).image.asset->url
   } | order(title asc)
 `;
 
@@ -247,14 +205,7 @@ export const mlnStoryBySlugQuery = groq`
     description,
     heroImage,
     content,
-    "manualGalleryImages": galleryImages[]->{
-      "_key": _id,
-      "asset": image.asset,
-      "alt": coalesce(image.alt, title),
-      "caption": description,
-      "title": title
-    },
-    "taggedGalleryImages": *[_type == "galleryImage" && references(^._id)]{
+    "galleryImages": galleryImages[]->{
       "_key": _id,
       "asset": image.asset,
       "alt": coalesce(image.alt, title),
@@ -276,12 +227,7 @@ export const allGalleryImagesQuery = groq`
     title,
     image,
     description,
-    "tags": tags[]->title,
-    relatedPeople[]-> {
-      _id,
-      name,
-      "slug": slug.current
-    }
+    "tags": tags[]->title
   } | order(_createdAt desc)
 `;
 
