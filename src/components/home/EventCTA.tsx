@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/Button";
 import React, { useRef } from "react";
 import Image from "next/image";
@@ -11,28 +13,31 @@ export function EventCTA() {
 	const container = useRef<HTMLDivElement>(null);
 	const bgImageRef = useRef<HTMLDivElement>(null);
 
-	useGSAP(() => {
-		if (!bgImageRef.current) return;
+	useGSAP(
+		() => {
+			if (!bgImageRef.current) return;
 
-		const imageElement = bgImageRef.current.querySelector("img");
-		if (!imageElement) return;
+			const imageElement = bgImageRef.current.querySelector("img");
+			if (!imageElement) return;
 
-		// Set initial scale
-		gsap.set(imageElement, { scale: 1.2, transformOrigin: "center center" });
+			// Set initial scale
+			gsap.set(imageElement, { scale: 1.2, transformOrigin: "center center" });
 
-		ScrollTrigger.create({
-			trigger: container.current,
-			start: "top 80%",
-			onEnter: () => {
-				gsap.to(imageElement, {
-					scale: 1,
-					duration: 1.5,
-					ease: "power2.out",
-				});
-			},
-			toggleActions: "play none none none",
-		});
-	}, { scope: container });
+			ScrollTrigger.create({
+				trigger: container.current,
+				start: "top 80%",
+				onEnter: () => {
+					gsap.to(imageElement, {
+						scale: 1,
+						duration: 1.5,
+						ease: "power2.out",
+					});
+				},
+				toggleActions: "play none none none",
+			});
+		},
+		{ scope: container }
+	);
 
 	return (
 		<section
@@ -54,7 +59,10 @@ export function EventCTA() {
 							meaningful as we celebrate this remarkable life.
 						</RevealText>
 					</div>
-					<StaggerFade className="mt-6 flex flex-wrap items-center justify-center gap-4 md:mt-8" delay={0.4}>
+					<StaggerFade
+						className="mt-6 flex flex-wrap items-center justify-center gap-4 md:mt-8"
+						delay={0.4}
+					>
 						<div>
 							<Button
 								title="Register"
@@ -75,9 +83,12 @@ export function EventCTA() {
 					</StaggerFade>
 				</div>
 			</div>
-			
+
 			{/* Background Image */}
-			<div ref={bgImageRef} className="absolute inset-0 z-0 size-full overflow-hidden">
+			<div
+				ref={bgImageRef}
+				className="absolute inset-0 z-0 size-full overflow-hidden"
+			>
 				<div className="relative size-full">
 					<Image
 						src={bgImage}
