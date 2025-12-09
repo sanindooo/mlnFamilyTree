@@ -6,6 +6,8 @@ import { RxChevronRight } from "react-icons/rx";
 import { BiCube } from "react-icons/bi";
 import { MLNStory } from "@/types";
 import fallbackImage from "@/assets/images/Children of MLN.jpg";
+import { StaggerFade } from "@/components/ui/StaggerFade";
+import { RevealText } from "@/components/ui/RevealText";
 
 interface BiographySectionCardProps {
 	title: string;
@@ -66,15 +68,18 @@ export function BiographyListing({ stories }: BiographyListingProps) {
 						<p className="mb-3 font-semibold md:mb-4 text-antique-gold uppercase tracking-wider text-sm">
 							Foundation
 						</p>
-						<h2 className="mb-5 text-3xl font-bold md:mb-6 md:text-4xl lg:text-5xl font-serif text-deep-umber">
+						<RevealText
+							tag="h2"
+							className="mb-5 text-3xl font-bold md:mb-6 md:text-4xl lg:text-5xl font-serif text-deep-umber"
+						>
 							The roots that shaped a life
-						</h2>
-						<p className="text-lg text-deep-umber">
+						</RevealText>
+						<RevealText tag="p" className="text-lg text-deep-umber" delay={0.2}>
 							Every person begins somewhere, shaped by place and circumstance
-						</p>
+						</RevealText>
 					</div>
 				</div>
-				<ul className="grid grid-cols-1 gap-6 md:gap-8 lg:grid-cols-3 list-none m-0 p-0">
+				<StaggerFade tag="ul" className="grid grid-cols-1 gap-6 md:gap-8 lg:grid-cols-3 list-none m-0 p-0" stagger={0.15}>
 					{stories.map((story, index) => (
 						<li key={story.slug}>
 							<BiographySectionCard
@@ -85,7 +90,7 @@ export function BiographyListing({ stories }: BiographyListingProps) {
 							/>
 						</li>
 					))}
-				</ul>
+				</StaggerFade>
 			</div>
 		</section>
 	);

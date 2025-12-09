@@ -5,6 +5,8 @@ import React, { useRef } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { useGSAP } from "@gsap/react";
 import SplitType from "split-type";
+import { StaggerFade } from "@/components/ui/StaggerFade";
+import { RevealText } from "@/components/ui/RevealText";
 
 interface TimelineEvent {
 	year: string;
@@ -53,7 +55,7 @@ export function Timeline({ events = [] }: TimelineProps) {
 						description:
 							"Remembered as a hero and pioneer whose contributions shaped modern Uganda.",
 					},
-				];
+			  ];
 
 	useGSAP(
 		() => {
@@ -63,13 +65,12 @@ export function Timeline({ events = [] }: TimelineProps) {
 			);
 
 			rows.forEach((row) => {
+				const year = row.querySelector(".timeline_year");
 				const title = row.querySelector(".timeline_title");
 				const text = row.querySelector(".timeline_text");
 				const icon = row.querySelector(".timeline-icon-wrapper");
 
-				// Split text
-				// Note: We check if elements exist to be safe
-				if (!title || !text || !icon) return;
+				if (!year || !title || !text || !icon) return;
 
 				const titleSplit = new SplitType(title as HTMLElement, {
 					types: "words",
@@ -78,15 +79,33 @@ export function Timeline({ events = [] }: TimelineProps) {
 					types: "words",
 				});
 
-				// Initial state
+				// Initial state for SplitText
 				gsap.set([titleSplit.words, textSplit.words], {
 					yPercent: 80,
 					opacity: 0,
 					autoAlpha: 0,
 				});
 
+				// Initial state for Year (simple fade)
+				gsap.set(year, {
+					opacity: 0,
+					autoAlpha: 0,
+					x: -20, // Slide in slightly from left
+				});
+
 				// Text Animation Timeline
 				const tlText = gsap.timeline({ paused: true });
+				
+				// Year fade in first/simultaneously
+				tlText.to(year, {
+					opacity: 1,
+					autoAlpha: 1,
+					x: 0,
+					duration: 0.8,
+					ease: "power2.out",
+				}, 0);
+
+				// Then split text content
 				tlText.to([titleSplit.words, textSplit.words], {
 					yPercent: 0,
 					opacity: 1,
@@ -94,10 +113,9 @@ export function Timeline({ events = [] }: TimelineProps) {
 					stagger: 0.01,
 					duration: 1,
 					ease: "power3.out",
-				});
+				}, 0.2);
 
 				// Icon Animation Timeline
-				// Animate background color instead of border color to match design
 				const tlIcon = gsap.timeline({ paused: true });
 				tlIcon.fromTo(
 					icon,
@@ -112,16 +130,13 @@ export function Timeline({ events = [] }: TimelineProps) {
 				// ScrollTrigger
 				ScrollTrigger.create({
 					trigger: row,
-					start: "top 80%", // Adjusted for better visibility on enter
+					start: "top 80%",
 					end: "bottom 20%",
-					toggleActions: "play reverse play reverse",
+					// Play once: onEnter play, onLeave/EnterBack do nothing (or reset if explicitly requested, but user asked for one direction)
+					toggleActions: "play none none none",
 					onEnter: () => {
 						tlText.play();
 						tlIcon.play();
-					},
-					onLeaveBack: () => {
-						tlText.reverse();
-						tlIcon.reverse();
 					},
 				});
 			});
@@ -141,18 +156,23 @@ export function Timeline({ events = [] }: TimelineProps) {
 						<p className="mb-3 font-semibold md:mb-4 text-antique-gold uppercase tracking-wider text-sm">
 							Life & Times
 						</p>
-						<h2 className="mb-5 text-3xl font-bold md:mb-6 md:text-4xl lg:text-5xl font-serif text-deep-umber">
+						<RevealText
+							tag="h2"
+							className="mb-5 text-3xl font-bold md:mb-6 md:text-4xl lg:text-5xl font-serif text-deep-umber"
+						>
 							A life marked by courage and conviction
-						</h2>
-						<p className="text-lg text-deep-umber">
+						</RevealText>
+						<RevealText tag="p" className="text-lg text-deep-umber" delay={0.2}>
 							Born into Buganda Kingdom during a time of profound change and
 							upheaval.
-						</p>
-						<div className="mt-6 flex flex-wrap items-center gap-4 md:mt-8">
-							<Button variant="secondary" href="/mln-story">
-								Read Full Biography
-							</Button>
-						</div>
+						</RevealText>
+						<StaggerFade className="mt-6 flex flex-wrap items-center gap-4 md:mt-8" delay={0.4}>
+							<div>
+								<Button variant="secondary" href="/mln-story">
+									Read Full Biography
+								</Button>
+							</div>
+						</StaggerFade>
 					</div>
 					<div className="absolute z-0 flex h-full w-8 flex-col items-center justify-self-start [grid-area:2/1/3/2] md:z-auto md:justify-self-center md:[grid-area:auto]">
 						<div className="absolute z-10 h-16 w-1 bg-gradient-to-b from-cream to-transparent" />
@@ -168,9 +188,9 @@ export function Timeline({ events = [] }: TimelineProps) {
 								<div className="absolute flex h-full w-8 items-start justify-center md:-ml-24 md:w-24 lg:-ml-32 lg:w-32">
 									<div className="timeline-icon-wrapper z-20 mt-7 size-4 rounded-full shadow-[0_0_0_8px_#fff] md:mt-8 border border-warm-sand bg-warm-sand" />
 								</div>
-
+								
 								<div className="ml-12 mt-4 flex flex-col md:ml-0">
-									<h3 className="mb-2 text-2xl font-bold leading-[1.2] md:text-3xl text-burgundy font-serif">
+									<h3 className="timeline_year mb-2 text-2xl font-bold leading-[1.2] md:text-3xl text-burgundy font-serif">
 										{event.year}
 									</h3>
 									<h4 className="timeline_title mb-2 text-lg font-bold md:text-xl text-deep-umber">

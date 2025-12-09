@@ -4,6 +4,7 @@ import Image from "next/image";
 import heroImage from "@/assets/images/Document from Paul Kiwana Nsibirwa.png";
 import { RevealText } from "@/components/ui/RevealText";
 import { RevealImage } from "@/components/ui/RevealImage";
+import { StaggerFade } from "@/components/ui/StaggerFade";
 
 export function Hero() {
 	return (
@@ -18,19 +19,29 @@ export function Hero() {
 						>
 							Katikkiro Martin Luther Nsibirwa MBE
 						</RevealText>
-						<RevealText tag="p" className="text-lg text-deep-umber" delay={0.3}>
+						<RevealText
+							tag="p"
+							className="text-lg text-deep-umber"
+							delay={0.3}
+						>
 							A pioneering leader, devoted family man, and cornerstone of
 							Ugandan heritage. Explore the enduring legacy of a true visionary.
 						</RevealText>
-						<nav
+						<StaggerFade
+							tag="nav"
 							className="mt-6 flex flex-wrap gap-4 md:mt-8"
 							aria-label="Hero actions"
+							delay={0.5}
 						>
-							<Button href="/mln-story">Discover the Biography</Button>
-							<Button variant="secondary" href="/tree">
-								View Family Tree
-							</Button>
-						</nav>
+							<div>
+								<Button href="/mln-story">Discover the Biography</Button>
+							</div>
+							<div>
+								<Button variant="secondary" href="/tree">
+									View Family Tree
+								</Button>
+							</div>
+						</StaggerFade>
 					</article>
 					<RevealImage delay={0.2}>
 						<figure>

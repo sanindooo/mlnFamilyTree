@@ -1,16 +1,17 @@
+import { PortableText } from "@portabletext/react";
 import React from "react";
 import {
 	BiLinkAlt,
-	BiLogoFacebookCircle,
 	BiLogoLinkedinSquare,
+	BiLogoFacebookCircle,
 } from "react-icons/bi";
 import { FaXTwitter } from "react-icons/fa6";
-import { PortableTextBlock } from "@portabletext/types";
-import { PortableTextRenderer } from "@/sanity/components/PortableTextRenderer";
+import { PortableTextRenderer } from "@/components/biography/PortableTextRenderer";
+import { StaggerFade } from "@/components/ui/StaggerFade";
 
 interface BiographyContentProps {
 	content?: string; // Legacy HTML content
-	portableTextContent?: PortableTextBlock[]; // New Sanity Portable Text content
+	portableTextContent?: any[]; // New Sanity Portable Text content
 	children?: React.ReactNode;
 }
 
@@ -32,7 +33,7 @@ export function BiographyContent({
 							content && <div dangerouslySetInnerHTML={{ __html: content }} />}
 					</div>
 
-					<div>
+					<StaggerFade tag="div" triggerStart="top 90%">
 						<div className="mb-8 text-center md:mb-10 lg:mb-12">
 							<p className="font-semibold md:text-md text-deep-umber">
 								Share this
@@ -54,19 +55,33 @@ export function BiographyContent({
 						</div>
 						<div>
 							<ul className="flex flex-wrap justify-center gap-2">
-								{["Family history", "Personal legacy", "Life story"].map(
-									(tag, index) => (
-										<li className="flex" key={index}>
-											<span className="bg-warm-sand/20 px-2 py-1 text-sm font-semibold text-deep-umber rounded">
-												{tag}
-											</span>
-										</li>
-									)
-								)}
+								<li className="flex items-center">
+									<a
+										href="#"
+										className="flex items-center gap-2 rounded-lg bg-warm-sand/20 px-4 py-2 text-sm font-medium text-deep-umber hover:bg-warm-sand/40 transition-colors"
+									>
+										Family history
+									</a>
+								</li>
+								<li className="flex items-center">
+									<a
+										href="#"
+										className="flex items-center gap-2 rounded-lg bg-warm-sand/20 px-4 py-2 text-sm font-medium text-deep-umber hover:bg-warm-sand/40 transition-colors"
+									>
+										Personal legacy
+									</a>
+								</li>
+								<li className="flex items-center">
+									<a
+										href="#"
+										className="flex items-center gap-2 rounded-lg bg-warm-sand/20 px-4 py-2 text-sm font-medium text-deep-umber hover:bg-warm-sand/40 transition-colors"
+									>
+										Life story
+									</a>
+								</li>
 							</ul>
 						</div>
-					</div>
-					<div className="my-8 h-px bg-warm-sand md:my-10 lg:my-12" />
+					</StaggerFade>
 				</div>
 			</div>
 		</section>

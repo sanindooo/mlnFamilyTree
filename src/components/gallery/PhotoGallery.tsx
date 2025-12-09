@@ -7,6 +7,7 @@ import Captions from "yet-another-react-lightbox/plugins/captions";
 import "yet-another-react-lightbox/styles.css";
 import "yet-another-react-lightbox/plugins/captions.css";
 import { GalleryImage } from "@/types";
+import { StaggerFade } from "@/components/ui/StaggerFade";
 
 interface PhotoGalleryProps {
 	images: GalleryImage[];
@@ -50,41 +51,57 @@ export function PhotoGallery({ images }: PhotoGalleryProps) {
 		<section className="py-12 md:py-16 lg:py-20 bg-white">
 			<div className="container">
 				{/* Header */}
-				<header className="mb-12 md:mb-16 text-center">
-					<p className="mb-3 font-semibold md:mb-4 text-antique-gold uppercase tracking-wider text-sm">
-						Archive
-					</p>
-					<h1 className="mb-5 text-4xl font-bold md:mb-6 md:text-5xl lg:text-6xl font-serif text-deep-umber">
-						Photo Gallery
-					</h1>
-					<p className="text-lg text-deep-umber max-w-2xl mx-auto">
-						A visual journey through the life and times of the Nsibirwa family
-					</p>
-				</header>
+				<StaggerFade tag="header" className="mb-12 md:mb-16 text-center" delay={0.2}>
+					<div>
+						<p className="mb-3 font-semibold md:mb-4 text-antique-gold uppercase tracking-wider text-sm">
+							Archive
+						</p>
+					</div>
+					<div>
+						<h1 className="mb-5 text-4xl font-bold md:mb-6 md:text-5xl lg:text-6xl font-serif text-deep-umber">
+							Photo Gallery
+						</h1>
+					</div>
+					<div>
+						<p className="text-lg text-deep-umber max-w-2xl mx-auto">
+							A visual journey through the life and times of the Nsibirwa family
+						</p>
+					</div>
+				</StaggerFade>
 
 				{/* Category Filter */}
-				<nav
+				<StaggerFade
+					tag="nav"
 					className="mb-8 md:mb-12 flex flex-wrap justify-center gap-3"
 					aria-label="Gallery filters"
+					delay={0.4}
+					stagger={0.05}
 				>
 					{categories.map((category) => (
-						<button
-							key={category}
-							onClick={() => setSelectedCategory(category)}
-							className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-								selectedCategory === category
-									? "bg-burgundy text-white"
-									: "bg-warm-sand/20 text-deep-umber hover:bg-warm-sand/40"
-							}`}
-							aria-pressed={selectedCategory === category}
-						>
-							{category === "all" ? "All Photos" : category}
-						</button>
+						<div key={category}>
+							<button
+								onClick={() => setSelectedCategory(category)}
+								className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+									selectedCategory === category
+										? "bg-burgundy text-white"
+										: "bg-warm-sand/20 text-deep-umber hover:bg-warm-sand/40"
+								}`}
+								aria-pressed={selectedCategory === category}
+							>
+								{category === "all" ? "All Photos" : category}
+							</button>
+						</div>
 					))}
-				</nav>
+				</StaggerFade>
 
 				{/* Gallery Grid */}
-				<ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 list-none p-0">
+				{/* We use key={selectedCategory} to trigger re-animation on filter change */}
+				<StaggerFade
+					key={selectedCategory} 
+					tag="ul" 
+					className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 list-none p-0" 
+					stagger={0.05}
+				>
 					{filteredImages.map((image, idx) => (
 						<li key={idx} onClick={() => handleImageClick(idx)}>
 							<figure className="group relative overflow-hidden rounded-xl border border-warm-sand shadow-lg cursor-pointer aspect-square m-0">
@@ -110,7 +127,7 @@ export function PhotoGallery({ images }: PhotoGalleryProps) {
 							</figure>
 						</li>
 					))}
-				</ul>
+				</StaggerFade>
 
 				{filteredImages.length === 0 && (
 					<p className="text-center text-muted py-12">

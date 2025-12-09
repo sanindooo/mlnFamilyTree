@@ -6,6 +6,7 @@ import Lightbox from "yet-another-react-lightbox";
 import Captions from "yet-another-react-lightbox/plugins/captions";
 import "yet-another-react-lightbox/styles.css";
 import "yet-another-react-lightbox/plugins/captions.css";
+import { StaggerFade } from "@/components/ui/StaggerFade";
 
 export interface GalleryImage {
 	src: string;
@@ -15,7 +16,7 @@ export interface GalleryImage {
 }
 
 interface SectionGalleryProps {
-	images: (string | GalleryImage)[];
+	images?: (string | GalleryImage)[];
 	sectionTitle: string;
 }
 
@@ -54,7 +55,7 @@ export function SectionGallery({ images, sectionTitle }: SectionGalleryProps) {
 					</h3>
 					<p className="text-center text-muted mt-2">Images from this period</p>
 				</header>
-				<ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 list-none p-0">
+				<StaggerFade tag="ul" className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 list-none p-0" stagger={0.1}>
 					{galleryImages.map((image, idx) => (
 						<li key={idx} onClick={() => handleImageClick(idx)}>
 							<figure className="relative h-48 w-full overflow-hidden rounded-xl border border-warm-sand shadow-lg group cursor-pointer m-0">
@@ -68,7 +69,7 @@ export function SectionGallery({ images, sectionTitle }: SectionGalleryProps) {
 							</figure>
 						</li>
 					))}
-				</ul>
+				</StaggerFade>
 
 				<Lightbox
 					open={open}
