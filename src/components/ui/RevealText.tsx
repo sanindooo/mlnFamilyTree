@@ -12,6 +12,7 @@ interface RevealTextProps {
 	delay?: number;
 	duration?: number;
 	yOffset?: number;
+	lineHeight?: number | string;
 }
 
 export const RevealText = ({
@@ -21,6 +22,7 @@ export const RevealText = ({
 	delay = 0,
 	duration = 1,
 	yOffset = 100,
+	lineHeight,
 }: RevealTextProps) => {
 	const comp = useRef<HTMLDivElement>(null);
 	const textRef = useRef<HTMLElement>(null);
@@ -41,9 +43,15 @@ export const RevealText = ({
 				});
 			}
 
+			// Determine effective line height
+			const isHeading = ["h1", "h2", "h3", "h4", "h5", "h6"].includes(Tag);
+			const effectiveLineHeight =
+				lineHeight !== undefined ? lineHeight : isHeading ? 1.25 : undefined;
+
 			// Set initial state: words start below the mask (invisible)
 			gsap.set(split.words, {
 				yPercent: yOffset,
+				lineHeight: effectiveLineHeight,
 			});
 
 			ScrollTrigger.create({
