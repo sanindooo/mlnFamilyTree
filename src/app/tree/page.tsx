@@ -3,7 +3,7 @@ import { TreeGrid } from "@/components/tree/TreeGrid";
 import { InteractiveTree } from "@/components/tree/InteractiveTree";
 import { getFamilyTree } from "@/lib/data";
 
-export const revalidate = process.env.USE_CACHE === "true" ? 3600 : 0;
+export const revalidate = 3600;
 
 export default async function TreePage() {
 	const treeData = await getFamilyTree();
