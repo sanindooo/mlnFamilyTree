@@ -79,7 +79,11 @@ export function BiographyListing({ stories }: BiographyListingProps) {
 						</RevealText>
 					</div>
 				</div>
-				<StaggerFade tag="ul" className="grid grid-cols-1 gap-6 md:gap-8 lg:grid-cols-3 list-none m-0 p-0" stagger={0.15}>
+				<StaggerFade
+					tag="ul"
+					className="grid grid-cols-1 gap-6 md:gap-8 lg:grid-cols-3 list-none m-0 p-0"
+					stagger={0.15}
+				>
 					{stories.map((story, index) => (
 						<li key={story.slug}>
 							<BiographySectionCard

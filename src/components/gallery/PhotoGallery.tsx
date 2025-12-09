@@ -8,6 +8,7 @@ import "yet-another-react-lightbox/styles.css";
 import "yet-another-react-lightbox/plugins/captions.css";
 import { GalleryImage } from "@/types";
 import { StaggerFade } from "@/components/ui/StaggerFade";
+import { RevealText } from "@/components/ui/RevealText";
 
 interface PhotoGalleryProps {
 	images: GalleryImage[];
@@ -50,18 +51,29 @@ export function PhotoGallery({ images }: PhotoGalleryProps) {
 	return (
 		<section className="py-12 md:py-16 lg:py-20 bg-white">
 			<div className="container">
-				{/* Header */}
-				<header className="mb-12 md:mb-16 text-center">
-					<p className="mb-3 font-semibold md:mb-4 text-antique-gold uppercase tracking-wider text-sm">
-						Archive
-					</p>
-					<h1 className="mb-5 text-4xl font-bold md:mb-6 md:text-5xl lg:text-6xl font-serif text-deep-umber">
-						Photo Gallery
-					</h1>
-					<p className="text-lg text-deep-umber max-w-2xl mx-auto">
-						A visual journey through the life and times of the Nsibirwa family
-					</p>
-				</header>
+			{/* Header */}
+			<header className="mb-12 md:mb-16 text-center">
+				<RevealText
+					tag="p"
+					className="mb-3 font-semibold md:mb-4 text-antique-gold uppercase tracking-wider text-sm"
+				>
+					Archive
+				</RevealText>
+				<RevealText
+					tag="h1"
+					className="mb-5 text-4xl font-bold md:mb-6 md:text-5xl lg:text-6xl font-serif text-deep-umber"
+					delay={0.1}
+				>
+					Photo Gallery
+				</RevealText>
+				<RevealText
+					tag="p"
+					className="text-lg text-deep-umber max-w-2xl mx-auto"
+					delay={0.2}
+				>
+					A visual journey through the life and times of the Nsibirwa family
+				</RevealText>
+			</header>
 
 				{/* Category Filter */}
 				<nav

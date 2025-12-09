@@ -80,7 +80,7 @@ export function BiographyHeader({
 								Actually, user wants UNIFIED animation.
 								The simplest way is to treat the whole block as staggered children.
 							*/}
-							
+
 							<div className="mb-5 md:mb-6">
 								<RevealText
 									tag="h1"

@@ -57,11 +57,19 @@ export function SectionGallery({ images, sectionTitle }: SectionGalleryProps) {
 					>
 						Gallery
 					</RevealText>
-					<RevealText tag="p" className="text-center text-muted mt-2" delay={0.2}>
+					<RevealText
+						tag="p"
+						className="text-center text-muted mt-2"
+						delay={0.2}
+					>
 						Images from this period
 					</RevealText>
 				</header>
-				<StaggerFade tag="ul" className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 list-none p-0" stagger={0.1}>
+				<StaggerFade
+					tag="ul"
+					className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 list-none p-0"
+					stagger={0.1}
+				>
 					{galleryImages.map((image, idx) => (
 						<li key={idx} onClick={() => handleImageClick(idx)}>
 							<figure className="relative h-48 w-full overflow-hidden rounded-xl border border-warm-sand shadow-lg group cursor-pointer m-0">

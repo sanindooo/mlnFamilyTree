@@ -17,24 +17,26 @@ export function EventCTA() {
 		() => {
 			if (!bgImageRef.current) return;
 
-			const imageElement = bgImageRef.current.querySelector("img");
-			if (!imageElement) return;
+		const imageElement = bgImageRef.current.querySelector("img");
+		if (!imageElement) return;
 
-			// Set initial scale
-			gsap.set(imageElement, { scale: 1.2, transformOrigin: "center center" });
+		// Set initial scale (reduced by 50%)
+		gsap.set(imageElement, { scale: 1.1, transformOrigin: "center center" });
 
-			ScrollTrigger.create({
-				trigger: container.current,
-				start: "top 80%",
-				onEnter: () => {
-					gsap.to(imageElement, {
-						scale: 1,
-						duration: 1.5,
-						ease: "power2.out",
-					});
-				},
-				toggleActions: "play none none none",
-			});
+		// Secondary motion: Image scales after text animation
+		ScrollTrigger.create({
+			trigger: container.current,
+			start: "top 80%",
+			onEnter: () => {
+				gsap.to(imageElement, {
+					scale: 1,
+					duration: 1.5,
+					ease: "power2.out",
+					delay: 0.8, // Delayed to start as text animation is finishing
+				});
+			},
+			toggleActions: "play none none none",
+		});
 		},
 		{ scope: container }
 	);

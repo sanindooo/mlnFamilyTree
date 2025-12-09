@@ -55,7 +55,7 @@ export function Timeline({ events = [] }: TimelineProps) {
 						description:
 							"Remembered as a hero and pioneer whose contributions shaped modern Uganda.",
 					},
-			  ];
+				];
 
 	useGSAP(
 		() => {
@@ -92,29 +92,37 @@ export function Timeline({ events = [] }: TimelineProps) {
 					autoAlpha: 0,
 					// Explicitly ensure no transform is set
 					x: 0,
-					y: 0
+					y: 0,
 				});
 
 				// Text Animation Timeline
 				const tlText = gsap.timeline({ paused: true });
-				
+
 				// Year fade in first/simultaneously - PURE FADE
-				tlText.to(year, {
-					opacity: 1,
-					autoAlpha: 1,
-					duration: 0.8,
-					ease: "power2.out",
-				}, 0);
+				tlText.to(
+					year,
+					{
+						opacity: 1,
+						autoAlpha: 1,
+						duration: 0.8,
+						ease: "power2.out",
+					},
+					0
+				);
 
 				// Then split text content
-				tlText.to([titleSplit.words, textSplit.words], {
-					yPercent: 0,
-					opacity: 1,
-					autoAlpha: 1,
-					stagger: 0.01,
-					duration: 1,
-					ease: "power3.out",
-				}, 0.2);
+				tlText.to(
+					[titleSplit.words, textSplit.words],
+					{
+						yPercent: 0,
+						opacity: 1,
+						autoAlpha: 1,
+						stagger: 0.01,
+						duration: 1,
+						ease: "power3.out",
+					},
+					0.2
+				);
 
 				// Icon Animation Timeline
 				const tlIcon = gsap.timeline({ paused: true });
@@ -184,7 +192,7 @@ export function Timeline({ events = [] }: TimelineProps) {
 								<div className="absolute flex h-full w-8 items-start justify-center md:-ml-24 md:w-24 lg:-ml-32 lg:w-32">
 									<div className="timeline-icon-wrapper z-20 mt-7 size-4 rounded-full shadow-[0_0_0_8px_#fff] md:mt-8 border border-warm-sand bg-warm-sand" />
 								</div>
-								
+
 								<div className="ml-12 mt-4 flex flex-col md:ml-0">
 									<h3 className="timeline_year mb-2 text-2xl font-bold leading-[1.2] md:text-3xl text-burgundy font-serif">
 										{event.year}

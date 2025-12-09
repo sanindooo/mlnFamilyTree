@@ -6,12 +6,9 @@ import { RevealText } from "@/components/ui/RevealText";
 import { StaggerFade } from "@/components/ui/StaggerFade";
 
 export function Highlights() {
-  return (
-    <section
-      id="highlights"
-      className="py-12 md:py-16 lg:py-20 bg-white"
-    >
-      <div className="container">
+	return (
+		<section id="highlights" className="py-12 md:py-16 lg:py-20 bg-white">
+			<div className="container">
 				<div className="flex flex-col">
 					<div className="rb-12 mb-12 md:mb-16 lg:mb-20">
 						<div className="w-full max-w-lg">
@@ -27,7 +24,11 @@ export function Highlights() {
 							>
 								Legacy Highlights
 							</RevealText>
-							<RevealText tag="p" className="text-lg text-deep-umber" delay={0.2}>
+							<RevealText
+								tag="p"
+								className="text-lg text-deep-umber"
+								delay={0.2}
+							>
 								Understand the achievements that defined a remarkable life and
 								shaped history.
 							</RevealText>
@@ -89,10 +90,10 @@ export function Highlights() {
 							</RevealText>
 						</div>
 					</div>
-					
+
 					{/* Slide in button */}
-					<StaggerFade 
-						tag="div" 
+					<StaggerFade
+						tag="div"
 						className="mt-10 flex items-center justify-start gap-4 md:mt-14 lg:mt-16"
 						delay={0.4}
 						stagger={0} // Single item
@@ -102,7 +103,7 @@ export function Highlights() {
 						</Button>
 					</StaggerFade>
 				</div>
-      </div>
-    </section>
-  );
+			</div>
+		</section>
+	);
 }

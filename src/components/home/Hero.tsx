@@ -19,11 +19,7 @@ export function Hero() {
 						>
 							Katikkiro Martin Luther Nsibirwa MBE
 						</RevealText>
-						<RevealText
-							tag="p"
-							className="text-lg text-deep-umber"
-							delay={0.3}
-						>
+						<RevealText tag="p" className="text-lg text-deep-umber" delay={0.3}>
 							A pioneering leader, devoted family man, and cornerstone of
 							Ugandan heritage. Explore the enduring legacy of a true visionary.
 						</RevealText>
