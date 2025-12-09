@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/Button";
 import { notFound } from "next/navigation";
 import { urlForImage } from "@/sanity/lib/adapters";
 
+export const revalidate = process.env.USE_CACHE === "true" ? 3600 : 0;
+
 export async function generateStaticParams() {
 	const docs = await getDocsIndex();
 	return docs.map((doc) => ({
