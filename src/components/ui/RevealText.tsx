@@ -11,6 +11,7 @@ interface RevealTextProps {
 	tag?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "div" | "span";
 	delay?: number;
 	duration?: number;
+	yOffset?: number;
 }
 
 export const RevealText = ({
@@ -19,6 +20,7 @@ export const RevealText = ({
 	tag: Tag = "div",
 	delay = 0,
 	duration = 1,
+	yOffset = 100,
 }: RevealTextProps) => {
 	const comp = useRef<HTMLDivElement>(null);
 	const textRef = useRef<HTMLElement>(null);
@@ -30,27 +32,27 @@ export const RevealText = ({
 			// Use SplitType to split text into words
 			const split = new SplitType(textRef.current, { types: "words" });
 
-			// Set initial state: words slightly down and invisible
-			gsap.set(split.words, {
-				yPercent: 100,
-				opacity: 0,
-				autoAlpha: 0,
-			});
+		// Set initial state: words slightly down and invisible
+		gsap.set(split.words, {
+			yPercent: yOffset,
+			opacity: 0,
+			autoAlpha: 0,
+		});
 
-			ScrollTrigger.create({
-				trigger: textRef.current,
-				start: "top 85%", // Trigger when top of element hits 85% of viewport height
-				onEnter: () => {
-					gsap.to(split.words, {
-						yPercent: 0,
-						opacity: 1,
-						autoAlpha: 1,
-						duration: duration,
-						ease: "power3.out",
-						stagger: 0.02,
-						delay: delay,
-					});
-				},
+		ScrollTrigger.create({
+			trigger: textRef.current,
+			start: "top 85%", // Trigger when top of element hits 85% of viewport height
+			onEnter: () => {
+				gsap.to(split.words, {
+					yPercent: 0,
+					opacity: 1,
+					autoAlpha: 1,
+					duration: duration,
+					ease: "power3.out",
+					stagger: 0.02,
+					delay: delay,
+				});
+			},
 				// Optional: Reset when scrolling back up?
 				// User didn't strictly specify, but usually "play once" is better for reading.
 				// leaving it as play once for now.
