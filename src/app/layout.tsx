@@ -4,6 +4,7 @@ import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
+import { siteConfig } from "@/lib/seo";
 
 const playfairDisplay = Playfair_Display({
 	variable: "--font-playfair-display",
@@ -18,9 +19,15 @@ const lato = Lato({
 });
 
 export const metadata: Metadata = {
-	title: "Virtual Museum of Martin Luther Nsibirwa",
-	description:
-		"Preserving and celebrating the life and contributions of Owek. Martin Luther Nsibirwa and his descendants.",
+	metadataBase: new URL(siteConfig.url),
+	title: {
+		default: siteConfig.name,
+		template: "%s | MLN Museum",
+	},
+	description: siteConfig.description,
+	openGraph: {
+		images: [{ url: siteConfig.ogImage }],
+	},
 };
 
 export default function RootLayout({

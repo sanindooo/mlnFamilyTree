@@ -5,6 +5,36 @@ import { SectionGallery } from "@/components/biography/SectionGallery";
 import { Button } from "@/components/ui/Button";
 import { notFound } from "next/navigation";
 import { urlForImage } from "@/sanity/lib/adapters";
+import { buildMetadata, extractFirstSentence } from "@/lib/seo";
+import type { Metadata } from "next";
+
+type Props = {
+	params: Promise<{ slug: string }>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+	const { slug } = await params;
+	const bio = await getBiography(slug);
+
+	if (!bio) {
+		return {};
+	}
+
+	const docs = await getDocsIndex();
+	const docEntry = docs.find((d) => d.slug === slug);
+	const heroImage = docEntry?.photos?.[0] || bio.photo;
+
+	const description = bio.content
+		? extractFirstSentence(bio.content)
+		: `Learn about ${bio.title} and their role in the Nsibirwa family.`;
+
+	return buildMetadata({
+		title: bio.title,
+		description,
+		image: heroImage,
+		path: `/member/${slug}`,
+	});
+}
 
 export async function generateStaticParams() {
 	const docs = await getDocsIndex();
