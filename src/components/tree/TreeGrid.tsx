@@ -36,10 +36,10 @@ export function TreeGrid() {
 								/>
 							</div>
 							<div className="mb-3 md:mb-4">
-								<h5 className="text-lg font-bold md:text-xl text-deep-umber font-serif">
+								<h3 className="text-lg font-bold md:text-xl text-deep-umber font-serif">
 									Family Member {i}
-								</h5>
-								<h6 className="text-base text-muted">Generation {i}</h6>
+								</h3>
+								<p className="text-base text-muted">Generation {i}</p>
 							</div>
 							<p className="text-deep-umber text-sm">
 								Carried forward what their parent began and added their own

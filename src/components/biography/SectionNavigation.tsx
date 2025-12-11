@@ -12,7 +12,10 @@ export function SectionNavigation({
 	nextSection,
 }: SectionNavigationProps) {
 	return (
-		<section className="py-8 md:py-12 bg-warm-sand/10 border-t border-warm-sand">
+		<nav
+			aria-label="Section navigation"
+			className="py-8 md:py-12 bg-warm-sand/10 border-t border-warm-sand"
+		>
 			<div className="container">
 				<div className="flex items-center justify-between gap-4">
 					{prevSection ? (
@@ -48,6 +51,6 @@ export function SectionNavigation({
 					)}
 				</div>
 			</div>
-		</section>
+		</nav>
 	);
 }

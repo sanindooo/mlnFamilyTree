@@ -11,7 +11,7 @@ export function Hero() {
 		<section id="hero" className="py-12 md:py-16 lg:py-20">
 			<div className="container">
 				<div className="grid grid-cols-1 gap-x-20 gap-y-12 md:gap-y-16 lg:grid-cols-2 lg:items-center">
-					<article>
+					<div>
 						<RevealText
 							tag="h1"
 							className="mb-5 text-4xl font-bold md:mb-6 md:text-5xl lg:text-6xl font-serif text-deep-umber"
@@ -38,7 +38,7 @@ export function Hero() {
 								</Button>
 							</div>
 						</StaggerFade>
-					</article>
+					</div>
 					<RevealImage delay={0.2}>
 						<figure>
 							<Image
