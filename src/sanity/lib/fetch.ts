@@ -8,14 +8,23 @@ import {
 	timelineEventsQuery,
 	allMLNStoriesQuery,
 	mlnStoryBySlugQuery,
+	allGrandchildrenQuery,
 } from "./queries";
 import {
 	adaptFamilyTree,
 	adaptSanityBiography,
 	adaptSanityMLNStory,
 	adaptGalleryImage,
+	adaptGrandchild,
 } from "./adapters";
-import { Person, Biography, DocEntry, MLNStory, GalleryImage } from "@/types";
+import {
+	Person,
+	Biography,
+	DocEntry,
+	MLNStory,
+	GalleryImage,
+	Grandchild,
+} from "@/types";
 
 // Cache strategy:
 // - Prod: USE_CACHE=true -> 1 hour ISR
@@ -153,5 +162,19 @@ export async function getMLNStoryFromSanity(
 	} catch (error) {
 		console.error(`Error fetching MLN story ${slug} from Sanity:`, error);
 		return null;
+	}
+}
+
+/**
+ * Fetch all grandchildren from Sanity
+ */
+export async function getGrandchildrenFromSanity(): Promise<Grandchild[]> {
+	try {
+		const data = await client.fetch(allGrandchildrenQuery, {}, fetchOptions);
+		if (!data) return [];
+		return data.map(adaptGrandchild);
+	} catch (error) {
+		console.error("Error fetching grandchildren from Sanity:", error);
+		return [];
 	}
 }

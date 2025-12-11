@@ -7,6 +7,7 @@ import {
 	Biography,
 	MLNStory,
 	GalleryImage,
+	Grandchild,
 	SanityPerson,
 	SanityMLNStory,
 	SanityGalleryImage,
@@ -154,4 +155,21 @@ export function getImageUrl(
 	if (!source) return undefined;
 	const base = urlForImage(source);
 	return width ? base.width(width).url() : base.url();
+}
+
+/**
+ * Convert Sanity Grandchild to frontend Grandchild type
+ */
+export function adaptGrandchild(sanityGrandchild: any): Grandchild {
+	return {
+		id: sanityGrandchild._id,
+		name: sanityGrandchild.name,
+		slug: sanityGrandchild.slug,
+		photo: sanityGrandchild.photo
+			? urlForImage(sanityGrandchild.photo).url()
+			: undefined,
+		description: sanityGrandchild.description,
+		linkedinUrl: sanityGrandchild.linkedinUrl,
+		twitterUrl: sanityGrandchild.twitterUrl,
+	};
 }
