@@ -32,27 +32,51 @@ export function BiographyContent({
 							content && <div dangerouslySetInnerHTML={{ __html: content }} />}
 					</div>
 
-					<StaggerFade tag="div" triggerStart="top 90%">
+					<StaggerFade
+						tag="aside"
+						triggerStart="top 90%"
+						aria-label="Share and related topics"
+					>
 						<div className="mb-8 text-center md:mb-10 lg:mb-12">
 							<p className="font-semibold md:text-md text-deep-umber">
 								Share this
 							</p>
-							<div className="mb-8 mt-3 flex items-start justify-center gap-2 sm:mb-0 md:mt-4">
-								<button className="size-8 rounded-[1.25rem] bg-warm-sand/30 p-1 hover:bg-warm-sand/50 transition-colors">
-									<BiLinkAlt className="size-6 text-deep-umber" />
-								</button>
-								<button className="size-8 rounded-[1.25rem] bg-warm-sand/30 p-1 hover:bg-warm-sand/50 transition-colors">
-									<BiLogoLinkedinSquare className="size-6 text-deep-umber" />
-								</button>
-								<button className="size-8 rounded-[1.25rem] bg-warm-sand/30 p-1 hover:bg-warm-sand/50 transition-colors">
-									<FaXTwitter className="size-6 p-0.5 text-deep-umber" />
-								</button>
-								<button className="size-8 rounded-[1.25rem] bg-warm-sand/30 p-1 hover:bg-warm-sand/50 transition-colors">
-									<BiLogoFacebookCircle className="size-6 text-deep-umber" />
-								</button>
-							</div>
+							<ul className="mb-8 mt-3 flex items-start justify-center gap-2 sm:mb-0 md:mt-4 list-none m-0 p-0">
+								<li>
+									<button
+										className="size-8 rounded-[1.25rem] bg-warm-sand/30 p-1 hover:bg-warm-sand/50 transition-colors"
+										aria-label="Copy link"
+									>
+										<BiLinkAlt className="size-6 text-deep-umber" />
+									</button>
+								</li>
+								<li>
+									<button
+										className="size-8 rounded-[1.25rem] bg-warm-sand/30 p-1 hover:bg-warm-sand/50 transition-colors"
+										aria-label="Share on LinkedIn"
+									>
+										<BiLogoLinkedinSquare className="size-6 text-deep-umber" />
+									</button>
+								</li>
+								<li>
+									<button
+										className="size-8 rounded-[1.25rem] bg-warm-sand/30 p-1 hover:bg-warm-sand/50 transition-colors"
+										aria-label="Share on X"
+									>
+										<FaXTwitter className="size-6 p-0.5 text-deep-umber" />
+									</button>
+								</li>
+								<li>
+									<button
+										className="size-8 rounded-[1.25rem] bg-warm-sand/30 p-1 hover:bg-warm-sand/50 transition-colors"
+										aria-label="Share on Facebook"
+									>
+										<BiLogoFacebookCircle className="size-6 text-deep-umber" />
+									</button>
+								</li>
+							</ul>
 						</div>
-						<div>
+						<nav aria-label="Related topics">
 							<ul className="flex flex-wrap justify-center gap-2">
 								<li className="flex items-center">
 									<a
@@ -79,7 +103,7 @@ export function BiographyContent({
 									</a>
 								</li>
 							</ul>
-						</div>
+						</nav>
 					</StaggerFade>
 				</div>
 			</div>

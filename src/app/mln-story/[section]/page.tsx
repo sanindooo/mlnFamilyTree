@@ -6,6 +6,28 @@ import { notFound } from "next/navigation";
 import { BiographyHeader } from "@/components/biography/BiographyHeader";
 import { RelatedStories } from "@/components/biography/RelatedStories";
 import fallbackImage from "@/assets/images/Children of MLN.jpg";
+import { buildMetadata } from "@/lib/seo";
+import type { Metadata } from "next";
+
+type Props = {
+	params: Promise<{ section: string }>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+	const { section } = await params;
+	const story = await getMLNStory(section);
+
+	if (!story) {
+		return {};
+	}
+
+	return buildMetadata({
+		title: story.title,
+		description: story.description,
+		image: story.heroImage,
+		path: `/mln-story/${section}`,
+	});
+}
 
 export async function generateStaticParams() {
 	const stories = await getAllMLNStories();

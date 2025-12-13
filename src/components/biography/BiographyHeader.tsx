@@ -9,6 +9,13 @@ import { FaXTwitter } from "react-icons/fa6";
 import { RevealText } from "@/components/ui/RevealText";
 import { RevealImage } from "@/components/ui/RevealImage";
 import { StaggerFade } from "@/components/ui/StaggerFade";
+import {
+	Breadcrumb,
+	BreadcrumbItem,
+	BreadcrumbLink,
+	BreadcrumbList,
+	BreadcrumbSeparator,
+} from "@/components/ui/Breadcrumb";
 
 interface BiographyHeaderProps {
 	title: string;
@@ -29,51 +36,34 @@ export function BiographyHeader({
 						<StaggerFade tag="div" delay={0.1}>
 							{/* Breadcrumbs */}
 							<div className="rb-5 mb-5 md:mb-6">
-								<nav className="flex items-center">
-									<p className="flex items-center text-sm font-semibold text-deep-umber">
-										<a href="/" className="hover:text-burgundy">
-											Home
-										</a>
-										<span className="mx-2">
-											<svg
-												stroke="currentColor"
-												fill="none"
-												strokeWidth="0"
-												viewBox="0 0 15 15"
-												className="h-4 w-4"
-												xmlns="http://www.w3.org/2000/svg"
+								<Breadcrumb className="flex w-full items-center font-semibold text-deep-umber">
+									<BreadcrumbList>
+										<BreadcrumbItem position={1}>
+											<BreadcrumbLink href="/" className="hover:text-burgundy">
+												Home
+											</BreadcrumbLink>
+										</BreadcrumbItem>
+										<BreadcrumbSeparator />
+										<BreadcrumbItem position={2}>
+											<BreadcrumbLink
+												href="/mln-story"
+												className="hover:text-burgundy"
 											>
-												<path
-													fillRule="evenodd"
-													clipRule="evenodd"
-													d="M6.1584 3.13508C6.35985 2.94621 6.67627 2.95642 6.86514 3.15788L10.6151 7.15788C10.7954 7.3502 10.7954 7.64949 10.6151 7.84182L6.86514 11.8418C6.67627 12.0433 6.35985 12.0535 6.1584 11.8646C5.95694 11.6757 5.94673 11.3593 6.1356 11.1579L9.565 7.49985L6.1356 3.84182C5.94673 3.64036 5.95694 3.32394 6.1584 3.13508Z"
-													fill="currentColor"
-												></path>
-											</svg>
-										</span>
-										<a href="/mln-story" className="hover:text-burgundy">
-											Biography
-										</a>
-										<span className="mx-2">
-											<svg
-												stroke="currentColor"
-												fill="none"
-												strokeWidth="0"
-												viewBox="0 0 15 15"
-												className="h-4 w-4"
-												xmlns="http://www.w3.org/2000/svg"
+												Biography
+											</BreadcrumbLink>
+										</BreadcrumbItem>
+										<BreadcrumbSeparator />
+										<BreadcrumbItem position={3}>
+											<BreadcrumbLink
+												href="#"
+												isCurrentPage
+												className="hover:text-burgundy"
 											>
-												<path
-													fillRule="evenodd"
-													clipRule="evenodd"
-													d="M6.1584 3.13508C6.35985 2.94621 6.67627 2.95642 6.86514 3.15788L10.6151 7.15788C10.7954 7.3502 10.7954 7.64949 10.6151 7.84182L6.86514 11.8418C6.67627 12.0433 6.35985 12.0535 6.1584 11.8646C5.95694 11.6757 5.94673 11.3593 6.1356 11.1579L9.565 7.49985L6.1356 3.84182C5.94673 3.64036 5.95694 3.32394 6.1584 3.13508Z"
-													fill="currentColor"
-												></path>
-											</svg>
-										</span>
-										MLN Biography
-									</p>
-								</nav>
+												MLN Biography
+											</BreadcrumbLink>
+										</BreadcrumbItem>
+									</BreadcrumbList>
+								</Breadcrumb>
 							</div>
 
 							{/* Title - using RevealText inside StaggerFade is tricky, better to just let StaggerFade handle it or use RevealText separately?
@@ -94,31 +84,51 @@ export function BiographyHeader({
 							<div className="flex size-full flex-col items-start justify-start">
 								<div className="rb-4 mb-6 flex items-center md:mb-8">
 									<div>
-										<h6 className="font-semibold text-deep-umber">
+										<p className="font-semibold text-deep-umber">
 											<span className="font-normal text-muted">Category</span>{" "}
 											{category}
-										</h6>
+										</p>
 									</div>
 								</div>
-								<div className="w-full">
+								<aside className="w-full" aria-label="Share this biography">
 									<p className="text-base font-semibold text-deep-umber">
 										Share this biography
 									</p>
-									<div className="rt-4 mt-3 flex items-center justify-start flex-wrap gap-2 md:mt-4">
-										<button className="rounded-[1.25rem] bg-warm-sand/30 p-1 hover:bg-warm-sand/50 transition-colors">
-											<BiLinkAlt className="size-6 text-deep-umber" />
-										</button>
-										<button className="rounded-[1.25rem] bg-warm-sand/30 p-1 hover:bg-warm-sand/50 transition-colors">
-											<BiLogoLinkedinSquare className="size-6 text-deep-umber" />
-										</button>
-										<button className="rounded-[1.25rem] bg-warm-sand/30 p-1 hover:bg-warm-sand/50 transition-colors">
-											<FaXTwitter className="size-6 p-0.5 text-deep-umber" />
-										</button>
-										<button className="rounded-[1.25rem] bg-warm-sand/30 p-1 hover:bg-warm-sand/50 transition-colors">
-											<BiLogoFacebookCircle className="size-6 text-deep-umber" />
-										</button>
-									</div>
-								</div>
+									<ul className="rt-4 mt-3 flex items-center justify-start flex-wrap gap-2 md:mt-4 list-none m-0 p-0">
+										<li>
+											<button
+												className="rounded-[1.25rem] bg-warm-sand/30 p-1 hover:bg-warm-sand/50 transition-colors"
+												aria-label="Copy link"
+											>
+												<BiLinkAlt className="size-6 text-deep-umber" />
+											</button>
+										</li>
+										<li>
+											<button
+												className="rounded-[1.25rem] bg-warm-sand/30 p-1 hover:bg-warm-sand/50 transition-colors"
+												aria-label="Share on LinkedIn"
+											>
+												<BiLogoLinkedinSquare className="size-6 text-deep-umber" />
+											</button>
+										</li>
+										<li>
+											<button
+												className="rounded-[1.25rem] bg-warm-sand/30 p-1 hover:bg-warm-sand/50 transition-colors"
+												aria-label="Share on X"
+											>
+												<FaXTwitter className="size-6 p-0.5 text-deep-umber" />
+											</button>
+										</li>
+										<li>
+											<button
+												className="rounded-[1.25rem] bg-warm-sand/30 p-1 hover:bg-warm-sand/50 transition-colors"
+												aria-label="Share on Facebook"
+											>
+												<BiLogoFacebookCircle className="size-6 text-deep-umber" />
+											</button>
+										</li>
+									</ul>
+								</aside>
 							</div>
 						</StaggerFade>
 					</div>

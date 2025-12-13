@@ -244,6 +244,24 @@ export const galleryImagesByTagQuery = groq`
   } | order(_createdAt desc)
 `;
 
+// ===== Grandchildren Queries =====
+
+/**
+ * Get all grandchildren ordered by display order
+ */
+export const allGrandchildrenQuery = groq`
+  *[_type == "grandchild"] {
+    _id,
+    name,
+    "slug": slug.current,
+    photo,
+    description,
+    linkedinUrl,
+    twitterUrl,
+    order
+  } | order(order asc)
+`;
+
 // ===== Timeline Queries =====
 
 /**

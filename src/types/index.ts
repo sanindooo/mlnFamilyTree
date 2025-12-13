@@ -57,6 +57,16 @@ export interface SearchResult {
 	score: number;
 }
 
+export interface Grandchild {
+	id: string;
+	name: string;
+	slug: string;
+	photo?: string;
+	description?: string;
+	linkedinUrl?: string;
+	twitterUrl?: string;
+}
+
 // ===== Sanity Types =====
 // Raw data structures from Sanity CMS
 

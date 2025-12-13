@@ -3,6 +3,7 @@ import { galleryImageType } from "./galleryImage";
 import { categoryType } from "./category";
 import { timelineEventType } from "./timelineEvent";
 import { mlnStoryType } from "./mlnStory";
+import { grandchildType } from "./grandchild";
 
 export const schemaTypes = [
 	personType,
@@ -10,4 +11,5 @@ export const schemaTypes = [
 	categoryType,
 	timelineEventType,
 	mlnStoryType,
+	grandchildType,
 ];

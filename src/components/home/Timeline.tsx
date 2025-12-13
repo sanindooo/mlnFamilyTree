@@ -72,29 +72,29 @@ export function Timeline({ events = [] }: TimelineProps) {
 
 				if (!year || !title || !text || !icon) return;
 
-			const titleSplit = new SplitType(title as HTMLElement, {
-				types: "words,lines",
-			});
-			const textSplit = new SplitType(text as HTMLElement, {
-				types: "words,lines",
-			});
-
-			// Set overflow hidden on lines for masking effect
-			if (titleSplit.lines) {
-				titleSplit.lines.forEach((line) => {
-					gsap.set(line, { overflow: "hidden" });
+				const titleSplit = new SplitType(title as HTMLElement, {
+					types: "words,lines",
 				});
-			}
-			if (textSplit.lines) {
-				textSplit.lines.forEach((line) => {
-					gsap.set(line, { overflow: "hidden" });
+				const textSplit = new SplitType(text as HTMLElement, {
+					types: "words,lines",
 				});
-			}
 
-			// Initial state for SplitText - words start below the mask
-			gsap.set([titleSplit.words, textSplit.words], {
-				yPercent: 100,
-			});
+				// Set overflow hidden on lines for masking effect
+				if (titleSplit.lines) {
+					titleSplit.lines.forEach((line) => {
+						gsap.set(line, { overflow: "hidden" });
+					});
+				}
+				if (textSplit.lines) {
+					textSplit.lines.forEach((line) => {
+						gsap.set(line, { overflow: "hidden" });
+					});
+				}
+
+				// Initial state for SplitText - words start below the mask
+				gsap.set([titleSplit.words, textSplit.words], {
+					yPercent: 100,
+				});
 
 				// Initial state for Year (simple fade, NO transform)
 				gsap.set(year, {
@@ -120,17 +120,17 @@ export function Timeline({ events = [] }: TimelineProps) {
 					0
 				);
 
-			// Then split text content
-			tlText.to(
-				[titleSplit.words, textSplit.words],
-				{
-					yPercent: 0,
-					stagger: 0.01,
-					duration: 1,
-					ease: "power3.out",
-				},
-				0.2
-			);
+				// Then split text content
+				tlText.to(
+					[titleSplit.words, textSplit.words],
+					{
+						yPercent: 0,
+						stagger: 0.01,
+						duration: 1,
+						ease: "power3.out",
+					},
+					0.2
+				);
 
 				// Icon Animation Timeline
 				const tlIcon = gsap.timeline({ paused: true });
@@ -193,28 +193,30 @@ export function Timeline({ events = [] }: TimelineProps) {
 						<div className="absolute bottom-0 z-0 h-16 w-1 bg-gradient-to-b from-transparent to-cream" />
 						<div className="absolute top-[-50vh] h-[50vh] w-full bg-cream" />
 					</div>
-					<div className="grid auto-cols-fr gap-x-12 gap-y-8 sm:gap-y-12 md:gap-x-20 md:gap-y-20">
+					<ul className="grid auto-cols-fr gap-x-12 gap-y-8 sm:gap-y-12 md:gap-x-20 md:gap-y-20 list-none m-0 p-0">
 						{displayEvents.map((event, index) => (
-							<div className="relative timeline_row" key={index}>
-								{/* Icon/Circle */}
-								<div className="absolute flex h-full w-8 items-start justify-center md:-ml-24 md:w-24 lg:-ml-32 lg:w-32">
-									<div className="timeline-icon-wrapper z-20 mt-7 size-4 rounded-full shadow-[0_0_0_8px_#fff] md:mt-8 border border-warm-sand bg-warm-sand" />
-								</div>
+							<li className="relative timeline_row" key={index}>
+								<article>
+									{/* Icon/Circle */}
+									<div className="absolute flex h-full w-8 items-start justify-center md:-ml-24 md:w-24 lg:-ml-32 lg:w-32">
+										<div className="timeline-icon-wrapper z-20 mt-7 size-4 rounded-full shadow-[0_0_0_8px_#fff] md:mt-8 border border-warm-sand bg-warm-sand" />
+									</div>
 
-								<div className="ml-12 mt-4 flex flex-col md:ml-0">
-									<h3 className="timeline_year mb-2 text-2xl font-bold leading-[1.2] md:text-3xl text-burgundy font-serif">
-										{event.year}
-									</h3>
-									<h4 className="timeline_title mb-2 text-lg font-bold md:text-xl text-deep-umber">
-										{event.title}
-									</h4>
-									<p className="timeline_text text-deep-umber">
-										{event.description}
-									</p>
-								</div>
-							</div>
+									<div className="ml-12 mt-4 flex flex-col md:ml-0">
+										<h3 className="timeline_year mb-2 text-2xl font-bold leading-[1.2] md:text-3xl text-burgundy font-serif">
+											{event.year}
+										</h3>
+										<h4 className="timeline_title mb-2 text-lg font-bold md:text-xl text-deep-umber">
+											{event.title}
+										</h4>
+										<p className="timeline_text text-deep-umber">
+											{event.description}
+										</p>
+									</div>
+								</article>
+							</li>
 						))}
-					</div>
+					</ul>
 				</div>
 			</div>
 		</section>

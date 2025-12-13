@@ -23,35 +23,37 @@ function BiographySectionCard({
 	imageSrc,
 }: BiographySectionCardProps) {
 	return (
-		<Link
-			href={href}
-			className="relative p-6 md:p-8 group overflow-hidden rounded-xl block"
-		>
-			<div className="absolute inset-0 z-0">
-				<div className="absolute inset-0 bg-muted/80 z-10" />
-				<Image
-					src={imageSrc}
-					className="size-full object-cover transition-transform duration-500 group-hover:scale-105 sepia-[.3]"
-					alt={title}
-					fill
-					sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-				/>
-			</div>
-			<div className="relative z-20 flex flex-col justify-between min-h-[240px]">
-				<div className="mb-6">
-					<BiCube className="size-12 text-cream mb-4" />
+		<article className="relative overflow-hidden rounded-xl">
+			<Link href={href} className="relative p-6 md:p-8 group block">
+				<div className="absolute inset-0 z-0">
+					<div className="absolute inset-0 bg-muted/80 z-10" />
+					<Image
+						src={imageSrc}
+						className="size-full object-cover transition-transform duration-500 group-hover:scale-105 sepia-[.3]"
+						alt={title}
+						fill
+						sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+					/>
 				</div>
-				<div>
-					<h3 className="mb-3 text-xl font-bold text-cream md:mb-4 md:text-2xl lg:text-3xl font-serif leading-tight">
-						{title}
-					</h3>
-					<p className="text-cream/90 mb-4">{description}</p>
-					<div className="flex items-center text-cream group-hover:text-antique-gold transition-colors">
-						<RxChevronRight className="size-5" />
+				<div className="relative z-20 flex flex-col justify-between min-h-[240px]">
+					<div className="mb-6">
+						<BiCube className="size-12 text-cream mb-4" aria-hidden="true" />
+					</div>
+					<div>
+						<h3 className="mb-3 text-xl font-bold text-cream md:mb-4 md:text-2xl lg:text-3xl font-serif leading-tight">
+							{title}
+						</h3>
+						<p className="text-cream/90 mb-4">{description}</p>
+						<div
+							className="flex items-center text-cream group-hover:text-antique-gold transition-colors"
+							aria-hidden="true"
+						>
+							<RxChevronRight className="size-5" />
+						</div>
 					</div>
 				</div>
-			</div>
-		</Link>
+			</Link>
+		</article>
 	);
 }
 
@@ -68,15 +70,15 @@ export function BiographyListing({ stories }: BiographyListingProps) {
 						<p className="mb-3 font-semibold md:mb-4 text-antique-gold uppercase tracking-wider text-sm">
 							Foundation
 						</p>
-					<RevealText
-						tag="h2"
-						className="mb-5 text-3xl font-bold md:mb-6 md:text-4xl lg:text-5xl font-serif text-deep-umber"
-					>
-						The roots that shaped a life
-					</RevealText>
-					<RevealText tag="p" className="text-lg text-deep-umber" delay={0.2}>
-						Every person begins somewhere, shaped by place and circumstance
-					</RevealText>
+						<RevealText
+							tag="h2"
+							className="mb-5 text-3xl font-bold md:mb-6 md:text-4xl lg:text-5xl font-serif text-deep-umber"
+						>
+							The roots that shaped a life
+						</RevealText>
+						<RevealText tag="p" className="text-lg text-deep-umber" delay={0.2}>
+							Every person begins somewhere, shaped by place and circumstance
+						</RevealText>
 					</div>
 				</div>
 				<StaggerFade
