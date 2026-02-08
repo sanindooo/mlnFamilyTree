@@ -3,7 +3,7 @@
 import React, { useRef } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { useGSAP } from "@gsap/react";
-import SplitType from "split-type";
+import { SplitText } from "gsap/SplitText";
 
 interface RevealTextProps {
 	children: React.ReactNode;
@@ -31,8 +31,8 @@ export const RevealText = ({
 		() => {
 			if (!textRef.current) return;
 
-			// Use SplitType to split text into words
-			const split = new SplitType(textRef.current, { types: "words,lines" });
+			// Use SplitText to split text into words
+			const split = new SplitText(textRef.current, { type: "words,lines" });
 
 			// Set overflow hidden on the lines to create the mask effect
 			if (split.lines) {
