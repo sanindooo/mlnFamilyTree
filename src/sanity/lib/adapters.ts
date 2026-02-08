@@ -8,6 +8,7 @@ import {
 	MLNStory,
 	GalleryImage,
 	Grandchild,
+	FooterCTAData,
 	SanityPerson,
 	SanityMLNStory,
 	SanityGalleryImage,
@@ -172,4 +173,54 @@ export function adaptGrandchild(sanityGrandchild: any): Grandchild {
 		linkedinUrl: sanityGrandchild.linkedinUrl,
 		twitterUrl: sanityGrandchild.twitterUrl,
 	};
+}
+
+/**
+ * Convert Sanity Footer CTA to frontend FooterCTAData type
+ * Returns null if title or text are missing (triggers conditional hiding)
+ */
+export function adaptFooterCTA(sanityFooterCTA: any): FooterCTAData | null {
+	// Return null if title or text are missing (component won't render)
+	if (!sanityFooterCTA?.title || !sanityFooterCTA?.text) {
+		return null;
+	}
+
+	const result: FooterCTAData = {
+		title: sanityFooterCTA.title,
+		text: sanityFooterCTA.text,
+	};
+
+	// Add background image if present
+	if (sanityFooterCTA.backgroundImage?.asset) {
+		result.backgroundImage = {
+			url: urlForImage(sanityFooterCTA.backgroundImage).url(),
+			alt: sanityFooterCTA.backgroundImage.alt,
+		};
+	}
+
+	// Add primary button only if both text and link are present
+	if (
+		sanityFooterCTA.primaryButton?.text &&
+		sanityFooterCTA.primaryButton?.link
+	) {
+		result.primaryButton = {
+			text: sanityFooterCTA.primaryButton.text,
+			link: sanityFooterCTA.primaryButton.link,
+			openInNewTab: sanityFooterCTA.primaryButton.openInNewTab || false,
+		};
+	}
+
+	// Add secondary button only if both text and link are present
+	if (
+		sanityFooterCTA.secondaryButton?.text &&
+		sanityFooterCTA.secondaryButton?.link
+	) {
+		result.secondaryButton = {
+			text: sanityFooterCTA.secondaryButton.text,
+			link: sanityFooterCTA.secondaryButton.link,
+			openInNewTab: sanityFooterCTA.secondaryButton.openInNewTab || false,
+		};
+	}
+
+	return result;
 }

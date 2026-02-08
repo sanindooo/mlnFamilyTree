@@ -4,6 +4,7 @@ import { categoryType } from "./category";
 import { timelineEventType } from "./timelineEvent";
 import { mlnStoryType } from "./mlnStory";
 import { grandchildType } from "./grandchild";
+import { footerCTAType } from "./footerCTA";
 
 export const schemaTypes = [
 	personType,
@@ -12,4 +13,5 @@ export const schemaTypes = [
 	timelineEventType,
 	mlnStoryType,
 	grandchildType,
+	footerCTAType,
 ];
