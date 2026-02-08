@@ -9,6 +9,7 @@ import {
 	allMLNStoriesQuery,
 	mlnStoryBySlugQuery,
 	allGrandchildrenQuery,
+	footerCTAQuery,
 } from "./queries";
 import {
 	adaptFamilyTree,
@@ -16,6 +17,7 @@ import {
 	adaptSanityMLNStory,
 	adaptGalleryImage,
 	adaptGrandchild,
+	adaptFooterCTA,
 } from "./adapters";
 import {
 	Person,
@@ -24,6 +26,7 @@ import {
 	MLNStory,
 	GalleryImage,
 	Grandchild,
+	FooterCTAData,
 } from "@/types";
 
 // Cache strategy:
@@ -176,5 +179,20 @@ export async function getGrandchildrenFromSanity(): Promise<Grandchild[]> {
 	} catch (error) {
 		console.error("Error fetching grandchildren from Sanity:", error);
 		return [];
+	}
+}
+
+/**
+ * Fetch Footer CTA from Sanity
+ * Returns null if no document exists or if title/text are missing
+ */
+export async function getFooterCTAFromSanity(): Promise<FooterCTAData | null> {
+	try {
+		const data = await client.fetch(footerCTAQuery, {}, fetchOptions);
+		if (!data) return null;
+		return adaptFooterCTA(data);
+	} catch (error) {
+		console.error("Error fetching Footer CTA from Sanity:", error);
+		return null;
 	}
 }

@@ -67,6 +67,25 @@ export interface Grandchild {
 	twitterUrl?: string;
 }
 
+export interface FooterCTAData {
+	title: string;
+	text: string;
+	backgroundImage?: {
+		url: string;
+		alt?: string;
+	};
+	primaryButton?: {
+		text: string;
+		link: string;
+		openInNewTab?: boolean;
+	};
+	secondaryButton?: {
+		text: string;
+		link: string;
+		openInNewTab?: boolean;
+	};
+}
+
 // ===== Sanity Types =====
 // Raw data structures from Sanity CMS
 

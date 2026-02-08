@@ -1,4 +1,4 @@
-import { Biography, DocEntry, Person, MLNStory } from "@/types";
+import { Biography, DocEntry, Person, MLNStory, FooterCTAData } from "@/types";
 import {
 	getFamilyTreeFromSanity,
 	getBiographyFromSanity,
@@ -6,6 +6,7 @@ import {
 	getDocsIndexFromSanity,
 	getAllMLNStoriesFromSanity,
 	getMLNStoryFromSanity,
+	getFooterCTAFromSanity,
 } from "@/sanity/lib/fetch";
 
 /**
@@ -58,4 +59,11 @@ export async function getAllMLNStories(): Promise<MLNStory[]> {
  */
 export async function getMLNStory(slug: string): Promise<MLNStory | null> {
 	return getMLNStoryFromSanity(slug);
+}
+
+/**
+ * SERVER-SIDE: Gets the Footer CTA data
+ */
+export async function getFooterCTA(): Promise<FooterCTAData | null> {
+	return getFooterCTAFromSanity();
 }

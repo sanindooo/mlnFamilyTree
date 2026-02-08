@@ -36,18 +36,19 @@ function BiographySectionCard({
 					/>
 				</div>
 				<div className="relative z-20 flex flex-col justify-between min-h-[240px]">
-					<div className="mb-6">
+					{/* <div className="mb-6">
 						<BiCube className="size-12 text-cream mb-4" aria-hidden="true" />
-					</div>
+					</div> */}
 					<div>
 						<h3 className="mb-3 text-xl font-bold text-cream md:mb-4 md:text-2xl lg:text-3xl font-serif leading-tight">
 							{title}
 						</h3>
 						<p className="text-cream/90 mb-4">{description}</p>
 						<div
-							className="flex items-center text-cream group-hover:text-antique-gold transition-colors"
+							className="flex items-center text-cream group-hover:text-white/80 transition-colors"
 							aria-hidden="true"
 						>
+							Explore
 							<RxChevronRight className="size-5" />
 						</div>
 					</div>

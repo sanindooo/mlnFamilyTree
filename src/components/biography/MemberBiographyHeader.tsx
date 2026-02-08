@@ -7,15 +7,10 @@ import {
 } from "@/components/ui/Breadcrumb";
 import React from "react";
 import Image, { StaticImageData } from "next/image";
-import {
-	BiLinkAlt,
-	BiLogoFacebookCircle,
-	BiLogoLinkedinSquare,
-} from "react-icons/bi";
-import { FaXTwitter } from "react-icons/fa6";
 import { RevealText } from "@/components/ui/RevealText";
 import { RevealImage } from "@/components/ui/RevealImage";
 import { StaggerFade } from "@/components/ui/StaggerFade";
+import { SocialShareButtons } from "@/components/shared/SocialShareButtons";
 
 interface MemberBiographyHeaderProps {
 	title: string;
@@ -78,40 +73,9 @@ export function MemberBiographyHeader({
 									<p className="text-base font-semibold text-deep-umber">
 										Share this biography
 									</p>
-									<ul className="rt-4 mt-3 flex items-center justify-start flex-wrap gap-2 md:mt-4 list-none m-0 p-0">
-										<li>
-											<button
-												className="rounded-[1.25rem] bg-warm-sand/30 p-1 hover:bg-warm-sand/50 transition-colors"
-												aria-label="Copy link"
-											>
-												<BiLinkAlt className="size-6 text-deep-umber" />
-											</button>
-										</li>
-										<li>
-											<button
-												className="rounded-[1.25rem] bg-warm-sand/30 p-1 hover:bg-warm-sand/50 transition-colors"
-												aria-label="Share on LinkedIn"
-											>
-												<BiLogoLinkedinSquare className="size-6 text-deep-umber" />
-											</button>
-										</li>
-										<li>
-											<button
-												className="rounded-[1.25rem] bg-warm-sand/30 p-1 hover:bg-warm-sand/50 transition-colors"
-												aria-label="Share on X"
-											>
-												<FaXTwitter className="size-6 p-0.5 text-deep-umber" />
-											</button>
-										</li>
-										<li>
-											<button
-												className="rounded-[1.25rem] bg-warm-sand/30 p-1 hover:bg-warm-sand/50 transition-colors"
-												aria-label="Share on Facebook"
-											>
-												<BiLogoFacebookCircle className="size-6 text-deep-umber" />
-											</button>
-										</li>
-									</ul>
+									<div className="rt-4 mt-3 md:mt-4">
+										<SocialShareButtons />
+									</div>
 								</aside>
 							</div>
 						</StaggerFade>

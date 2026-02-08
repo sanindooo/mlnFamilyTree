@@ -275,3 +275,31 @@ export const timelineEventsQuery = groq`
     displayOrder
   } | order(displayOrder asc)
 `;
+
+// ===== Footer CTA Queries =====
+
+/**
+ * Get the Footer CTA singleton document
+ */
+export const footerCTAQuery = groq`
+  *[_type == "footerCTA"][0] {
+    _id,
+    title,
+    text,
+    backgroundImage {
+      asset->,
+      alt,
+      hotspot
+    },
+    primaryButton {
+      text,
+      link,
+      openInNewTab
+    },
+    secondaryButton {
+      text,
+      link,
+      openInNewTab
+    }
+  }
+`;

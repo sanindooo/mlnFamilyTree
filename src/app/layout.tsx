@@ -5,6 +5,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import { siteConfig } from "@/lib/seo";
+import { Toaster } from "sonner";
 
 const playfairDisplay = Playfair_Display({
 	variable: "--font-playfair-display",
@@ -43,6 +44,7 @@ export default function RootLayout({
 					<main>{children}</main>
 					<Footer />
 				</SmoothScroll>
+				<Toaster position="bottom-center" richColors />
 			</body>
 		</html>
 	);

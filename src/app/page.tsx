@@ -1,8 +1,9 @@
 import { Hero } from "@/components/home/Hero";
 import { Highlights } from "@/components/home/Highlights";
 import { Timeline } from "@/components/home/Timeline";
-import { EventCTA } from "@/components/home/EventCTA";
+import { FooterCTA } from "@/components/home/FooterCTA";
 import { getTimelineEventsFromSanity } from "@/sanity/lib/fetch";
+import { getFooterCTA } from "@/lib/data";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
@@ -13,14 +14,17 @@ export const metadata = buildMetadata({
 });
 
 export default async function Home() {
-	const events = await getTimelineEventsFromSanity();
+	const [events, footerCTA] = await Promise.all([
+		getTimelineEventsFromSanity(),
+		getFooterCTA(),
+	]);
 
 	return (
 		<>
 			<Hero />
 			<Highlights />
 			<Timeline events={events} />
-			<EventCTA />
+			{footerCTA && <FooterCTA data={footerCTA} />}
 		</>
 	);
 }
