@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/Button";
 import React, { useRef } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { useGSAP } from "@gsap/react";
-import SplitType from "split-type";
+import { SplitText } from "gsap/SplitText";
 import { StaggerFade } from "@/components/ui/StaggerFade";
 import { RevealText } from "@/components/ui/RevealText";
 
@@ -72,11 +72,11 @@ export function Timeline({ events = [] }: TimelineProps) {
 
 				if (!year || !title || !text || !icon) return;
 
-				const titleSplit = new SplitType(title as HTMLElement, {
-					types: "words,lines",
+				const titleSplit = new SplitText(title as HTMLElement, {
+					type: "words,lines",
 				});
-				const textSplit = new SplitType(text as HTMLElement, {
-					types: "words,lines",
+				const textSplit = new SplitText(text as HTMLElement, {
+					type: "words,lines",
 				});
 
 				// Set overflow hidden on lines for masking effect
