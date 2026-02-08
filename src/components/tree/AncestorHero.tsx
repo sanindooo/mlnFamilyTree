@@ -38,7 +38,7 @@ export function AncestorHero() {
 				toggleActions: "play none none none",
 			});
 		},
-		{ scope: container }
+		{ scope: container },
 	);
 
 	return (
@@ -65,7 +65,7 @@ export function AncestorHero() {
 					Born into a world that shaped generations. Their story lives on
 					through family and legacy.
 				</RevealText>
-				<StaggerFade
+				{/* <StaggerFade
 					className="mt-6 flex flex-wrap items-center justify-center gap-4 md:mt-8"
 					delay={0.4}
 					stagger={0.1}
@@ -83,7 +83,7 @@ export function AncestorHero() {
 							Share
 						</Button>
 					</div>
-				</StaggerFade>
+				</StaggerFade> */}
 			</div>
 
 			<div
