@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useSignIn, useUser } from "@clerk/nextjs";
 import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -260,6 +260,31 @@ function VerificationForm({
 }) {
   const router = useRouter();
   const [isResending, setIsResending] = useState(false);
+  const [cooldown, setCooldown] = useState(60);
+  const cooldownRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const startCooldown = useCallback(() => {
+    setCooldown(60);
+    if (cooldownRef.current) clearInterval(cooldownRef.current);
+    cooldownRef.current = setInterval(() => {
+      setCooldown((prev) => {
+        if (prev <= 1) {
+          clearInterval(cooldownRef.current!);
+          cooldownRef.current = null;
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  }, []);
+
+  // Start countdown on mount (code was just sent from CredentialsForm)
+  useEffect(() => {
+    startCooldown();
+    return () => {
+      if (cooldownRef.current) clearInterval(cooldownRef.current);
+    };
+  }, [startCooldown]);
 
   const {
     register,
@@ -301,12 +326,13 @@ function VerificationForm({
   };
 
   const handleResend = async () => {
-    if (!signIn) return;
+    if (!signIn || cooldown > 0) return;
     setIsResending(true);
 
     try {
       await signIn.prepareSecondFactor({ strategy: "email_code" });
       toast.success("A new code has been sent to your email.");
+      startCooldown();
     } catch {
       toast.error("Failed to resend code. Please try again.");
     } finally {
@@ -379,10 +405,14 @@ function VerificationForm({
         <button
           type="button"
           onClick={handleResend}
-          disabled={isResending}
+          disabled={isResending || cooldown > 0}
           className="text-sm font-medium text-burgundy hover:text-burgundy/80 disabled:opacity-50"
         >
-          {isResending ? "Sending..." : "Resend code"}
+          {isResending
+            ? "Sending..."
+            : cooldown > 0
+              ? `Resend code (${cooldown}s)`
+              : "Resend code"}
         </button>
       </div>
     </>
