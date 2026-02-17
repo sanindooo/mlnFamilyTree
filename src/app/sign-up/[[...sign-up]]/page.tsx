@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSignUp, useUser } from "@clerk/nextjs";
 import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -207,16 +207,20 @@ function InvitationSignUp({ ticket }: { ticket: string }) {
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [ticketError, setTicketError] = useState<string | null>(null);
+  const [completingProfile, setCompletingProfile] = useState(false);
+  const completingProfileRef = useRef(false);
+  const [userName, setUserName] = useState({ firstName: "", lastName: "" });
 
-  // Redirect if already signed in (hook before conditional returns)
+  // Redirect if already signed in, but NOT if completing profile after Step 1.
+  // Uses ref (synchronous) to win the race against Clerk's async isSignedIn update.
   useEffect(() => {
-    if (isSignedIn) {
+    if (isSignedIn && !completingProfileRef.current) {
       router.push("/members/dashboard");
     }
   }, [isSignedIn, router]);
 
   if (!isLoaded) return null;
-  if (isSignedIn) return null;
+  if (isSignedIn && !completingProfile) return null;
 
   if (ticketError) {
     return (
@@ -269,14 +273,25 @@ function InvitationSignUp({ ticket }: { ticket: string }) {
               setActive={setActive}
               isSubmitting={isSubmitting}
               setIsSubmitting={setIsSubmitting}
-              onComplete={() => setStep(2)}
+              onBeforeActivate={() => {
+                completingProfileRef.current = true; // synchronous — wins the race
+                setCompletingProfile(true); // for render guard
+              }}
+              onActivationFailed={() => {
+                completingProfileRef.current = false;
+                setCompletingProfile(false);
+              }}
+              onComplete={(firstName, lastName) => {
+                setUserName({ firstName, lastName });
+                setStep(2);
+              }}
               onError={setTicketError}
             />
           )}
 
           {step === 2 && (
             <Step2Form
-              signUp={signUp}
+              userName={userName}
               isSubmitting={isSubmitting}
               setIsSubmitting={setIsSubmitting}
             />
@@ -294,6 +309,8 @@ function Step1Form({
   setActive,
   isSubmitting,
   setIsSubmitting,
+  onBeforeActivate,
+  onActivationFailed,
   onComplete,
   onError,
 }: {
@@ -303,7 +320,9 @@ function Step1Form({
   setActive: ReturnType<typeof useSignUp>["setActive"];
   isSubmitting: boolean;
   setIsSubmitting: (v: boolean) => void;
-  onComplete: () => void;
+  onBeforeActivate: () => void;
+  onActivationFailed: () => void;
+  onComplete: (firstName: string, lastName: string) => void;
   onError: (msg: string) => void;
 }) {
   const {
@@ -328,8 +347,14 @@ function Step1Form({
       });
 
       if (result.status === "complete" && result.createdSessionId && setActive) {
-        await setActive({ session: result.createdSessionId });
-        onComplete();
+        onBeforeActivate(); // suppress isSignedIn redirect BEFORE setActive
+        try {
+          await setActive({ session: result.createdSessionId });
+        } catch (activationErr) {
+          onActivationFailed(); // reset the flag so redirect guard works again
+          throw activationErr;
+        }
+        onComplete(data.firstName, data.lastName);
       } else {
         toast.error("Additional verification may be required. Please contact the administrator.");
       }
@@ -407,11 +432,11 @@ function Step1Form({
 }
 
 function Step2Form({
-  signUp,
+  userName,
   isSubmitting,
   setIsSubmitting,
 }: {
-  signUp: ReturnType<typeof useSignUp>["signUp"];
+  userName: { firstName: string; lastName: string };
   isSubmitting: boolean;
   setIsSubmitting: (v: boolean) => void;
 }) {
@@ -431,7 +456,7 @@ function Step2Form({
 
     try {
       const payload = {
-        fullName: `${signUp?.firstName || ""} ${signUp?.lastName || ""}`.trim(),
+        fullName: `${userName.firstName} ${userName.lastName}`.trim(),
         ...data,
       };
 
@@ -443,6 +468,9 @@ function Step2Form({
 
       if (res.ok) {
         router.push("/members/dashboard");
+      } else if (res.status === 401) {
+        toast.error("Your session expired. Please sign in again.");
+        router.push("/sign-in");
       } else {
         toast.error("Failed to save profile. Please try again.");
       }

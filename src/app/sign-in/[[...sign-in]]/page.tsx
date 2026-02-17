@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useSignIn } from "@clerk/nextjs";
+import { useEffect, useState } from "react";
+import { useSignIn, useUser } from "@clerk/nextjs";
 import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -23,13 +23,24 @@ type SignInInput = z.infer<typeof signInSchema>;
 
 export default function SignInPage() {
   const { isLoaded, signIn, setActive } = useSignIn();
+  const { isSignedIn } = useUser();
   const router = useRouter();
   const searchParams = useSearchParams();
   const rawRedirect = searchParams.get("redirect_url") || "/members/dashboard";
-  // Prevent open redirect — only allow relative paths
-  const redirectUrl = rawRedirect.startsWith("/") && !rawRedirect.startsWith("//")
-    ? rawRedirect
-    : "/members/dashboard";
+  // Prevent open redirect — only allow paths under known prefixes
+  const redirectUrl = (() => {
+    const ALLOWED_PREFIXES = ["/members", "/admin"];
+    if (!rawRedirect.startsWith("/") || rawRedirect.startsWith("//")) return "/members/dashboard";
+    try {
+      const decoded = decodeURIComponent(rawRedirect);
+      if (decoded.startsWith("//") || decoded.includes("\\")) return "/members/dashboard";
+    } catch {
+      return "/members/dashboard";
+    }
+    return ALLOWED_PREFIXES.some((p) => rawRedirect.startsWith(p))
+      ? rawRedirect
+      : "/members/dashboard";
+  })();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
@@ -40,8 +51,17 @@ export default function SignInPage() {
     resolver: zodResolver(signInSchema),
   });
 
+  // Redirect authenticated users away from sign-in page
+  useEffect(() => {
+    if (isLoaded && isSignedIn) {
+      router.push(redirectUrl);
+    }
+  }, [isLoaded, isSignedIn, router, redirectUrl]);
+
+  if (!isLoaded) return null;
+  if (isSignedIn) return null;
+
   const onSubmit = async (data: SignInInput) => {
-    if (!isLoaded) return;
     setIsSubmitting(true);
 
     try {
