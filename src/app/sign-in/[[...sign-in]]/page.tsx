@@ -33,6 +33,14 @@ export default function SignInPage() {
     : "/members/dashboard";
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignInInput>({
+    resolver: zodResolver(signInSchema),
+  });
+
   // Redirect authenticated users away from sign-in page
   useEffect(() => {
     if (isLoaded && isSignedIn) {
@@ -43,16 +51,7 @@ export default function SignInPage() {
   if (!isLoaded) return null;
   if (isSignedIn) return null;
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<SignInInput>({
-    resolver: zodResolver(signInSchema),
-  });
-
   const onSubmit = async (data: SignInInput) => {
-    if (!isLoaded) return;
     setIsSubmitting(true);
 
     try {

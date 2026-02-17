@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSignUp, useUser } from "@clerk/nextjs";
 import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -208,14 +208,16 @@ function InvitationSignUp({ ticket }: { ticket: string }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [ticketError, setTicketError] = useState<string | null>(null);
   const [completingProfile, setCompletingProfile] = useState(false);
+  const completingProfileRef = useRef(false);
   const [userName, setUserName] = useState({ firstName: "", lastName: "" });
 
-  // Redirect if already signed in, but NOT if completing profile after Step 1
+  // Redirect if already signed in, but NOT if completing profile after Step 1.
+  // Uses ref (synchronous) to win the race against Clerk's async isSignedIn update.
   useEffect(() => {
-    if (isSignedIn && !completingProfile) {
+    if (isSignedIn && !completingProfileRef.current) {
       router.push("/members/dashboard");
     }
-  }, [isSignedIn, completingProfile, router]);
+  }, [isSignedIn, router]);
 
   if (!isLoaded) return null;
   if (isSignedIn && !completingProfile) return null;
@@ -271,7 +273,10 @@ function InvitationSignUp({ ticket }: { ticket: string }) {
               setActive={setActive}
               isSubmitting={isSubmitting}
               setIsSubmitting={setIsSubmitting}
-              onBeforeActivate={() => setCompletingProfile(true)}
+              onBeforeActivate={() => {
+                completingProfileRef.current = true; // synchronous — wins the race
+                setCompletingProfile(true); // for render guard
+              }}
               onComplete={(firstName, lastName) => {
                 setUserName({ firstName, lastName });
                 setStep(2);
