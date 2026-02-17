@@ -14,13 +14,15 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	const { slug } = await params;
-	const bio = await getBiography(slug);
+	const [bio, docs] = await Promise.all([
+		getBiography(slug),
+		getDocsIndex(),
+	]);
 
 	if (!bio) {
 		return {};
 	}
 
-	const docs = await getDocsIndex();
 	const docEntry = docs.find((d) => d.slug === slug);
 	const heroImage = docEntry?.photos?.[0] || bio.photo;
 
@@ -49,14 +51,14 @@ export default async function MemberPage({
 	params: Promise<{ slug: string }>;
 }) {
 	const { slug } = await params;
-	const bio = await getBiography(slug);
+	const [bio, docs] = await Promise.all([
+		getBiography(slug),
+		getDocsIndex(),
+	]);
 
 	if (!bio) {
 		notFound();
 	}
-
-	// Get photos for header if available in docs
-	const docs = await getDocsIndex();
 	const docEntry = docs.find((d) => d.slug === slug);
 	const heroImage =
 		docEntry?.photos?.[0] || bio.photo || "/placeholder-image.svg";

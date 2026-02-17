@@ -117,6 +117,7 @@ export function FooterCTA({ data }: FooterCTAProps) {
 							className="size-full object-cover opacity-30 sepia-[.5]"
 							alt={imageAlt}
 							fill
+							sizes="100vw"
 						/>
 					) : (
 						<Image
@@ -124,6 +125,7 @@ export function FooterCTA({ data }: FooterCTAProps) {
 							className="size-full object-cover opacity-30 sepia-[.5]"
 							alt={imageAlt}
 							fill
+							sizes="100vw"
 							placeholder="blur"
 						/>
 					)}

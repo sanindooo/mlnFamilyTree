@@ -119,6 +119,39 @@ export interface SanityGalleryImage {
 	tags?: string[];
 }
 
+export interface SanityGrandchild {
+	_id: string;
+	_type: "grandchild";
+	name: string;
+	slug: string;
+	photo?: SanityImageSource;
+	description?: string;
+	linkedinUrl?: string;
+	twitterUrl?: string;
+	order?: number;
+}
+
+export interface SanityFooterCTA {
+	_id: string;
+	_type: "footerCTA";
+	title?: string;
+	text?: string;
+	backgroundImage?: {
+		asset: SanityImageSource;
+		alt?: string;
+	};
+	primaryButton?: {
+		text?: string;
+		link?: string;
+		openInNewTab?: boolean;
+	};
+	secondaryButton?: {
+		text?: string;
+		link?: string;
+		openInNewTab?: boolean;
+	};
+}
+
 export interface SanityMLNStory {
 	_id: string;
 	_type: "mlnStory";

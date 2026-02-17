@@ -59,7 +59,7 @@ export const StaggerFade = ({
 				toggleActions: "play none none none",
 			});
 		},
-		{ scope: container, dependencies: [children] }
+		{ scope: container }
 	);
 
 	return (

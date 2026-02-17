@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Lato } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -37,15 +38,17 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en" className={`${playfairDisplay.variable} ${lato.variable}`}>
-			<body className={`font-sans antialiased bg-cream text-deep-umber`}>
-				<SmoothScroll>
-					<Navbar />
-					<main>{children}</main>
-					<Footer />
-				</SmoothScroll>
-				<Toaster position="bottom-center" richColors />
-			</body>
-		</html>
+		<ClerkProvider appearance={{ cssLayerName: "clerk" }}>
+			<html lang="en" className={`${playfairDisplay.variable} ${lato.variable}`}>
+				<body className={`font-sans antialiased bg-cream text-deep-umber`}>
+					<SmoothScroll>
+						<Navbar />
+						<main>{children}</main>
+						<Footer />
+					</SmoothScroll>
+					<Toaster position="bottom-center" richColors />
+				</body>
+			</html>
+		</ClerkProvider>
 	);
 }

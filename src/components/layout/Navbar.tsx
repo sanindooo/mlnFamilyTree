@@ -2,12 +2,17 @@
 
 import { Button } from "@/components/ui/Button";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import React, { useState, useEffect, useRef } from "react";
-import { clsx } from "clsx";
+import { useState, useEffect, useRef } from "react";
 import { BiChevronDown } from "react-icons/bi";
 import Link from "next/link";
 import { gsap } from "@/lib/gsap";
 import { useGSAP } from "@gsap/react";
+import {
+	SignedIn,
+	SignedOut,
+	SignInButton,
+	UserButton,
+} from "@clerk/nextjs";
 
 const useRelume = () => {
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -177,8 +182,23 @@ export function Navbar() {
 						</span>
 					</Link>
 
-					{/* Right: CTA Button */}
-					<div className="flex items-center">
+					{/* Right: Auth + CTA */}
+					<div className="flex items-center gap-4">
+						<SignedIn>
+							<Link
+								href="/members"
+								className="text-base font-medium text-deep-umber hover:text-burgundy transition-colors hidden sm:block"
+							>
+								Members
+							</Link>
+						</SignedIn>
+						<SignedOut>
+							<SignInButton mode="redirect">
+								<button className="text-base font-medium text-deep-umber hover:text-burgundy transition-colors cursor-pointer hidden sm:block">
+									Sign In
+								</button>
+							</SignInButton>
+						</SignedOut>
 						<Button
 							href="/mln-story"
 							size="sm"
@@ -186,6 +206,9 @@ export function Navbar() {
 						>
 							Biography
 						</Button>
+						<SignedIn>
+							<UserButton />
+						</SignedIn>
 					</div>
 				</div>
 			</div>
@@ -267,6 +290,32 @@ export function Navbar() {
 								>
 									Search
 								</Link>
+							</li>
+
+							{/* Auth controls */}
+							<li className="mt-4 pt-4 border-t border-warm-sand">
+								<SignedIn>
+									<Link
+										href="/members"
+										className="block text-base font-medium text-deep-umber hover:text-burgundy py-3 px-2 rounded-lg hover:bg-warm-sand/10 transition-colors"
+										onClick={toggleMobileMenu}
+									>
+										Members
+									</Link>
+									<div className="py-3 px-2">
+										<UserButton signInUrl="/sign-in" />
+									</div>
+								</SignedIn>
+								<SignedOut>
+									<SignInButton mode="redirect">
+										<button
+											className="block w-full text-left text-base font-medium text-deep-umber hover:text-burgundy py-3 px-2 rounded-lg hover:bg-warm-sand/10 transition-colors cursor-pointer"
+											onClick={toggleMobileMenu}
+										>
+											Sign In
+										</button>
+									</SignInButton>
+								</SignedOut>
 							</li>
 						</ul>
 					</nav>

@@ -6,7 +6,6 @@ import {
 	BiLinkAlt,
 	BiLogoLinkedinSquare,
 	BiLogoFacebookCircle,
-	BiLogoInstagram,
 } from "react-icons/bi";
 import { FaXTwitter } from "react-icons/fa6";
 import { toast } from "sonner";
@@ -34,14 +33,8 @@ export function SocialShareButtons({
 	const pageUrl = getPageUrl(pathname);
 
 	const handleShare = (platform: SocialPlatform) => {
-		if (platform === "instagram") {
-			// Instagram: copy to clipboard
-			handleCopyLink();
-		} else {
-			// Facebook, X, LinkedIn: open share URL
-			const shareUrl = getShareUrl(platform, pageUrl, message);
-			window.open(shareUrl, "_blank", "noopener,noreferrer");
-		}
+		const shareUrl = getShareUrl(platform, pageUrl, message);
+		window.open(shareUrl, "_blank", "noopener,noreferrer");
 	};
 
 	const handleCopyLink = async () => {
@@ -98,15 +91,6 @@ export function SocialShareButtons({
 					<BiLogoFacebookCircle className="size-6 text-deep-umber" />
 				</button>
 			</li>
-			<li>
-				<button
-					onClick={() => handleShare("instagram")}
-					className={`${baseButtonClass} ${buttonClassName} hover:cursor-pointer`}
-					aria-label="Share on Instagram"
-				>
-					<BiLogoInstagram className="size-6 text-deep-umber" />
-				</button>
-			</li>
-		</ul>
+			</ul>
 	);
 }
