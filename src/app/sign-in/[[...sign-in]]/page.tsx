@@ -68,6 +68,7 @@ export default function SignInPage() {
       const result = await signIn.create({
         identifier: data.email,
         password: data.password,
+        strategy: "password",
       });
 
       if (result.status === "complete") {
