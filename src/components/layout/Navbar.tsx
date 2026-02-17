@@ -7,12 +7,8 @@ import { BiChevronDown } from "react-icons/bi";
 import Link from "next/link";
 import { gsap } from "@/lib/gsap";
 import { useGSAP } from "@gsap/react";
-import {
-	SignedIn,
-	SignedOut,
-	SignInButton,
-	UserButton,
-} from "@clerk/nextjs";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
+import { UserMenu } from "./UserMenu";
 
 const useRelume = () => {
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -193,11 +189,12 @@ export function Navbar() {
 							</Link>
 						</SignedIn>
 						<SignedOut>
-							<SignInButton mode="redirect">
-								<button className="text-base font-medium text-deep-umber hover:text-burgundy transition-colors cursor-pointer hidden sm:block">
-									Sign In
-								</button>
-							</SignInButton>
+							<Link
+								href="/sign-in"
+								className="text-base font-medium text-deep-umber hover:text-burgundy transition-colors hidden sm:block"
+							>
+								Sign In
+							</Link>
 						</SignedOut>
 						<Button
 							href="/mln-story"
@@ -207,7 +204,7 @@ export function Navbar() {
 							Biography
 						</Button>
 						<SignedIn>
-							<UserButton />
+							<UserMenu />
 						</SignedIn>
 					</div>
 				</div>
@@ -300,21 +297,24 @@ export function Navbar() {
 										className="block text-base font-medium text-deep-umber hover:text-burgundy py-3 px-2 rounded-lg hover:bg-warm-sand/10 transition-colors"
 										onClick={toggleMobileMenu}
 									>
-										Members
+										Dashboard
 									</Link>
-									<div className="py-3 px-2">
-										<UserButton signInUrl="/sign-in" />
-									</div>
+									<Link
+										href="/members/directory"
+										className="block text-base font-medium text-deep-umber hover:text-burgundy py-3 px-2 rounded-lg hover:bg-warm-sand/10 transition-colors"
+										onClick={toggleMobileMenu}
+									>
+										Members Directory
+									</Link>
 								</SignedIn>
 								<SignedOut>
-									<SignInButton mode="redirect">
-										<button
-											className="block w-full text-left text-base font-medium text-deep-umber hover:text-burgundy py-3 px-2 rounded-lg hover:bg-warm-sand/10 transition-colors cursor-pointer"
-											onClick={toggleMobileMenu}
-										>
-											Sign In
-										</button>
-									</SignInButton>
+									<Link
+										href="/sign-in"
+										className="block text-base font-medium text-deep-umber hover:text-burgundy py-3 px-2 rounded-lg hover:bg-warm-sand/10 transition-colors"
+										onClick={toggleMobileMenu}
+									>
+										Sign In
+									</Link>
 								</SignedOut>
 							</li>
 						</ul>
