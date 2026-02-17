@@ -34,8 +34,10 @@ export default function MembersPage() {
     try {
       const res = await fetch("/api/profiles/me");
       if (res.ok) {
-        setProfile(await res.json());
-        setNeedsCompletion(false);
+        const data = await res.json();
+        setProfile(data);
+        // Webhook creates profiles with familyConnection and location as empty strings
+        setNeedsCompletion(data.familyConnection === "" && data.location === "");
       } else if (res.status === 404) {
         setNeedsCompletion(true);
       }

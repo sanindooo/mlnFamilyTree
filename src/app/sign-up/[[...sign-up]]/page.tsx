@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSignUp, useUser } from "@clerk/nextjs";
 import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -214,6 +214,13 @@ function InvitationSignUp({ ticket }: { ticket: string }) {
     return null;
   }
 
+  // If Step 1 already completed (e.g., user refreshed), skip to Step 2
+  useEffect(() => {
+    if (isLoaded && signUp?.status === "complete" && signUp.createdSessionId && step === 1) {
+      setStep(2);
+    }
+  }, [isLoaded, signUp?.status, signUp?.createdSessionId, step]);
+
   if (ticketError) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center px-4 py-16">
@@ -421,25 +428,50 @@ function Step2Form({
     setIsSubmitting(true);
 
     try {
-      // Activate the session first so the profile API call is authenticated
       if (signUp?.status === "complete" && signUp.createdSessionId && setActive) {
         await setActive({ session: signUp.createdSessionId });
 
-        // Now save extended profile to DB via upsert
-        try {
-          await fetch("/api/profiles/me", {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              fullName: `${signUp.firstName || ""} ${signUp.lastName || ""}`.trim(),
-              ...data,
-            }),
-          });
-        } catch {
-          toast.error("Failed to save profile. You can update it from the dashboard.");
+        const payload = {
+          fullName: `${signUp.firstName || ""} ${signUp.lastName || ""}`.trim(),
+          ...data,
+        };
+
+        // Retry up to 5 times with 500ms delay on 401 (session cookie propagation)
+        const MAX_ATTEMPTS = 5;
+        const RETRY_DELAY_MS = 500;
+        let saved = false;
+
+        for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+          try {
+            const res = await fetch("/api/profiles/me", {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+
+            if (res.ok) {
+              saved = true;
+              break;
+            }
+
+            // Session cookie not propagated yet — wait and retry
+            if (res.status === 401 && attempt < MAX_ATTEMPTS - 1) {
+              await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY_MS));
+              continue;
+            }
+
+            // Non-401 error, stop retrying
+            break;
+          } catch (error) {
+            console.error(`Profile save attempt ${attempt + 1} failed:`, error);
+          }
         }
 
-        router.push("/members/dashboard");
+        if (saved) {
+          router.push("/members/dashboard");
+        } else {
+          toast.error("Failed to save profile. Please try again.");
+        }
       } else {
         toast.error("Account setup could not be completed. Please try signing in.");
         router.push("/sign-in");
