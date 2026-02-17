@@ -283,7 +283,9 @@ For Clerk SDK integration:
 - [ ] Navigation/redirect conditional on API success?
 - [ ] Error messages shown on all failure paths?
 
-## Addendum: Sign-In Page Missing `strategy` Parameter
+## Addendum 1: Sign-In Page Missing `strategy` Parameter (Superseded)
+
+> **Note:** This fix was correct but insufficient. The `strategy: "password"` parameter was later found to be optional when `password` is provided (Clerk infers it). The real issue was **Client Trust** — see Addendum 2 below.
 
 ### Problem
 
@@ -293,42 +295,108 @@ After replacing the pre-built `<SignIn />` component with a custom form, the sig
 
 The user had not enabled 2FA in the Clerk dashboard.
 
-### Root Cause
+### Initial Diagnosis (Incorrect)
 
-The `signIn.create()` call was missing the `strategy` parameter:
+The `signIn.create()` call was missing the `strategy` parameter. Adding `strategy: "password"` was expected to bypass the second factor requirement.
+
+### Why It Didn't Work
+
+The `strategy` parameter is optional when `password` is provided — Clerk infers the strategy from the presence of the `password` field. The `needs_second_factor` status was not caused by a missing strategy. It was caused by **Client Trust**, a Clerk security feature that triggers automatic second-factor verification on new/unrecognized devices. See Addendum 2.
+
+---
+
+## Addendum 2: Client Trust Triggers `needs_second_factor` on New Devices
+
+### Problem
+
+After all previous fixes, the sign-in page still returned:
+
+> "Two-factor authentication is required. Please contact the administrator."
+
+The user had **not** enabled 2FA. The `signIn.create()` call was correct. The `strategy: "password"` parameter was present.
+
+### Root Cause: Clerk Client Trust
+
+[Client Trust](https://clerk.com/docs/guides/secure/client-trust) is a Clerk security feature introduced on November 14, 2025, automatically enabled for all applications created after that date. It combats credential stuffing attacks.
+
+**How it works:** When all of these conditions are met:
+1. The user enters a **valid password**
+2. The user has **NOT** enabled MFA/2FA on their account
+3. The user is signing in from a **new/unrecognized device**
+
+Clerk automatically requires a second-factor verification (email OTP), returning `status: "needs_second_factor"` with `email_code` as a supported strategy. This is not user-configured 2FA — it is a platform-level security measure.
+
+**Why the previous code broke:** The sign-in form treated `needs_second_factor` as a terminal error:
 
 ```typescript
-// BROKEN: no strategy specified
-const result = await signIn.create({
-  identifier: data.email,
-  password: data.password,
-});
+// BROKEN: dead-end error for a legitimate flow
+} else if (result.status === "needs_second_factor") {
+  toast.error("Two-factor authentication is required. Please contact the administrator.");
+}
 ```
-
-Without an explicit `strategy`, Clerk's backend may interpret the sign-in attempt using its default authentication flow, which can include multi-factor verification. The pre-built `<SignIn />` component handled this internally. When switching to a custom form, the strategy must be specified explicitly.
 
 ### Fix
 
-Add `strategy: "password"` to the `signIn.create()` call:
+Restructured the sign-in page into two sub-components:
+
+1. **`CredentialsForm`** — email/password form. On `needs_second_factor`, prepares the second factor and transitions to the verification view.
+2. **`VerificationForm`** — 6-digit email OTP form. Calls `signIn.attemptSecondFactor()` and completes the sign-in.
 
 ```typescript
-// FIXED: explicit strategy
+// In CredentialsForm.onSubmit:
 const result = await signIn.create({
   identifier: data.email,
   password: data.password,
-  strategy: "password",
 });
+
+if (result.status === "complete" && result.createdSessionId && setActive) {
+  await setActive({ session: result.createdSessionId });
+  router.push(redirectUrl);
+} else if (result.status === "needs_second_factor") {
+  // Client Trust or user-enabled MFA — prepare email code verification
+  await signIn.prepareSecondFactor({ strategy: "email_code" });
+  onNeedsVerification(data.email);
+}
 ```
 
-### Prevention
+```typescript
+// In VerificationForm.onSubmit:
+const result = await signIn.attemptSecondFactor({
+  strategy: "email_code",
+  code: data.code,
+});
 
-This is captured in the updated code review checklist below. When using `signIn.create()` or `signUp.create()`, always specify the `strategy` parameter explicitly — never rely on Clerk inferring it.
+if (result.status === "complete" && result.createdSessionId && setActive) {
+  await setActive({ session: result.createdSessionId });
+  router.push(redirectUrl);
+}
+```
+
+The verification form includes:
+- Envelope icon and "Check Your Email" heading (matches existing design language)
+- User's email displayed so they know where to check
+- 6-digit code input with `inputMode="numeric"` and `autoComplete="one-time-code"`
+- "Resend code" button calling `signIn.prepareSecondFactor()` again
+- "Back to sign in" link to return to the credentials form
+
+### Also Changed
+
+- Removed explicit `strategy: "password"` from `signIn.create()` — it is inferred from the `password` field per Clerk docs. The Clerk documentation examples for custom email/password forms pass only `identifier` and `password`.
+
+### Clerk Documentation References
+
+- [Build a Custom Email/Password Authentication Flow](https://clerk.com/docs/guides/development/custom-flows/authentication/email-password)
+- [Build a Custom Sign-In Flow with MFA](https://clerk.com/docs/guides/development/custom-flows/authentication/email-password-mfa)
+- [Client Trust Documentation](https://clerk.com/docs/guides/secure/client-trust)
+- [Introducing Client Trust (Changelog, 2025-11-14)](https://clerk.com/changelog/2025-11-14-client-trust-credential-stuffing-killer)
+- [SignIn Object JavaScript Reference](https://clerk.com/docs/reference/javascript/sign-in)
+- [SignIn Second Factor Reference](https://clerk.com/docs/references/javascript/sign-in/second-factor)
 
 ### Affected Files
 
 | File | Change |
 |------|--------|
-| `src/app/sign-in/[[...sign-in]]/page.tsx` | Added `strategy: "password"` to `signIn.create()` call |
+| `src/app/sign-in/[[...sign-in]]/page.tsx` | Split into `CredentialsForm` + `VerificationForm`, handle `needs_second_factor` with email OTP flow |
 
 ---
 
@@ -338,12 +406,12 @@ This is captured in the updated code review checklist below. When using `signIn.
 - **Previous (incorrect) fix plan:** `docs/plans/2026-02-17-fix-signup-profile-race-condition-plan.md`
 - **Architecture:** `docs/brainstorms/2026-02-17-database-and-custom-auth-brainstorm.md`
 - **Auth setup:** `docs/plans/2026-02-17-feat-clerk-authentication-plan.md`
-- **Reference pattern:** `src/app/sign-in/[[...sign-in]]/page.tsx:68-75` (sign-in — fixed to include `strategy: "password"`)
 
-### Affected Files
+### All Affected Files (Cumulative)
 
 | File | Change |
 |------|--------|
+| `src/app/sign-in/[[...sign-in]]/page.tsx` | Handle Client Trust `needs_second_factor` with email OTP verification flow |
 | `src/app/sign-up/[[...sign-up]]/page.tsx` | Capture return value, setActive in Step 1, simplify Step 2, fix hooks order |
 | `src/app/(protected)/members/dashboard/page.tsx` | Strict empty string check (from previous fix, retained) |
 | `src/app/api/profiles/me/route.ts` | No change (verified correct) |
