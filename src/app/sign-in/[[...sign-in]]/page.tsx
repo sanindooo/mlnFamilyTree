@@ -27,10 +27,20 @@ export default function SignInPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const rawRedirect = searchParams.get("redirect_url") || "/members/dashboard";
-  // Prevent open redirect — only allow relative paths
-  const redirectUrl = rawRedirect.startsWith("/") && !rawRedirect.startsWith("//")
-    ? rawRedirect
-    : "/members/dashboard";
+  // Prevent open redirect — only allow paths under known prefixes
+  const redirectUrl = (() => {
+    const ALLOWED_PREFIXES = ["/members", "/admin"];
+    if (!rawRedirect.startsWith("/") || rawRedirect.startsWith("//")) return "/members/dashboard";
+    try {
+      const decoded = decodeURIComponent(rawRedirect);
+      if (decoded.startsWith("//") || decoded.includes("\\")) return "/members/dashboard";
+    } catch {
+      return "/members/dashboard";
+    }
+    return ALLOWED_PREFIXES.some((p) => rawRedirect.startsWith(p))
+      ? rawRedirect
+      : "/members/dashboard";
+  })();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {

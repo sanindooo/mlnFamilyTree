@@ -277,6 +277,10 @@ function InvitationSignUp({ ticket }: { ticket: string }) {
                 completingProfileRef.current = true; // synchronous — wins the race
                 setCompletingProfile(true); // for render guard
               }}
+              onActivationFailed={() => {
+                completingProfileRef.current = false;
+                setCompletingProfile(false);
+              }}
               onComplete={(firstName, lastName) => {
                 setUserName({ firstName, lastName });
                 setStep(2);
@@ -306,6 +310,7 @@ function Step1Form({
   isSubmitting,
   setIsSubmitting,
   onBeforeActivate,
+  onActivationFailed,
   onComplete,
   onError,
 }: {
@@ -316,6 +321,7 @@ function Step1Form({
   isSubmitting: boolean;
   setIsSubmitting: (v: boolean) => void;
   onBeforeActivate: () => void;
+  onActivationFailed: () => void;
   onComplete: (firstName: string, lastName: string) => void;
   onError: (msg: string) => void;
 }) {
@@ -342,7 +348,12 @@ function Step1Form({
 
       if (result.status === "complete" && result.createdSessionId && setActive) {
         onBeforeActivate(); // suppress isSignedIn redirect BEFORE setActive
-        await setActive({ session: result.createdSessionId });
+        try {
+          await setActive({ session: result.createdSessionId });
+        } catch (activationErr) {
+          onActivationFailed(); // reset the flag so redirect guard works again
+          throw activationErr;
+        }
         onComplete(data.firstName, data.lastName);
       } else {
         toast.error("Additional verification may be required. Please contact the administrator.");
@@ -457,6 +468,9 @@ function Step2Form({
 
       if (res.ok) {
         router.push("/members/dashboard");
+      } else if (res.status === 401) {
+        toast.error("Your session expired. Please sign in again.");
+        router.push("/sign-in");
       } else {
         toast.error("Failed to save profile. Please try again.");
       }
