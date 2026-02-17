@@ -293,14 +293,14 @@ export function Navbar() {
 							<li className="mt-4 pt-4 border-t border-warm-sand">
 								<SignedIn>
 									<Link
-										href="/members"
+										href="/members/dashboard"
 										className="block text-base font-medium text-deep-umber hover:text-burgundy py-3 px-2 rounded-lg hover:bg-warm-sand/10 transition-colors"
 										onClick={toggleMobileMenu}
 									>
 										Dashboard
 									</Link>
 									<Link
-										href="/members/directory"
+										href="/members"
 										className="block text-base font-medium text-deep-umber hover:text-burgundy py-3 px-2 rounded-lg hover:bg-warm-sand/10 transition-colors"
 										onClick={toggleMobileMenu}
 									>

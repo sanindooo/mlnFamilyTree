@@ -209,7 +209,7 @@ function InvitationSignUp({ ticket }: { ticket: string }) {
 
   // Redirect if already signed in
   if (isSignedIn) {
-    router.push("/members");
+    router.push("/members/dashboard");
     return null;
   }
 
@@ -433,7 +433,7 @@ function Step2Form({
       // Activate the session
       if (signUp?.status === "complete" && signUp.createdSessionId && setActive) {
         await setActive({ session: signUp.createdSessionId });
-        router.push("/members");
+        router.push("/members/dashboard");
       } else {
         toast.error("Account setup could not be completed. Please try signing in.");
         router.push("/sign-in");
@@ -442,7 +442,7 @@ function Step2Form({
       toast.error("Failed to save profile. You can update it from the dashboard.");
       if (signUp?.createdSessionId && setActive) {
         await setActive({ session: signUp.createdSessionId });
-        router.push("/members");
+        router.push("/members/dashboard");
       }
     } finally {
       setIsSubmitting(false);

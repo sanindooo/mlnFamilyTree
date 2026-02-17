@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 		title: bio.title,
 		description,
 		image: heroImage,
-		path: `/member/${slug}`,
+		path: `/biography/${slug}`,
 	});
 }
 

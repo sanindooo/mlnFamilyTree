@@ -40,7 +40,7 @@ export default async function MemberProfilePage({
   return (
     <section className="container py-16">
       <Link
-        href="/members/directory"
+        href="/members"
         className="text-sm text-burgundy hover:text-burgundy/80"
       >
         &larr; Back to Directory

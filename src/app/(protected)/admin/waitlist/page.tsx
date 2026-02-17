@@ -24,7 +24,7 @@ export default function AdminWaitlistPage() {
   useEffect(() => {
     if (!isLoaded) return;
     if (!isAdmin) {
-      router.push("/members");
+      router.push("/members/dashboard");
       return;
     }
     fetchEntries();
@@ -36,7 +36,7 @@ export default function AdminWaitlistPage() {
       if (res.ok) {
         setEntries(await res.json());
       } else if (res.status === 403) {
-        router.push("/members");
+        router.push("/members/dashboard");
       }
     } catch {
       toast.error("Failed to load waitlist entries");

@@ -24,7 +24,7 @@ export default function SignInPage() {
   const { isLoaded, signIn, setActive } = useSignIn();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectUrl = searchParams.get("redirect_url") || "/members";
+  const redirectUrl = searchParams.get("redirect_url") || "/members/dashboard";
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
