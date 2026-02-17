@@ -92,6 +92,23 @@ npx drizzle-kit migrate
 
 This creates versioned SQL migration files in the `drizzle/` directory that can be reviewed and committed to git.
 
+## Bootstrapping the First Admin
+
+The app uses a waitlist + admin approval flow, which creates a chicken-and-egg problem: you need an admin to approve users, but there's no admin yet.
+
+A seed script handles this in one command:
+
+```bash
+npm run seed:admin admin@example.com "Your Name" "Family connection"
+```
+
+This will:
+1. Create a pre-approved waitlist entry in the database
+2. Send a Clerk invitation email with the admin role attached
+3. If the user already exists in Clerk, it sets their role to admin instead
+
+After running, check your email for the invitation link, sign up, and you'll have full admin access.
+
 ## Clerk Webhooks
 
 The app uses a Clerk webhook at `/api/webhooks/clerk` to sync user data to the database.
