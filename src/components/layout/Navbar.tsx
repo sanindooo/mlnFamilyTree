@@ -2,25 +2,13 @@
 
 import { Button } from "@/components/ui/Button";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import React, { useState, useEffect, useRef } from "react";
-import { clsx } from "clsx";
+import { useState, useEffect, useRef } from "react";
 import { BiChevronDown } from "react-icons/bi";
 import Link from "next/link";
 import { gsap } from "@/lib/gsap";
 import { useGSAP } from "@gsap/react";
-
-const useRelume = () => {
-	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-	const isMobile = useMediaQuery("(max-width: 991px)");
-	const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
-
-	return {
-		toggleMobileMenu,
-		isMobileMenuOpen,
-		isMobile,
-		setIsMobileMenuOpen,
-	};
-};
+import { SignedIn, SignedOut, useUser } from "@clerk/nextjs";
+import { UserMenu } from "./UserMenu";
 
 const navLinks = [
 	{ href: "/tree", label: "Family Tree" },
@@ -39,9 +27,24 @@ const biographySections = [
 ];
 
 export function Navbar() {
-	const { isMobileMenuOpen, toggleMobileMenu, isMobile, setIsMobileMenuOpen } =
-		useRelume();
+	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+	const isMobile = useMediaQuery("(max-width: 991px)");
+	const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
+	const { user } = useUser();
+	const isAdmin = (user?.publicMetadata as { role?: string })?.role === "admin";
+	const [pendingCount, setPendingCount] = useState(0);
 	const [isBiographyOpen, setIsBiographyOpen] = useState(false);
+
+	// Fetch pending waitlist count for admins
+	useEffect(() => {
+		if (!isAdmin) return;
+		fetch("/api/admin/waitlist/count")
+			.then((res) => (res.ok ? res.json() : null))
+			.then((data: { count: number } | null) => {
+				if (data) setPendingCount(data.count);
+			})
+			.catch(() => {});
+	}, [isAdmin]);
 	const dropdownRef = useRef<HTMLLIElement>(null);
 	const mobileMenuRef = useRef<HTMLElement>(null);
 	const mobileOverlayRef = useRef<HTMLDivElement>(null);
@@ -177,8 +180,37 @@ export function Navbar() {
 						</span>
 					</Link>
 
-					{/* Right: CTA Button */}
-					<div className="flex items-center">
+					{/* Right: Auth + CTA */}
+					<div className="flex items-center gap-4">
+						<SignedIn>
+							<Link
+								href="/members"
+								className="text-base font-medium text-deep-umber hover:text-burgundy transition-colors hidden sm:block"
+							>
+								Members
+							</Link>
+							{isAdmin && (
+								<Link
+									href="/admin/waitlist"
+									className={`relative text-base font-medium text-deep-umber hover:text-burgundy transition-colors hidden sm:block ${pendingCount > 0 ? "mr-5" : ""}`}
+								>
+									Waitlist
+									{pendingCount > 0 && (
+										<span className="absolute -top-2 -right-5 flex size-5 items-center justify-center rounded-full bg-burgundy text-[10px] font-bold text-white">
+											{pendingCount}
+										</span>
+									)}
+								</Link>
+							)}
+						</SignedIn>
+						<SignedOut>
+							<Link
+								href="/sign-in"
+								className="text-base font-medium text-deep-umber hover:text-burgundy transition-colors hidden sm:block"
+							>
+								Sign In
+							</Link>
+						</SignedOut>
 						<Button
 							href="/mln-story"
 							size="sm"
@@ -186,6 +218,9 @@ export function Navbar() {
 						>
 							Biography
 						</Button>
+						<SignedIn>
+							<UserMenu />
+						</SignedIn>
 					</div>
 				</div>
 			</div>
@@ -267,6 +302,49 @@ export function Navbar() {
 								>
 									Search
 								</Link>
+							</li>
+
+							{/* Auth controls */}
+							<li className="mt-4 pt-4 border-t border-warm-sand">
+								<SignedIn>
+									<Link
+										href="/members/dashboard"
+										className="block text-base font-medium text-deep-umber hover:text-burgundy py-3 px-2 rounded-lg hover:bg-warm-sand/10 transition-colors"
+										onClick={toggleMobileMenu}
+									>
+										Dashboard
+									</Link>
+									<Link
+										href="/members"
+										className="block text-base font-medium text-deep-umber hover:text-burgundy py-3 px-2 rounded-lg hover:bg-warm-sand/10 transition-colors"
+										onClick={toggleMobileMenu}
+									>
+										Members Directory
+									</Link>
+									{isAdmin && (
+										<Link
+											href="/admin/waitlist"
+											className="flex items-center gap-2 text-base font-medium text-deep-umber hover:text-burgundy py-3 px-2 rounded-lg hover:bg-warm-sand/10 transition-colors"
+											onClick={toggleMobileMenu}
+										>
+											Waitlist
+											{pendingCount > 0 && (
+												<span className="flex size-5 items-center justify-center rounded-full bg-burgundy text-[10px] font-bold text-white">
+													{pendingCount}
+												</span>
+											)}
+										</Link>
+									)}
+								</SignedIn>
+								<SignedOut>
+									<Link
+										href="/sign-in"
+										className="block text-base font-medium text-deep-umber hover:text-burgundy py-3 px-2 rounded-lg hover:bg-warm-sand/10 transition-colors"
+										onClick={toggleMobileMenu}
+									>
+										Sign In
+									</Link>
+								</SignedOut>
 							</li>
 						</ul>
 					</nav>

@@ -1,36 +1,123 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MLN Museum
+
+A family museum and community website built with Next.js, Sanity CMS, Clerk authentication, Neon Postgres, and Vercel Blob storage.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- A [Neon](https://neon.tech) Postgres database
+- A [Clerk](https://clerk.com) application
+- A [Vercel Blob](https://vercel.com/docs/storage/vercel-blob) store (for avatar uploads)
+- A [Sanity](https://sanity.io) project (for CMS content)
+
+### Environment Variables
+
+Copy `.env.example` to `.env.local` and fill in the values:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cp .env.example .env.local
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Required variables:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Variable | Description |
+|----------|-------------|
+| `DATABASE_URL` | Neon Postgres connection string (pooled) |
+| `DATABASE_URL_UNPOOLED` | Neon Postgres connection string (direct) |
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Clerk publishable key |
+| `CLERK_SECRET_KEY` | Clerk secret key |
+| `CLERK_WEBHOOK_SECRET` | Clerk webhook signing secret (`whsec_...`) |
+| `NEXT_PUBLIC_APP_URL` | Your app URL (e.g. `http://localhost:3000` or production URL) |
+| `BLOB_READ_WRITE_TOKEN` | Vercel Blob read/write token |
+| `NEXT_PUBLIC_SANITY_PROJECT_ID` | Sanity project ID |
+| `NEXT_PUBLIC_SANITY_DATASET` | Sanity dataset name |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Install and Run
 
-## Learn More
+```bash
+npm install
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Database Schema
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The database is managed with [Drizzle ORM](https://orm.drizzle.team/). The schema is defined in `src/lib/db/schema.ts`.
 
-## Deploy on Vercel
+### After Updating the Schema
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Whenever you make changes to `src/lib/db/schema.ts` (adding columns, tables, indexes, etc.), you need to push those changes to your database:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npx drizzle-kit push
+```
+
+This compares your schema file against the live database and applies the differences. Drizzle will show you exactly what SQL it plans to run and ask for confirmation before executing.
+
+### Common Schema Operations
+
+**Add a new column:**
+
+1. Add the column definition in `src/lib/db/schema.ts`
+2. Run `npx drizzle-kit push`
+3. If the column is `NOT NULL` without a default, Drizzle may ask to truncate the table. For production databases with existing data, add the column as nullable first, backfill, then add the constraint manually.
+
+**Add an index:**
+
+1. Add the index in the table's third argument in `src/lib/db/schema.ts`
+2. Run `npx drizzle-kit push` -- indexes are additive and safe to apply
+
+**Inspect the current database:**
+
+```bash
+npx drizzle-kit studio
+```
+
+This opens a web UI at `https://local.drizzle.studio` where you can browse tables and data.
+
+### Production Migrations
+
+For production deployments, use Drizzle's migration workflow instead of `push`:
+
+```bash
+# Generate a migration file from schema changes
+npx drizzle-kit generate
+
+# Apply pending migrations
+npx drizzle-kit migrate
+```
+
+This creates versioned SQL migration files in the `drizzle/` directory that can be reviewed and committed to git.
+
+## Clerk Webhooks
+
+The app uses a Clerk webhook at `/api/webhooks/clerk` to sync user data to the database.
+
+### Local Development
+
+Use [ngrok](https://ngrok.com) to expose your local server:
+
+```bash
+ngrok http 3000
+```
+
+Then set the webhook URL in Clerk Dashboard to `https://<your-ngrok-url>/api/webhooks/clerk`.
+
+### Production
+
+Set the webhook URL in Clerk Dashboard to `https://<your-domain>/api/webhooks/clerk`.
+
+Subscribe to these events: `user.created`, `user.updated`.
+
+## Deployment
+
+Deploy to [Vercel](https://vercel.com):
+
+1. Connect your GitHub repository to Vercel
+2. Set all environment variables listed above
+3. Make sure `NEXT_PUBLIC_APP_URL` points to your production domain
+4. Set up the Clerk webhook endpoint with your production URL
+5. Deploy

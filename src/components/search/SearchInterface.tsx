@@ -68,7 +68,7 @@ export function SearchInterface({ documents }: SearchInterfaceProps) {
 										href={
 											doc.slug === "mln-story"
 												? "/mln-story"
-												: `/member/${doc.slug}`
+												: `/biography/${doc.slug}`
 										}
 										className="group"
 									>

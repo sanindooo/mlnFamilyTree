@@ -48,7 +48,7 @@ const TreeBranch = ({ node, depth = 0 }: TreeBranchProps) => {
 					<div className="flex flex-col sm:flex-row sm:items-baseline sm:gap-2">
 						{node.slug && node.hasBioOrGallery ? (
 							<Link
-								href={`/member/${node.slug}`}
+								href={`/biography/${node.slug}`}
 								className="font-medium text-deep-umber hover:text-burgundy transition-colors"
 							>
 								{node.name}

@@ -12,6 +12,8 @@ import {
 	SanityPerson,
 	SanityMLNStory,
 	SanityGalleryImage,
+	SanityGrandchild,
+	SanityFooterCTA,
 } from "@/types";
 
 /**
@@ -147,6 +149,21 @@ export function adaptGalleryImage(
 }
 
 /**
+ * Validate that a URL is safe to render in an href attribute.
+ * Rejects javascript:, data:, vbscript: schemes.
+ */
+function isSafeUrl(url: string | undefined): string | undefined {
+	if (!url) return undefined;
+	if (url.startsWith("/")) return url;
+	try {
+		const parsed = new URL(url);
+		return ["https:", "http:"].includes(parsed.protocol) ? url : undefined;
+	} catch {
+		return undefined;
+	}
+}
+
+/**
  * Helper to get optimized image URLs from Sanity
  */
 export function getImageUrl(
@@ -161,7 +178,7 @@ export function getImageUrl(
 /**
  * Convert Sanity Grandchild to frontend Grandchild type
  */
-export function adaptGrandchild(sanityGrandchild: any): Grandchild {
+export function adaptGrandchild(sanityGrandchild: SanityGrandchild): Grandchild {
 	return {
 		id: sanityGrandchild._id,
 		name: sanityGrandchild.name,
@@ -170,8 +187,8 @@ export function adaptGrandchild(sanityGrandchild: any): Grandchild {
 			? urlForImage(sanityGrandchild.photo).url()
 			: undefined,
 		description: sanityGrandchild.description,
-		linkedinUrl: sanityGrandchild.linkedinUrl,
-		twitterUrl: sanityGrandchild.twitterUrl,
+		linkedinUrl: isSafeUrl(sanityGrandchild.linkedinUrl),
+		twitterUrl: isSafeUrl(sanityGrandchild.twitterUrl),
 	};
 }
 
@@ -179,7 +196,7 @@ export function adaptGrandchild(sanityGrandchild: any): Grandchild {
  * Convert Sanity Footer CTA to frontend FooterCTAData type
  * Returns null if title or text are missing (triggers conditional hiding)
  */
-export function adaptFooterCTA(sanityFooterCTA: any): FooterCTAData | null {
+export function adaptFooterCTA(sanityFooterCTA: SanityFooterCTA): FooterCTAData | null {
 	// Return null if title or text are missing (component won't render)
 	if (!sanityFooterCTA?.title || !sanityFooterCTA?.text) {
 		return null;
@@ -198,26 +215,22 @@ export function adaptFooterCTA(sanityFooterCTA: any): FooterCTAData | null {
 		};
 	}
 
-	// Add primary button only if both text and link are present
-	if (
-		sanityFooterCTA.primaryButton?.text &&
-		sanityFooterCTA.primaryButton?.link
-	) {
+	// Add primary button only if both text and link are present and safe
+	const primaryLink = isSafeUrl(sanityFooterCTA.primaryButton?.link);
+	if (sanityFooterCTA.primaryButton?.text && primaryLink) {
 		result.primaryButton = {
 			text: sanityFooterCTA.primaryButton.text,
-			link: sanityFooterCTA.primaryButton.link,
+			link: primaryLink,
 			openInNewTab: sanityFooterCTA.primaryButton.openInNewTab || false,
 		};
 	}
 
-	// Add secondary button only if both text and link are present
-	if (
-		sanityFooterCTA.secondaryButton?.text &&
-		sanityFooterCTA.secondaryButton?.link
-	) {
+	// Add secondary button only if both text and link are present and safe
+	const secondaryLink = isSafeUrl(sanityFooterCTA.secondaryButton?.link);
+	if (sanityFooterCTA.secondaryButton?.text && secondaryLink) {
 		result.secondaryButton = {
 			text: sanityFooterCTA.secondaryButton.text,
-			link: sanityFooterCTA.secondaryButton.link,
+			link: secondaryLink,
 			openInNewTab: sanityFooterCTA.secondaryButton.openInNewTab || false,
 		};
 	}
