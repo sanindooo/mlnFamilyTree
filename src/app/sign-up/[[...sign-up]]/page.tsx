@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import Link from "next/link";
 
 import { Input } from "@/components/ui/Input";
+import { PasswordInput } from "@/components/ui/PasswordInput";
 import { Button } from "@/components/ui/Button";
 import { waitlistJoinSchema, type WaitlistJoinInput } from "@/lib/validations/waitlist";
 
@@ -372,7 +373,7 @@ function Step1Form({
           <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-deep-umber">
             Password
           </label>
-          <Input id="password" type="password" placeholder="At least 8 characters" autoComplete="new-password" {...register("password")} />
+          <PasswordInput id="password" placeholder="At least 8 characters" autoComplete="new-password" {...register("password")} />
           {errors.password && <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>}
         </div>
 
@@ -380,7 +381,7 @@ function Step1Form({
           <label htmlFor="confirmPassword" className="mb-1.5 block text-sm font-medium text-deep-umber">
             Confirm Password
           </label>
-          <Input id="confirmPassword" type="password" placeholder="Confirm your password" autoComplete="new-password" {...register("confirmPassword")} />
+          <PasswordInput id="confirmPassword" placeholder="Confirm your password" autoComplete="new-password" {...register("confirmPassword")} />
           {errors.confirmPassword && <p className="mt-1 text-sm text-red-600">{errors.confirmPassword.message}</p>}
         </div>
 
@@ -420,30 +421,32 @@ function Step2Form({
     setIsSubmitting(true);
 
     try {
-      // Save extended profile to DB via upsert
-      await fetch("/api/profiles/me", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          fullName: `${signUp.firstName || ""} ${signUp.lastName || ""}`.trim(),
-          ...data,
-        }),
-      });
-
-      // Activate the session
+      // Activate the session first so the profile API call is authenticated
       if (signUp?.status === "complete" && signUp.createdSessionId && setActive) {
         await setActive({ session: signUp.createdSessionId });
+
+        // Now save extended profile to DB via upsert
+        try {
+          await fetch("/api/profiles/me", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              fullName: `${signUp.firstName || ""} ${signUp.lastName || ""}`.trim(),
+              ...data,
+            }),
+          });
+        } catch {
+          toast.error("Failed to save profile. You can update it from the dashboard.");
+        }
+
         router.push("/members/dashboard");
       } else {
         toast.error("Account setup could not be completed. Please try signing in.");
         router.push("/sign-in");
       }
     } catch {
-      toast.error("Failed to save profile. You can update it from the dashboard.");
-      if (signUp?.createdSessionId && setActive) {
-        await setActive({ session: signUp.createdSessionId });
-        router.push("/members/dashboard");
-      }
+      toast.error("Failed to activate session. Please try signing in.");
+      router.push("/sign-in");
     } finally {
       setIsSubmitting(false);
     }

@@ -7,8 +7,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import Image from "next/image";
 import Link from "next/link";
+import { getInitials } from "@/lib/utils/initials";
 
 import { Input } from "@/components/ui/Input";
+import { PasswordInput } from "@/components/ui/PasswordInput";
 import { Button } from "@/components/ui/Button";
 import {
   profileUpdateSchema,
@@ -188,23 +190,6 @@ export default function MembersPage() {
             </div>
           </div>
 
-          {/* Delete Account Placeholder */}
-          <div className="rounded-xl border border-warm-sand bg-white p-6 shadow-sm">
-            <h4 className="!text-base font-medium text-muted">
-              Delete Account
-            </h4>
-            <p className="mt-1 text-sm text-muted">
-              Account deletion will be available in a future update.
-            </p>
-            <Button
-              variant="secondary"
-              size="sm"
-              className="mt-3 opacity-50"
-              disabled
-            >
-              Delete Account
-            </Button>
-          </div>
         </div>
       </div>
     </section>
@@ -238,14 +223,7 @@ function ProfileAvatar({
   size?: number;
 }) {
   const src = profilePhotoUrl || clerkImageUrl;
-  const initials = name
-    ? name
-        .split(" ")
-        .map((n) => n[0])
-        .join("")
-        .toUpperCase()
-        .slice(0, 2)
-    : "?";
+  const initials = getInitials(name);
 
   if (src) {
     return (
@@ -383,22 +361,19 @@ function PasswordChangeSection() {
         </Button>
       ) : (
         <form onSubmit={handleSubmit} className="mt-3 space-y-3">
-          <Input
-            type="password"
+          <PasswordInput
             placeholder="Current password"
             value={currentPassword}
             onChange={(e) => setCurrentPassword(e.target.value)}
             autoComplete="current-password"
           />
-          <Input
-            type="password"
+          <PasswordInput
             placeholder="New password (min 8 characters)"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
             autoComplete="new-password"
           />
-          <Input
-            type="password"
+          <PasswordInput
             placeholder="Confirm new password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}

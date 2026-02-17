@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { userProfiles } from "@/lib/db/schema";
 import { profileUpdateSchema } from "@/lib/validations/profile";
+import { generateSlug } from "@/lib/utils/slug";
 
 export async function GET() {
   const { userId } = await auth();
@@ -34,16 +35,16 @@ export async function PATCH(req: Request) {
   }
 
   // Clean empty strings to null for URL fields
-  const data = { ...parsed.data };
-  for (const key of ["linkedinUrl", "twitterUrl", "websiteUrl"] as const) {
-    if (key in data && data[key] === "") {
-      (data as Record<string, unknown>)[key] = null;
-    }
-  }
+  const urlFields = ["linkedinUrl", "twitterUrl", "websiteUrl"] as const;
+  const cleanedUrls = Object.fromEntries(
+    urlFields
+      .filter((key) => key in parsed.data && parsed.data[key] === "")
+      .map((key) => [key, null])
+  );
 
   const [updated] = await db
     .update(userProfiles)
-    .set(data)
+    .set({ ...parsed.data, ...cleanedUrls })
     .where(eq(userProfiles.clerkUserId, userId))
     .returning();
 
@@ -66,14 +67,16 @@ export async function PUT(req: Request) {
   }
 
   // Upsert: create if missing, update if exists (client-side fallback)
+  const fullName = parsed.data.fullName || "Member";
   const [upserted] = await db
     .insert(userProfiles)
     .values({
+      ...parsed.data,
       clerkUserId: userId,
-      fullName: parsed.data.fullName || "Member",
+      slug: generateSlug(fullName),
+      fullName,
       familyConnection: parsed.data.familyConnection || "",
       location: parsed.data.location || "",
-      ...parsed.data,
     })
     .onConflictDoUpdate({
       target: userProfiles.clerkUserId,

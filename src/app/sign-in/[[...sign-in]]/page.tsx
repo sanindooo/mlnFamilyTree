@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import Link from "next/link";
 
 import { Input } from "@/components/ui/Input";
+import { PasswordInput } from "@/components/ui/PasswordInput";
 import { Button } from "@/components/ui/Button";
 
 const signInSchema = z.object({
@@ -24,7 +25,11 @@ export default function SignInPage() {
   const { isLoaded, signIn, setActive } = useSignIn();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectUrl = searchParams.get("redirect_url") || "/members/dashboard";
+  const rawRedirect = searchParams.get("redirect_url") || "/members/dashboard";
+  // Prevent open redirect — only allow relative paths
+  const redirectUrl = rawRedirect.startsWith("/") && !rawRedirect.startsWith("//")
+    ? rawRedirect
+    : "/members/dashboard";
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
@@ -112,9 +117,8 @@ export default function SignInPage() {
               >
                 Password
               </label>
-              <Input
+              <PasswordInput
                 id="password"
-                type="password"
                 placeholder="Enter your password"
                 autoComplete="current-password"
                 {...register("password")}

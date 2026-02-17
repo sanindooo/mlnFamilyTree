@@ -47,17 +47,16 @@ export default function AdminWaitlistPage() {
 
   const handleAction = async (
     entryId: number,
-    action: "approve" | "deny"
+    action: "approve" | "deny",
+    makeAdmin?: boolean
   ) => {
-    if (
-      !confirm(
-        `Are you sure you want to ${action} this request?${
-          action === "approve"
-            ? " An invitation email will be sent."
-            : ""
-        }`
-      )
-    ) {
+    const message = makeAdmin
+      ? "Approve as Admin? They will have admin privileges and an invitation email will be sent."
+      : action === "approve"
+        ? "Are you sure you want to approve? An invitation email will be sent."
+        : "Are you sure you want to deny this request?";
+
+    if (!confirm(message)) {
       return;
     }
 
@@ -66,7 +65,7 @@ export default function AdminWaitlistPage() {
       const res = await fetch("/api/admin/waitlist", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ entryId, action }),
+        body: JSON.stringify({ entryId, action, makeAdmin }),
       });
 
       if (res.ok) {
@@ -203,6 +202,15 @@ export default function AdminWaitlistPage() {
                           {actioningId === entry.id
                             ? "..."
                             : "Approve"}
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="secondary"
+                          onClick={() => handleAction(entry.id, "approve", true)}
+                          disabled={actioningId === entry.id}
+                          title="Approve and grant admin privileges"
+                        >
+                          + Admin
                         </Button>
                         <Button
                           size="sm"

@@ -4,6 +4,7 @@ import type { NextRequest } from "next/server";
 
 import { db } from "@/lib/db";
 import { userProfiles } from "@/lib/db/schema";
+import { generateSlug } from "@/lib/utils/slug";
 
 export async function POST(req: NextRequest) {
   try {
@@ -18,6 +19,7 @@ export async function POST(req: NextRequest) {
         .insert(userProfiles)
         .values({
           clerkUserId: id,
+          slug: generateSlug(fullName),
           fullName,
           familyConnection: "",
           location: "",

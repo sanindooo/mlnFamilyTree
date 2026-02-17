@@ -7,21 +7,8 @@ import { BiChevronDown } from "react-icons/bi";
 import Link from "next/link";
 import { gsap } from "@/lib/gsap";
 import { useGSAP } from "@gsap/react";
-import { SignedIn, SignedOut } from "@clerk/nextjs";
+import { SignedIn, SignedOut, useUser } from "@clerk/nextjs";
 import { UserMenu } from "./UserMenu";
-
-const useRelume = () => {
-	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-	const isMobile = useMediaQuery("(max-width: 991px)");
-	const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
-
-	return {
-		toggleMobileMenu,
-		isMobileMenuOpen,
-		isMobile,
-		setIsMobileMenuOpen,
-	};
-};
 
 const navLinks = [
 	{ href: "/tree", label: "Family Tree" },
@@ -40,9 +27,24 @@ const biographySections = [
 ];
 
 export function Navbar() {
-	const { isMobileMenuOpen, toggleMobileMenu, isMobile, setIsMobileMenuOpen } =
-		useRelume();
+	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+	const isMobile = useMediaQuery("(max-width: 991px)");
+	const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
+	const { user } = useUser();
+	const isAdmin = (user?.publicMetadata as { role?: string })?.role === "admin";
+	const [pendingCount, setPendingCount] = useState(0);
 	const [isBiographyOpen, setIsBiographyOpen] = useState(false);
+
+	// Fetch pending waitlist count for admins
+	useEffect(() => {
+		if (!isAdmin) return;
+		fetch("/api/admin/waitlist/count")
+			.then((res) => (res.ok ? res.json() : null))
+			.then((data: { count: number } | null) => {
+				if (data) setPendingCount(data.count);
+			})
+			.catch(() => {});
+	}, [isAdmin]);
 	const dropdownRef = useRef<HTMLLIElement>(null);
 	const mobileMenuRef = useRef<HTMLElement>(null);
 	const mobileOverlayRef = useRef<HTMLDivElement>(null);
@@ -187,6 +189,19 @@ export function Navbar() {
 							>
 								Members
 							</Link>
+							{isAdmin && (
+								<Link
+									href="/admin/waitlist"
+									className={`relative text-base font-medium text-deep-umber hover:text-burgundy transition-colors hidden sm:block ${pendingCount > 0 ? "mr-5" : ""}`}
+								>
+									Waitlist
+									{pendingCount > 0 && (
+										<span className="absolute -top-2 -right-5 flex size-5 items-center justify-center rounded-full bg-burgundy text-[10px] font-bold text-white">
+											{pendingCount}
+										</span>
+									)}
+								</Link>
+							)}
 						</SignedIn>
 						<SignedOut>
 							<Link
@@ -306,6 +321,20 @@ export function Navbar() {
 									>
 										Members Directory
 									</Link>
+									{isAdmin && (
+										<Link
+											href="/admin/waitlist"
+											className="flex items-center gap-2 text-base font-medium text-deep-umber hover:text-burgundy py-3 px-2 rounded-lg hover:bg-warm-sand/10 transition-colors"
+											onClick={toggleMobileMenu}
+										>
+											Waitlist
+											{pendingCount > 0 && (
+												<span className="flex size-5 items-center justify-center rounded-full bg-burgundy text-[10px] font-bold text-white">
+													{pendingCount}
+												</span>
+											)}
+										</Link>
+									)}
 								</SignedIn>
 								<SignedOut>
 									<Link

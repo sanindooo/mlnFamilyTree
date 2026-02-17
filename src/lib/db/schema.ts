@@ -1,8 +1,9 @@
-import { boolean, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import { boolean, index, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 
 export const userProfiles = pgTable("user_profiles", {
   id: serial("id").primaryKey(),
   clerkUserId: text("clerk_user_id").notNull().unique(),
+  slug: text("slug").notNull().unique(),
   fullName: text("full_name").notNull(),
   familyConnection: text("family_connection").notNull(),
   location: text("location").notNull(),
@@ -23,7 +24,10 @@ export const userProfiles = pgTable("user_profiles", {
     .notNull()
     .defaultNow()
     .$onUpdate(() => new Date()),
-});
+}, (table) => ({
+  visibleDirectoryIdx: index("idx_user_profiles_visible_directory")
+    .on(table.isVisibleInDirectory, table.fullName),
+}));
 
 export const waitlistEntries = pgTable("waitlist_entries", {
   id: serial("id").primaryKey(),
@@ -36,7 +40,9 @@ export const waitlistEntries = pgTable("waitlist_entries", {
     .notNull()
     .defaultNow()
     .$onUpdate(() => new Date()),
-});
+}, (table) => ({
+  statusIdx: index("idx_waitlist_entries_status").on(table.status),
+}));
 
 export type InsertUserProfile = typeof userProfiles.$inferInsert;
 export type SelectUserProfile = typeof userProfiles.$inferSelect;

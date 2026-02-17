@@ -1,9 +1,16 @@
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
+import { z } from "zod";
 
 import { db } from "@/lib/db";
 import { waitlistEntries } from "@/lib/db/schema";
+
+const waitlistActionSchema = z.object({
+  entryId: z.number().int().positive(),
+  action: z.enum(["approve", "deny"]),
+  makeAdmin: z.boolean().optional(),
+});
 
 async function isAdmin(userId: string): Promise<boolean> {
   const client = await clerkClient();
@@ -36,17 +43,15 @@ export async function PATCH(req: Request) {
   }
 
   const body = await req.json();
-  const { entryId, action } = body as {
-    entryId: number;
-    action: "approve" | "deny";
-  };
-
-  if (!entryId || !["approve", "deny"].includes(action)) {
+  const parsed = waitlistActionSchema.safeParse(body);
+  if (!parsed.success) {
     return NextResponse.json(
-      { error: "Invalid request. Provide entryId and action (approve/deny)" },
+      { error: "Invalid request", details: parsed.error.flatten() },
       { status: 400 }
     );
   }
+
+  const { entryId, action, makeAdmin } = parsed.data;
 
   // Get the waitlist entry
   const [entry] = await db
@@ -61,13 +66,21 @@ export async function PATCH(req: Request) {
   if (action === "approve") {
     // Send Clerk invitation
     const client = await clerkClient();
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
+    if (!baseUrl) {
+      return NextResponse.json(
+        { error: "Server misconfiguration: NEXT_PUBLIC_APP_URL is not set" },
+        { status: 500 }
+      );
+    }
     try {
       await client.invitations.createInvitation({
         emailAddress: entry.email,
-        redirectUrl: `${process.env.NEXT_PUBLIC_CLERK_SIGN_UP_URL || "/sign-up"}`,
+        redirectUrl: `${baseUrl}/sign-up`,
         publicMetadata: {
           waitlistEntryId: entry.id,
           familyConnection: entry.familyConnection,
+          ...(makeAdmin ? { role: "admin" } : {}),
         },
       });
     } catch (error) {

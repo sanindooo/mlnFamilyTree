@@ -4,12 +4,25 @@ import { useUser, useClerk } from "@clerk/nextjs";
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { getInitials } from "@/lib/utils/initials";
 
 export function UserMenu() {
   const { isLoaded, isSignedIn, user } = useUser();
   const { signOut } = useClerk();
   const [open, setOpen] = useState(false);
+  const [profilePhotoUrl, setProfilePhotoUrl] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  // Fetch DB profile photo (takes priority over Clerk avatar)
+  useEffect(() => {
+    if (!isSignedIn) return;
+    fetch("/api/profiles/me")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.profilePhotoUrl) setProfilePhotoUrl(data.profilePhotoUrl);
+      })
+      .catch(() => {});
+  }, [isSignedIn]);
 
   // Close on click outside
   useEffect(() => {
@@ -35,14 +48,7 @@ export function UserMenu() {
 
   if (!isLoaded || !isSignedIn) return null;
 
-  const initials = user.fullName
-    ? user.fullName
-        .split(" ")
-        .map((n) => n[0])
-        .join("")
-        .toUpperCase()
-        .slice(0, 2)
-    : "?";
+  const initials = getInitials(user.fullName);
 
   return (
     <div className="relative" ref={menuRef}>
@@ -53,13 +59,13 @@ export function UserMenu() {
         aria-haspopup="true"
         aria-label="User menu"
       >
-        {user.imageUrl ? (
+        {profilePhotoUrl || user.imageUrl ? (
           <Image
-            src={user.imageUrl}
+            src={profilePhotoUrl || user.imageUrl}
             alt={user.fullName || "User avatar"}
             width={32}
             height={32}
-            className="rounded-full border-2 border-antique-gold object-cover"
+            className="size-8 rounded-full border-2 border-antique-gold object-cover"
           />
         ) : (
           <div className="flex size-8 items-center justify-center rounded-full border-2 border-antique-gold bg-warm-sand/30 text-xs font-medium text-deep-umber">
