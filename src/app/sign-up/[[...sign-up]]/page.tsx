@@ -208,18 +208,15 @@ function InvitationSignUp({ ticket }: { ticket: string }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [ticketError, setTicketError] = useState<string | null>(null);
 
-  // Redirect if already signed in
-  if (isSignedIn) {
-    router.push("/members/dashboard");
-    return null;
-  }
-
-  // If Step 1 already completed (e.g., user refreshed), skip to Step 2
+  // Redirect if already signed in (hook before conditional returns)
   useEffect(() => {
-    if (isLoaded && signUp?.status === "complete" && signUp.createdSessionId && step === 1) {
-      setStep(2);
+    if (isSignedIn) {
+      router.push("/members/dashboard");
     }
-  }, [isLoaded, signUp?.status, signUp?.createdSessionId, step]);
+  }, [isSignedIn, router]);
+
+  if (!isLoaded) return null;
+  if (isSignedIn) return null;
 
   if (ticketError) {
     return (
@@ -269,6 +266,7 @@ function InvitationSignUp({ ticket }: { ticket: string }) {
               ticket={ticket}
               isLoaded={isLoaded}
               signUp={signUp}
+              setActive={setActive}
               isSubmitting={isSubmitting}
               setIsSubmitting={setIsSubmitting}
               onComplete={() => setStep(2)}
@@ -278,7 +276,6 @@ function InvitationSignUp({ ticket }: { ticket: string }) {
 
           {step === 2 && (
             <Step2Form
-              setActive={setActive}
               signUp={signUp}
               isSubmitting={isSubmitting}
               setIsSubmitting={setIsSubmitting}
@@ -294,6 +291,7 @@ function Step1Form({
   ticket,
   isLoaded,
   signUp,
+  setActive,
   isSubmitting,
   setIsSubmitting,
   onComplete,
@@ -302,6 +300,7 @@ function Step1Form({
   ticket: string;
   isLoaded: boolean | undefined;
   signUp: ReturnType<typeof useSignUp>["signUp"];
+  setActive: ReturnType<typeof useSignUp>["setActive"];
   isSubmitting: boolean;
   setIsSubmitting: (v: boolean) => void;
   onComplete: () => void;
@@ -320,7 +319,7 @@ function Step1Form({
     setIsSubmitting(true);
 
     try {
-      await signUp.create({
+      const result = await signUp.create({
         strategy: "ticket",
         ticket,
         firstName: data.firstName,
@@ -328,7 +327,12 @@ function Step1Form({
         password: data.password,
       });
 
-      onComplete();
+      if (result.status === "complete" && result.createdSessionId && setActive) {
+        await setActive({ session: result.createdSessionId });
+        onComplete();
+      } else {
+        toast.error("Additional verification may be required. Please contact the administrator.");
+      }
     } catch (err) {
       if (isClerkAPIResponseError(err)) {
         const code = err.errors[0]?.code;
@@ -403,12 +407,10 @@ function Step1Form({
 }
 
 function Step2Form({
-  setActive,
   signUp,
   isSubmitting,
   setIsSubmitting,
 }: {
-  setActive: ReturnType<typeof useSignUp>["setActive"];
   signUp: ReturnType<typeof useSignUp>["signUp"];
   isSubmitting: boolean;
   setIsSubmitting: (v: boolean) => void;
@@ -423,62 +425,29 @@ function Step2Form({
     resolver: zodResolver(signUpStep2Schema),
   });
 
+  // User is already authenticated from Step 1 (setActive called there)
   const onSubmit = async (data: Step2Input) => {
-    if (!signUp) return;
     setIsSubmitting(true);
 
     try {
-      if (signUp?.status === "complete" && signUp.createdSessionId && setActive) {
-        await setActive({ session: signUp.createdSessionId });
+      const payload = {
+        fullName: `${signUp?.firstName || ""} ${signUp?.lastName || ""}`.trim(),
+        ...data,
+      };
 
-        const payload = {
-          fullName: `${signUp.firstName || ""} ${signUp.lastName || ""}`.trim(),
-          ...data,
-        };
+      const res = await fetch("/api/profiles/me", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
-        // Retry up to 5 times with 500ms delay on 401 (session cookie propagation)
-        const MAX_ATTEMPTS = 5;
-        const RETRY_DELAY_MS = 500;
-        let saved = false;
-
-        for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
-          try {
-            const res = await fetch("/api/profiles/me", {
-              method: "PUT",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(payload),
-            });
-
-            if (res.ok) {
-              saved = true;
-              break;
-            }
-
-            // Session cookie not propagated yet — wait and retry
-            if (res.status === 401 && attempt < MAX_ATTEMPTS - 1) {
-              await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY_MS));
-              continue;
-            }
-
-            // Non-401 error, stop retrying
-            break;
-          } catch (error) {
-            console.error(`Profile save attempt ${attempt + 1} failed:`, error);
-          }
-        }
-
-        if (saved) {
-          router.push("/members/dashboard");
-        } else {
-          toast.error("Failed to save profile. Please try again.");
-        }
+      if (res.ok) {
+        router.push("/members/dashboard");
       } else {
-        toast.error("Account setup could not be completed. Please try signing in.");
-        router.push("/sign-in");
+        toast.error("Failed to save profile. Please try again.");
       }
     } catch {
-      toast.error("Failed to activate session. Please try signing in.");
-      router.push("/sign-in");
+      toast.error("Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
