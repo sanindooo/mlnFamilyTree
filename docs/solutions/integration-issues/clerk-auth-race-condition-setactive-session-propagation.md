@@ -12,6 +12,7 @@ tags:
 severity: high
 modules:
   - sign-up-page
+  - sign-in-page
   - dashboard
   - profiles-api
 symptoms:
@@ -20,6 +21,7 @@ symptoms:
   - User is actually logged in after page refresh
   - User must re-enter profile details after refresh
   - Step 2 profile save never executes
+  - "Two-factor authentication is required. Please contact the administrator." on sign-in
 root_cause_type: state-management-error
 supersedes: "Previous analysis blamed setActive() cookie propagation race condition (incorrect)"
 ---
@@ -273,6 +275,7 @@ if (condition) return null; // conditional returns after
 For Clerk SDK integration:
 
 - [ ] `signUp.create()` / `signIn.create()` return value captured and used?
+- [ ] `strategy` parameter explicitly specified (e.g., `"password"`, `"ticket"`)?
 - [ ] Status checked on the return value, NOT the hook state?
 - [ ] `setActive()` called immediately after confirming `status === "complete"`?
 - [ ] All React hooks called before any conditional `return` statements?
@@ -280,13 +283,62 @@ For Clerk SDK integration:
 - [ ] Navigation/redirect conditional on API success?
 - [ ] Error messages shown on all failure paths?
 
+## Addendum: Sign-In Page Missing `strategy` Parameter
+
+### Problem
+
+After replacing the pre-built `<SignIn />` component with a custom form, the sign-in page returned the error:
+
+> "Two-factor authentication is required. Please contact the administrator."
+
+The user had not enabled 2FA in the Clerk dashboard.
+
+### Root Cause
+
+The `signIn.create()` call was missing the `strategy` parameter:
+
+```typescript
+// BROKEN: no strategy specified
+const result = await signIn.create({
+  identifier: data.email,
+  password: data.password,
+});
+```
+
+Without an explicit `strategy`, Clerk's backend may interpret the sign-in attempt using its default authentication flow, which can include multi-factor verification. The pre-built `<SignIn />` component handled this internally. When switching to a custom form, the strategy must be specified explicitly.
+
+### Fix
+
+Add `strategy: "password"` to the `signIn.create()` call:
+
+```typescript
+// FIXED: explicit strategy
+const result = await signIn.create({
+  identifier: data.email,
+  password: data.password,
+  strategy: "password",
+});
+```
+
+### Prevention
+
+This is captured in the updated code review checklist below. When using `signIn.create()` or `signUp.create()`, always specify the `strategy` parameter explicitly — never rely on Clerk inferring it.
+
+### Affected Files
+
+| File | Change |
+|------|--------|
+| `src/app/sign-in/[[...sign-in]]/page.tsx` | Added `strategy: "password"` to `signIn.create()` call |
+
+---
+
 ## Related Documentation
 
 - **Correct fix plan:** `docs/plans/2026-02-17-fix-signup-step2-status-check-plan.md`
 - **Previous (incorrect) fix plan:** `docs/plans/2026-02-17-fix-signup-profile-race-condition-plan.md`
 - **Architecture:** `docs/brainstorms/2026-02-17-database-and-custom-auth-brainstorm.md`
 - **Auth setup:** `docs/plans/2026-02-17-feat-clerk-authentication-plan.md`
-- **Reference pattern:** `src/app/sign-in/[[...sign-in]]/page.tsx:48-55` (sign-in uses return value correctly)
+- **Reference pattern:** `src/app/sign-in/[[...sign-in]]/page.tsx:68-75` (sign-in — fixed to include `strategy: "password"`)
 
 ### Affected Files
 
